@@ -1,0 +1,13 @@
+{
+  "name": "Baumholz Home",
+  "short_name": "Baumholz",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E0B08",
+  "theme_color": "#D4A15A",
+  "icons": [
+    { "src": "/assets/img/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
+
+

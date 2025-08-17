@@ -1,0 +1,100 @@
+/* Baumholz Home – Global Styles */
+:root {
+  --bg: #0e0b08;
+  --text: #f5efe6;
+  --gold: #d4a15a;
+  --gold-2: #f0d7a1;
+  --green: #2f6f3e;
+  --muted: #9a8663;
+  --container: 1100px;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  color: var(--text);
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(212,161,90,0.08), transparent 60%),
+    radial-gradient(50% 40% at 50% 100%, rgba(240,215,161,0.06), transparent 60%),
+    var(--bg);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+}
+
+h1, h2, h3 { font-family: Cinzel, serif; letter-spacing: 0.02em; }
+h1 { font-size: 3rem; margin: 0 0 0.5rem; text-shadow: 0 0 16px rgba(212,161,90,0.25); }
+h2 { font-size: 2rem; margin: 0 0 1rem; }
+h3 { font-size: 1.2rem; margin: 0 0 0.5rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--gold); text-decoration: none; }
+a:hover { color: var(--gold-2); }
+
+.container { width: min(100% - 2rem, var(--container)); margin-inline: auto; }
+
+/* Header */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(14,11,8,0.9), rgba(14,11,8,0.6));
+  border-bottom: 1px solid rgba(212,161,90,0.2);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; }
+.brand { display: inline-flex; align-items: center; gap: 0.6rem; font-family: Cinzel, serif; font-weight: 700; color: var(--gold-2); }
+.brand img { filter: drop-shadow(0 0 8px rgba(212,161,90,0.35)); }
+.nav { display: flex; align-items: center; gap: 1rem; }
+.nav a { padding: 0.4rem 0.2rem; }
+
+/* Hero */
+.hero { padding: 5rem 0 3rem; text-align: center; }
+.hero .subtitle { color: var(--gold-2); opacity: 0.9; }
+.hero .date { color: var(--muted); margin-top: 0.25rem; }
+.cta-row { display: inline-flex; gap: 0.75rem; margin: 1.25rem 0 2rem; flex-wrap: wrap; justify-content: center; }
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  background: linear-gradient(180deg, var(--gold-2), var(--gold));
+  color: #2b1f12;
+  padding: 0.7rem 1rem; border-radius: 10px; font-weight: 700;
+  border: 1px solid rgba(212,161,90,0.5);
+  box-shadow: 0 6px 20px rgba(212,161,90,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.btn:hover { filter: brightness(1.05); box-shadow: 0 8px 24px rgba(212,161,90,0.35), inset 0 1px 0 rgba(255,255,255,0.25); }
+.btn:active { transform: translateY(1px); }
+.btn-ghost {
+  background: transparent; color: var(--gold-2);
+  border: 1px solid rgba(212,161,90,0.35);
+}
+.btn-small { padding: 0.45rem 0.7rem; font-size: 0.9rem; }
+
+/* Sections */
+.section { padding: 3rem 0; }
+
+/* Timeline */
+.timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid rgba(212,161,90,0.35); position: relative; }
+.timeline li { display: grid; grid-template-columns: 5rem 1fr; align-items: center; gap: 1rem; padding: 0.75rem 0 0.75rem 0.75rem; position: relative; }
+.timeline li::before { content: ""; position: absolute; left: -6px; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 12px rgba(212,161,90,0.8); }
+.timeline .time { color: var(--gold-2); font-weight: 700; letter-spacing: 0.04em; }
+.card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,161,90,0.25); padding: 1rem; border-radius: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+
+/* Info grid */
+.info-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+@media (max-width: 700px) { .info-grid { grid-template-columns: 1fr; } }
+
+/* Countdown */
+.countdown { display: inline-grid; grid-template-columns: repeat(4, minmax(60px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+.countdown div { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,161,90,0.25); border-radius: 12px; padding: 0.6rem 0.8rem; min-width: 72px; }
+.countdown span { font-family: Cinzel, serif; font-size: 1.6rem; display: block; }
+.countdown small { color: var(--muted); }
+
+/* Footer */
+.site-footer { border-top: 1px solid rgba(212,161,90,0.2); margin-top: 2rem; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.2rem 0; }
+.footer-nav { display: flex; gap: 1rem; }
+
+/* Utilities */
+.address { font-style: normal; color: var(--gold-2); }
+.noscript { color: var(--gold-2); }
+
+

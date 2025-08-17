@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Baumholz Home//Party//DE
+BEGIN:VEVENT
+UID:baumholz-home-party@example.com
+DTSTAMP:20250101T000000Z
+DTSTART:20251231T190000Z
+DTEND:20260101T020000Z
+SUMMARY:Baumholz Home – Hausparty
+DESCRIPTION:Alle Infos unter https://baumholzhome.lol
+LOCATION:Holzweg 1\, 00000 Musterstadt
+END:VEVENT
+END:VCALENDAR
+
+
