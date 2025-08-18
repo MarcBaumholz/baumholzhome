@@ -1,14 +1,23 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Baumholz Home//Party//DE
+PRODID:-//Baumholz Home//The Last Chapter//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
 BEGIN:VEVENT
-UID:baumholz-home-party@example.com
-DTSTAMP:20250101T000000Z
-DTSTART:20251231T190000Z
-DTEND:20260101T020000Z
-SUMMARY:Baumholz Home – Hausparty
-DESCRIPTION:Alle Infos unter https://baumholzhome.lol
-LOCATION:Holzweg 1\, 00000 Musterstadt
+UID:baumholz-home-last-chapter@baumholzhome.lol
+DTSTART:20250913T190000
+DTEND:20250914T020000
+SUMMARY:Baumholz Home – The Last Chapter
+DESCRIPTION:Baumholz Home – The Last Chapter\n\nHausparty mit 3 Stages, Tombola und DJ Dome\n\nAdresse: Kürräckerstraße 10, 71409 Schwaikheim\n\nTickets: 15€ (Unlimited Bier & Aperol, Sticker, Bierdeckel, 1 Tombola Los)\n\nMehr Infos: https://baumholzhome.lol
+LOCATION:Baumholz Home, Kürräckerstraße 10, 71409 Schwaikheim
+URL:https://baumholzhome.lol
+STATUS:CONFIRMED
+SEQUENCE:0
+BEGIN:VALARM
+TRIGGER:-PT1H
+DESCRIPTION:Baumholz Home – The Last Chapter beginnt in 1 Stunde
+ACTION:DISPLAY
+END:VALARM
 END:VEVENT
 END:VCALENDAR
 
