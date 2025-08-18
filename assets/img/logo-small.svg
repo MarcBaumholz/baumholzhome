@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="Baumholz Home Logo">
+  <defs>
+    <!-- Golden gradient -->
+    <linearGradient id="goldGradientSmall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F0D7A1"/>
+      <stop offset="50%" stop-color="#D4A15A"/>
+      <stop offset="100%" stop-color="#B8945A"/>
+    </linearGradient>
+    
+    <!-- Tree gradient -->
+    <linearGradient id="treeGradientSmall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4A7C59"/>
+      <stop offset="100%" stop-color="#2F6F3E"/>
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glowSmall">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="45" fill="url(#goldGradientSmall)" opacity="0.1"/>
+  
+  <!-- Chalice/Goblet -->
+  <g filter="url(#glowSmall)">
+    <!-- Chalice stem -->
+    <rect x="45" y="60" width="10" height="25" fill="url(#goldGradientSmall)" rx="2"/>
+    
+    <!-- Glass bowl -->
+    <ellipse cx="50" cy="45" rx="20" ry="15" fill="none" stroke="url(#goldGradientSmall)" stroke-width="3" opacity="0.9"/>
+    
+    <!-- Tree inside -->
+    <circle cx="50" cy="40" r="8" fill="url(#treeGradientSmall)"/>
+    <circle cx="47" cy="38" r="5" fill="url(#treeGradientSmall)"/>
+    <circle cx="53" cy="38" r="5" fill="url(#treeGradientSmall)"/>
+    <circle cx="50" cy="35" r="4" fill="url(#treeGradientSmall)"/>
+    
+    <!-- Foam on top -->
+    <ellipse cx="50" cy="30" rx="15" ry="6" fill="#FFFFFF" opacity="0.9"/>
+    <ellipse cx="45" cy="28" rx="6" ry="4" fill="#FFFFFF" opacity="0.8"/>
+    <ellipse cx="55" cy="28" rx="6" ry="4" fill="#FFFFFF" opacity="0.8"/>
+  </g>
+</svg>

@@ -109,4 +109,124 @@
 	}
 })();
 
+// Google Calendar Integration
+function addToGoogleCalendar() {
+  const event = {
+    summary: 'Baumholz Home – The Last Chapter',
+    description: 'Baumholz Home – The Last Chapter\n\nHausparty mit 3 Stages, Tombola und DJ Dome\n\nTickets: 15€ (Unlimited Bier/Aperol)\nZusätzliche Tombola Lose: 5€\n\nInstagram: @baumholz.home',
+    location: 'Kürräckerstraße 10, 71409 Schwaikheim, Deutschland',
+    start: {
+      dateTime: '2025-09-13T19:00:00+02:00',
+      timeZone: 'Europe/Berlin'
+    },
+    end: {
+      dateTime: '2025-09-14T02:00:00+02:00',
+      timeZone: 'Europe/Berlin'
+    },
+    reminders: {
+      useDefault: false,
+      overrides: [
+        { method: 'email', minutes: 24 * 60 },
+        { method: 'popup', minutes: 60 }
+      ]
+    }
+  };
+
+  const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.summary)}&dates=20250913T170000Z/20250914T000000Z&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}&sf=true&output=xml`;
+  
+  window.open(calendarUrl, '_blank');
+}
+
+// Add event listener to calendar button
+document.addEventListener('DOMContentLoaded', function() {
+  const calendarBtn = document.querySelector('a[href="./assets/party.ics"]');
+  if (calendarBtn) {
+    calendarBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      addToGoogleCalendar();
+    });
+  }
+});
+
+// Review Popup System
+function createReviewPopup() {
+  const reviews = [
+    {
+      quote: "Das was Schwaikheim fehlte! Für Spaß, Unterhaltung und netter Gesellschaft ist hier gesorgt.",
+      reviewer: "Jakob Mühlpointner",
+      stars: 5
+    },
+    {
+      quote: "Tolle Stimmung, im Keller habe ich mich gefühlt wie im Lehmann. Überall verrückte Vögel welche auf den Brutalen Beat der Anlage abgegangen sind.",
+      reviewer: "Bene_dikt17",
+      stars: 5
+    },
+    {
+      quote: "Ein einzigartiges Erlebnis. Wer auf Abenteuer und neue Erfahrungen steht, ist herzlich willkommen.",
+      reviewer: "Julian Slangen",
+      stars: 5
+    },
+    {
+      quote: "Ich würde diesen Ort mit 33 von 33 Sternen bewerten. Die Gastgeber waren sehr zuvorkommend.",
+      reviewer: "Odin Schreiber",
+      stars: 5
+    },
+    {
+      quote: "Weltklasse!! Gastfreundschaft auf höchster Stufe und und um die Uhr geöffnet!!",
+      reviewer: "Kübi",
+      stars: 5
+    }
+  ];
+
+  const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
+  
+  const popup = document.createElement('div');
+  popup.className = 'review-popup';
+  popup.innerHTML = `
+    <div class="review-popup-content">
+      <button class="review-popup-close" aria-label="Schließen">×</button>
+      <div class="review-popup-header">
+        <h3>Was andere sagen</h3>
+        <div class="review-popup-stars">
+          ${'★'.repeat(randomReview.stars)}
+        </div>
+      </div>
+      <blockquote class="review-popup-quote">
+        "${randomReview.quote}"
+      </blockquote>
+      <cite class="review-popup-reviewer">— ${randomReview.reviewer}</cite>
+      <div class="review-popup-actions">
+        <button class="btn btn-ghost review-popup-close-btn">Schließen</button>
+        <button class="btn review-popup-write-btn">Ja, mach ich!</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  // Close functionality
+  const closePopup = () => {
+    popup.classList.add('fade-out');
+    setTimeout(() => {
+      document.body.removeChild(popup);
+    }, 300);
+  };
+
+  popup.querySelector('.review-popup-close').addEventListener('click', closePopup);
+  popup.querySelector('.review-popup-close-btn').addEventListener('click', closePopup);
+
+  // Write review functionality
+  popup.querySelector('.review-popup-write-btn').addEventListener('click', () => {
+    const googleReviewUrl = 'https://www.google.com/search?sca_esv=0cad35c59d313fc9&rlz=1C5CHFA_enDE1156DE1156&biw=1652&bih=916&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-Ez7tBuSJudopwFXMsQc6eF2EIYw4FwHGZsbikYxEuSxSJUKoSFSVYOaIdJZU5AI6AjtPrK7AC2bdHdhGNKc3m1_cN7wX&q=Baumholz+Home+Reviews&sa=X&ved=2ahUKEwj7hPXRqZWPAxUx1gIHHaXRHWIQ0bkNegQIJBAC';
+    window.open(googleReviewUrl, '_blank');
+    closePopup();
+  });
+
+  // Auto-close after 10 seconds
+  setTimeout(closePopup, 10000);
+}
+
+// Show review popup after 20 seconds
+setTimeout(createReviewPopup, 20000);
+
 
