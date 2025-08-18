@@ -40,6 +40,15 @@
       <stop offset="0%" stop-color="#D4A15A" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#D4A15A" stop-opacity="0"/>
     </radialGradient>
+    
+    <!-- Text glow effect -->
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
   
   <!-- Background glow -->
@@ -84,7 +93,7 @@
   </g>
   
   <!-- Text: BAUMHOLZ HOME -->
-  <text x="200" y="420" text-anchor="middle" font-family="Cinzel, serif" font-size="32" font-weight="700" fill="#D4A15A" letter-spacing="3">
+  <text x="200" y="420" text-anchor="middle" font-family="Cinzel, serif" font-size="32" font-weight="700" fill="#D4A15A" letter-spacing="3" filter="url(#textGlow)">
     BAUMHOLZ HOME
   </text>
   
@@ -92,7 +101,7 @@
   <line x1="120" y1="450" x2="280" y2="450" stroke="#D4A15A" stroke-width="3" opacity="0.8"/>
   
   <!-- Text: THE LAST CHAPTER -->
-  <text x="200" y="480" text-anchor="middle" font-family="Cinzel, serif" font-size="18" font-weight="600" fill="#D4A15A" letter-spacing="2">
+  <text x="200" y="480" text-anchor="middle" font-family="Cinzel, serif" font-size="18" font-weight="600" fill="#D4A15A" letter-spacing="2" filter="url(#textGlow)">
     THE LAST CHAPTER
   </text>
 </svg>
