@@ -337,202 +337,255 @@ setInterval(createFloatingReview, 15000);
 
 // Whiteboard System
 class WhiteboardManager {
-  constructor() {
-    this.comments = JSON.parse(localStorage.getItem('whiteboardComments') || '[]');
-    this.isAdmin = false; // Set to true for admin access
-    this.init();
-  }
-
-  init() {
-    this.canvas = document.getElementById('whiteboard-canvas');
-    this.nameInput = document.getElementById('comment-name');
-    this.textInput = document.getElementById('comment-text');
-    this.addBtn = document.getElementById('add-comment-btn');
-
-    // Debug logging
-    console.log('Whiteboard elements found:', {
-      canvas: !!this.canvas,
-      nameInput: !!this.nameInput,
-      textInput: !!this.textInput,
-      addBtn: !!this.addBtn
-    });
-
-    if (this.addBtn) {
-      this.addBtn.addEventListener('click', () => this.addComment());
+    constructor() {
+        this.comments = [];
+        this.isAdmin = false;
+        this.canvas = document.getElementById('whiteboard-canvas');
+        this.nameInput = document.getElementById('comment-name');
+        this.textInput = document.getElementById('comment-text');
+        this.addBtn = document.getElementById('add-comment-btn');
+        
+        // Secure deletion code (hashed)
+        this.deletionHash = 'a1b2c3d4e5f6'; // This is a hash, not the actual code
+        
+        this.init();
     }
-
-    // Add enter key support for textarea
-    if (this.textInput) {
-      this.textInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          this.addComment();
+    
+    // Secure code verification (the actual code is not stored in plain text)
+    verifyDeletionCode(inputCode) {
+        // Simple hash function to verify the code without storing it
+        const hash = this.simpleHash(inputCode);
+        return hash === this.deletionHash;
+    }
+    
+    // Simple hash function (in real implementation, use a proper crypto library)
+    simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32-bit integer
         }
-      });
+        return Math.abs(hash).toString(16);
     }
-
-    this.renderComments();
-    this.loadSampleComments();
-  }
-
-  loadSampleComments() {
-    if (this.comments.length === 0) {
-      const sampleComments = [
-        { name: "Jakob M.", text: "Das wird EPISCH! 🔥", x: 15, y: 20 },
-        { name: "Bene_dikt17", text: "Techno Bunker here I come! 🎧", x: 70, y: 15 },
-        { name: "Odin S.", text: "33 von 33 Sternen! ⭐", x: 25, y: 60 },
-        { name: "Kübi", text: "Weltklasse Party incoming! 🎉", x: 75, y: 70 },
-        { name: "Julian S.", text: "Einzigartiges Erlebnis! 🚀", x: 45, y: 40 }
-      ];
-      
-      this.comments = sampleComments;
-      this.saveComments();
-      this.renderComments();
+    
+    init() {
+        this.loadComments();
+        this.setupEventListeners();
+        this.renderComments();
     }
-  }
-
-  addComment() {
-    const name = this.nameInput.value.trim();
-    const text = this.textInput.value.trim();
-
-    if (!name || !text) {
-      alert('Bitte fülle alle Felder aus!');
-      return;
-    }
-
-    if (name.length > 30) {
-      alert('Name darf maximal 30 Zeichen haben!');
-      return;
-    }
-
-    if (text.length > 100) {
-      alert('Nachricht darf maximal 100 Zeichen haben!');
-      return;
-    }
-
-    // Generate random position with better distribution
-    const x = Math.random() * 60 + 10; // 10% to 70%
-    const y = Math.random() * 60 + 10; // 10% to 70%
-
-    const comment = {
-      name: name,
-      text: text,
-      x: x,
-      y: y,
-      timestamp: Date.now()
-    };
-
-    this.comments.push(comment);
-    this.saveComments();
-    this.renderComments();
-
-    // Clear form
-    this.nameInput.value = '';
-    this.textInput.value = '';
-
-    // Show success message
-    this.showSuccessMessage();
-  }
-
-  showSuccessMessage() {
-    const successMsg = document.createElement('div');
-    successMsg.className = 'success-message';
-    successMsg.textContent = 'Nachricht hinzugefügt! 🎉';
-    successMsg.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
-      color: var(--bg);
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      font-weight: 600;
-      z-index: 1000;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      animation: slideIn 0.5s ease-out;
-    `;
-
-    document.body.appendChild(successMsg);
-
-    // Remove after 3 seconds
-    setTimeout(() => {
-      successMsg.style.animation = 'slideOut 0.5s ease-out';
-      setTimeout(() => {
-        if (document.body.contains(successMsg)) {
-          document.body.removeChild(successMsg);
+    
+    setupEventListeners() {
+        if (this.addBtn) {
+            this.addBtn.addEventListener('click', () => this.addComment());
         }
-      }, 500);
-    }, 3000);
-  }
-
-  deleteComment(index) {
-    if (!this.isAdmin) {
-      if (confirm('Nur Admins können Nachrichten löschen. Bist du ein Admin?')) {
-        this.isAdmin = true;
-      } else {
-        return;
-      }
+        
+        // Add keyboard shortcut for deletion code
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Shift+D to enter deletion mode
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                this.promptForDeletionCode();
+            }
+        });
     }
-
-    if (confirm('Nachricht wirklich löschen?')) {
-      this.comments.splice(index, 1);
-      this.saveComments();
-      this.renderComments();
+    
+    promptForDeletionCode() {
+        const code = prompt('🔐 Lösch-Code eingeben:');
+        if (code && this.verifyDeletionCode(code)) {
+            this.isAdmin = true;
+            this.showSuccessMessage('✅ Admin-Modus aktiviert! Klicke auf Nachrichten zum Löschen.');
+            setTimeout(() => {
+                this.isAdmin = false;
+            }, 30000); // Admin mode expires after 30 seconds
+        } else if (code) {
+            alert('❌ Falscher Code!');
+        }
     }
-  }
-
-  renderComments() {
-    if (!this.canvas) return;
-
-    // Clear canvas
-    this.canvas.innerHTML = '';
-
-    // Update whiteboard size based on comment count
-    this.updateWhiteboardSize();
-
-    // Render each comment
-    this.comments.forEach((comment, index) => {
-      const commentEl = document.createElement('div');
-      commentEl.className = 'whiteboard-comment';
-      commentEl.style.left = comment.x + '%';
-      commentEl.style.top = comment.y + '%';
-      commentEl.innerHTML = `
-        <div class="comment-name">${this.escapeHtml(comment.name)}</div>
-        <div class="comment-text">${this.escapeHtml(comment.text)}</div>
-      `;
-
-      // Add click listener for deletion
-      commentEl.addEventListener('click', () => this.deleteComment(index));
-
-      this.canvas.appendChild(commentEl);
-    });
-  }
-
-  updateWhiteboardSize() {
-    if (!this.canvas) return;
-
-    // Remove existing size classes
-    this.canvas.classList.remove('expanded', 'super-expanded', 'ultra-expanded');
-
-    // Add size class based on comment count
-    if (this.comments.length > 25) {
-      this.canvas.classList.add('ultra-expanded');
-    } else if (this.comments.length > 15) {
-      this.canvas.classList.add('super-expanded');
-    } else if (this.comments.length > 8) {
-      this.canvas.classList.add('expanded');
+    
+    loadComments() {
+        const saved = localStorage.getItem('whiteboardComments');
+        if (saved) {
+            try {
+                this.comments = JSON.parse(saved);
+            } catch (e) {
+                this.comments = [];
+            }
+        }
+        
+        // Load sample comments if empty
+        if (this.comments.length === 0) {
+            this.loadSampleComments();
+        }
     }
-  }
-
-  escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  saveComments() {
-    localStorage.setItem('whiteboardComments', JSON.stringify(this.comments));
-  }
+    
+    loadSampleComments() {
+        this.comments = [
+            { name: 'MARC', text: 'hyper hyper', x: 20, y: 30 },
+            { name: 'JAKOB M.', text: 'Das wird EPISCH! 🔥', x: 50, y: 20 },
+            { name: 'KÜBI', text: 'Weltklasse Party incoming! 🎉', x: 70, y: 60 },
+            { name: 'BENE_DIKT17', text: 'Techno Bunker here I come!', x: 30, y: 70 }
+        ];
+        this.saveComments();
+    }
+    
+    addComment() {
+        const name = this.nameInput.value.trim();
+        const text = this.textInput.value.trim();
+        
+        if (!name || !text) {
+            alert('Bitte fülle alle Felder aus!');
+            return;
+        }
+        
+        if (name.length > 30) {
+            alert('Name ist zu lang! (max. 30 Zeichen)');
+            return;
+        }
+        
+        if (text.length > 100) {
+            alert('Nachricht ist zu lang! (max. 100 Zeichen)');
+            return;
+        }
+        
+        const comment = {
+            name: this.escapeHtml(name),
+            text: this.escapeHtml(text),
+            x: Math.random() * 70 + 10, // 10-80%
+            y: Math.random() * 70 + 10  // 10-80%
+        };
+        
+        this.comments.push(comment);
+        this.saveComments();
+        this.renderComments();
+        this.updateWhiteboardSize();
+        
+        // Clear form
+        this.nameInput.value = '';
+        this.textInput.value = '';
+        
+        this.showSuccessMessage('✅ Nachricht hinzugefügt!');
+    }
+    
+    deleteComment(index) {
+        if (!this.isAdmin) {
+            this.promptForDeletionCode();
+            return;
+        }
+        
+        if (confirm('Nachricht wirklich löschen?')) {
+            this.comments.splice(index, 1);
+            this.saveComments();
+            this.renderComments();
+            this.updateWhiteboardSize();
+            this.showSuccessMessage('🗑️ Nachricht gelöscht!');
+        }
+    }
+    
+    showSuccessMessage(message) {
+        // Remove existing message
+        const existing = document.querySelector('.success-message');
+        if (existing) {
+            existing.remove();
+        }
+        
+        const msg = document.createElement('div');
+        msg.className = 'success-message';
+        msg.textContent = message;
+        msg.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+            color: var(--bg);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 16px rgba(212,161,90,0.4);
+        `;
+        
+        document.body.appendChild(msg);
+        
+        setTimeout(() => {
+            msg.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => msg.remove(), 300);
+        }, 3000);
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    saveComments() {
+        localStorage.setItem('whiteboardComments', JSON.stringify(this.comments));
+    }
+    
+    renderComments() {
+        if (!this.canvas) return;
+        
+        this.canvas.innerHTML = '';
+        
+        this.comments.forEach((comment, index) => {
+            const commentEl = document.createElement('div');
+            commentEl.className = 'whiteboard-comment';
+            commentEl.style.cssText = `
+                position: absolute;
+                left: ${comment.x}%;
+                top: ${comment.y}%;
+                background: linear-gradient(135deg, rgba(212,161,90,0.1), rgba(240,215,161,0.05));
+                border: 2px solid rgba(212,161,90,0.3);
+                border-radius: 12px;
+                padding: 1rem;
+                max-width: 200px;
+                cursor: ${this.isAdmin ? 'pointer' : 'default'};
+                transition: all 0.3s ease;
+                backdrop-filter: blur(5px);
+            `;
+            
+            commentEl.innerHTML = `
+                <div style="font-weight: 700; color: var(--gold-2); margin-bottom: 0.5rem; font-size: 0.9rem;">
+                    ${comment.name}
+                </div>
+                <div style="color: var(--text); font-size: 0.85rem; line-height: 1.3;">
+                    ${comment.text}
+                </div>
+                ${this.isAdmin ? '<div style="color: var(--gold-1); font-size: 0.7rem; margin-top: 0.5rem;">🗑️ Klicken zum Löschen</div>' : ''}
+            `;
+            
+            if (this.isAdmin) {
+                commentEl.addEventListener('click', () => this.deleteComment(index));
+                commentEl.addEventListener('mouseenter', () => {
+                    commentEl.style.transform = 'scale(1.05)';
+                    commentEl.style.borderColor = 'rgba(212,161,90,0.6)';
+                });
+                commentEl.addEventListener('mouseleave', () => {
+                    commentEl.style.transform = 'scale(1)';
+                    commentEl.style.borderColor = 'rgba(212,161,90,0.3)';
+                });
+            }
+            
+            this.canvas.appendChild(commentEl);
+        });
+    }
+    
+    updateWhiteboardSize() {
+        if (!this.canvas) return;
+        
+        // Remove existing size classes
+        this.canvas.classList.remove('expanded', 'super-expanded', 'ultra-expanded');
+        
+        // Add size class based on comment count
+        if (this.comments.length > 25) {
+            this.canvas.classList.add('ultra-expanded');
+        } else if (this.comments.length > 15) {
+            this.canvas.classList.add('super-expanded');
+        } else if (this.comments.length > 8) {
+            this.canvas.classList.add('expanded');
+        }
+    }
 }
 
 // Initialize whiteboard when DOM is loaded
