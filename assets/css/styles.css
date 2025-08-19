@@ -863,8 +863,8 @@ h4 { font-size: 1rem; }
   }
 }
 
-/* Floor connections */
-.house-layout::before {
+/* Floor connections - REMOVED MIDDLE LINE */
+/* .house-layout::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -874,7 +874,7 @@ h4 { font-size: 1rem; }
   background: linear-gradient(to bottom, transparent, rgba(212,161,90,0.3), transparent);
   transform: translateX(-50%);
   z-index: 1;
-}
+} */
 
 .house-floor {
   position: relative;
@@ -2773,6 +2773,21 @@ p, h1, h2, h3, h4, h5, h6, span, div {
   .footer-copyright {
     font-size: 0.85rem;
   }
+}
+
+/* Contact Link Styling */
+.contact-link {
+  color: var(--gold-2);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.contact-link:hover {
+  color: var(--gold-1);
+  border-bottom-color: var(--gold-2);
+  text-shadow: 0 0 10px rgba(212,161,90,0.3);
 }
 
 
