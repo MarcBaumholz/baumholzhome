@@ -348,7 +348,64 @@ class WhiteboardManager {
         // Secure deletion code (hashed)
         this.deletionHash = 'a1b2c3d4e5f6'; // This is a hash, not the actual code
         
+        // IP-based rate limiting
+        this.userIPs = JSON.parse(localStorage.getItem('whiteboardUserIPs') || '{}');
+        this.currentIP = this.getUserIP();
+        
         this.init();
+    }
+    
+    // Get user IP (simplified - in production use a proper IP service)
+    getUserIP() {
+        // For demo purposes, use a combination of user agent and screen resolution
+        // In production, you'd want to use a proper IP detection service
+        const userAgent = navigator.userAgent;
+        const screenRes = `${screen.width}x${screen.height}`;
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        
+        // Create a pseudo-unique identifier
+        return btoa(`${userAgent}-${screenRes}-${timezone}`).substring(0, 16);
+    }
+    
+    // Check if user can post (24-hour limit)
+    canUserPost() {
+        const now = Date.now();
+        const lastPost = this.userIPs[this.currentIP];
+        
+        if (!lastPost) {
+            return true; // First time posting
+        }
+        
+        const hoursSinceLastPost = (now - lastPost) / (1000 * 60 * 60);
+        return hoursSinceLastPost >= 24;
+    }
+    
+    // Get time until user can post again
+    getTimeUntilNextPost() {
+        const now = Date.now();
+        const lastPost = this.userIPs[this.currentIP];
+        
+        if (!lastPost) {
+            return 0; // Can post immediately
+        }
+        
+        const hoursSinceLastPost = (now - lastPost) / (1000 * 60 * 60);
+        const hoursRemaining = Math.max(0, 24 - hoursSinceLastPost);
+        
+        if (hoursRemaining < 1) {
+            const minutesRemaining = Math.ceil(hoursRemaining * 60);
+            return `${minutesRemaining} Minuten`;
+        } else {
+            const hours = Math.floor(hoursRemaining);
+            const minutes = Math.ceil((hoursRemaining - hours) * 60);
+            return `${hours} Stunden ${minutes} Minuten`;
+        }
+    }
+    
+    // Save user post time
+    saveUserPostTime() {
+        this.userIPs[this.currentIP] = Date.now();
+        localStorage.setItem('whiteboardUserIPs', JSON.stringify(this.userIPs));
     }
     
     // Secure code verification (the actual code is not stored in plain text)
@@ -373,6 +430,21 @@ class WhiteboardManager {
         this.loadComments();
         this.setupEventListeners();
         this.renderComments();
+        this.updatePostingStatus();
+    }
+    
+    updatePostingStatus() {
+        const statusEl = document.getElementById('posting-status');
+        if (!statusEl) return;
+        
+        if (this.canUserPost()) {
+            statusEl.textContent = '✅ Du kannst einen Kommentar schreiben';
+            statusEl.className = 'posting-status can-post';
+        } else {
+            const timeRemaining = this.getTimeUntilNextPost();
+            statusEl.textContent = `⏰ Du kannst in ${timeRemaining} wieder kommentieren`;
+            statusEl.className = 'posting-status cannot-post';
+        }
     }
     
     setupEventListeners() {
@@ -437,6 +509,13 @@ class WhiteboardManager {
             return;
         }
         
+        // Check rate limiting
+        if (!this.canUserPost()) {
+            const timeRemaining = this.getTimeUntilNextPost();
+            alert(`⏰ Du kannst nur alle 24 Stunden einen Kommentar schreiben.\n\nBitte warte noch ${timeRemaining} bis zu deinem nächsten Kommentar.`);
+            return;
+        }
+        
         const comment = {
             name: this.escapeHtml(name),
             text: this.escapeHtml(text),
@@ -449,11 +528,17 @@ class WhiteboardManager {
         this.renderComments();
         this.updateWhiteboardSize();
         
+        // Save user post time after successful post
+        this.saveUserPostTime();
+        
         // Clear form
         this.nameInput.value = '';
         this.textInput.value = '';
         
-        this.showSuccessMessage('✅ Nachricht hinzugefügt!');
+        // Update posting status
+        this.updatePostingStatus();
+        
+        this.showSuccessMessage('✅ Nachricht hinzugefügt! Du kannst in 24 Stunden wieder kommentieren.');
     }
     
     deleteComment(index) {

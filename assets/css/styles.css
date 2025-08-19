@@ -1365,4 +1365,25 @@ a:hover { color: var(--gold-2); }
   }
 }
 
+.posting-status {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.posting-status.can-post {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.posting-status.cannot-post {
+  background: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
 
