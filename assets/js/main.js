@@ -521,22 +521,21 @@ class WhiteboardManager {
                 position: absolute;
                 left: ${comment.x}%;
                 top: ${comment.y}%;
-                background: linear-gradient(135deg, rgba(212,161,90,0.1), rgba(240,215,161,0.05));
-                border: 2px solid rgba(212,161,90,0.3);
+                background: rgba(255, 255, 255, 0.95);
+                border: 2px solid rgba(212,161,90,0.4);
                 border-radius: 12px;
                 padding: 1rem;
                 max-width: 200px;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                backdrop-filter: blur(5px);
-                box-shadow: 0 4px 16px rgba(212,161,90,0.2);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
             `;
             
             commentEl.innerHTML = `
-                <div style="font-weight: 700; color: var(--gold-2); margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <div style="font-weight: 700; color: #333; margin-bottom: 0.5rem; font-size: 0.9rem;">
                     ${comment.name}
                 </div>
-                <div style="color: var(--text); font-size: 0.85rem; line-height: 1.3;">
+                <div style="color: #000; font-size: 0.85rem; line-height: 1.3;">
                     ${comment.text}
                 </div>
             `;
@@ -545,13 +544,13 @@ class WhiteboardManager {
             commentEl.addEventListener('click', () => this.deleteComment(index));
             commentEl.addEventListener('mouseenter', () => {
                 commentEl.style.transform = 'scale(1.05)';
-                commentEl.style.borderColor = 'rgba(212,161,90,0.6)';
-                commentEl.style.boxShadow = '0 6px 20px rgba(212,161,90,0.3)';
+                commentEl.style.borderColor = 'rgba(212,161,90,0.8)';
+                commentEl.style.boxShadow = '0 6px 20px rgba(0,0,0,0.2)';
             });
             commentEl.addEventListener('mouseleave', () => {
                 commentEl.style.transform = 'scale(1)';
-                commentEl.style.borderColor = 'rgba(212,161,90,0.3)';
-                commentEl.style.boxShadow = '0 4px 16px rgba(212,161,90,0.2)';
+                commentEl.style.borderColor = 'rgba(212,161,90,0.4)';
+                commentEl.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)';
             });
             
             this.canvas.appendChild(commentEl);
