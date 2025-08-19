@@ -1031,7 +1031,7 @@ a:hover { color: var(--gold-2); }
   left: 0;
 }
 
-/* Whiteboard System */
+/* Whiteboard System - Optimized Design */
 .whiteboard-intro {
   text-align: center;
   color: var(--text-light);
@@ -1040,71 +1040,14 @@ a:hover { color: var(--gold-2); }
 }
 
 .whiteboard-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2rem;
   margin-bottom: 2rem;
-}
-
-.whiteboard {
-  background: linear-gradient(135deg, rgba(40,40,40,0.9) 0%, rgba(60,60,60,0.8) 100%);
-  border: 3px solid var(--gold-2);
-  border-radius: 16px;
-  min-height: 400px;
-  padding: 2rem;
-  position: relative;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 0 20px rgba(212,161,90,0.1);
-  overflow: hidden;
-}
-
-.whiteboard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    linear-gradient(90deg, transparent 98%, rgba(212,161,90,0.1) 100%),
-    linear-gradient(0deg, transparent 98%, rgba(212,161,90,0.1) 100%);
-  background-size: 30px 30px;
-  pointer-events: none;
-}
-
-.whiteboard-comment {
-  position: absolute;
-  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
-  color: var(--bg);
-  padding: 1rem 1.2rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  max-width: 200px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,161,90,0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.whiteboard-comment:hover {
-  transform: scale(1.05) rotate(1deg);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 2px rgba(212,161,90,0.5);
-  background: linear-gradient(135deg, var(--gold-2), var(--gold-3));
-}
-
-.whiteboard-comment .comment-name {
-  font-weight: 700;
-  font-size: 0.8rem;
-  margin-bottom: 0.4rem;
-  opacity: 0.9;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.whiteboard-comment .comment-text {
-  line-height: 1.4;
-  font-size: 0.85rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .whiteboard-form {
@@ -1112,25 +1055,35 @@ a:hover { color: var(--gold-2); }
   border: 2px solid rgba(212,161,90,0.2);
   border-radius: 16px;
   padding: 2rem;
-  height: fit-content;
+  width: 100%;
+  max-width: 600px;
   backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  align-items: end;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .form-group label {
-  display: block;
   color: var(--gold-2);
   font-weight: 600;
-  margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group textarea {
-  width: 100%;
   padding: 1rem;
   border: 2px solid rgba(212,161,90,0.3);
   border-radius: 8px;
@@ -1156,31 +1109,188 @@ a:hover { color: var(--gold-2); }
 }
 
 .form-group textarea {
+  min-height: 80px;
   resize: vertical;
-  min-height: 100px;
+}
+
+.hyper-hyper-btn {
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--bg);
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 16px rgba(212,161,90,0.3);
+  align-self: center;
+  min-width: 200px;
+}
+
+.hyper-hyper-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212,161,90,0.4);
+  background: linear-gradient(135deg, var(--gold-2), var(--gold-3));
+}
+
+.hyper-hyper-btn:active {
+  transform: translateY(0);
+}
+
+.whiteboard {
+  background: linear-gradient(135deg, rgba(40,40,40,0.9) 0%, rgba(60,60,60,0.8) 100%);
+  border: 3px solid var(--gold-2);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 0 20px rgba(212,161,90,0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 500px;
+  transition: all 0.5s ease;
+}
+
+.whiteboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(90deg, transparent 98%, rgba(212,161,90,0.1) 100%),
+    linear-gradient(0deg, transparent 98%, rgba(212,161,90,0.1) 100%);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.whiteboard-comment {
+  position: absolute;
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--bg);
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  max-width: 200px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,161,90,0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: commentAppear 0.5s ease-out;
+}
+
+@keyframes commentAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.whiteboard-comment:hover {
+  transform: scale(1.05) rotate(1deg);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 2px rgba(212,161,90,0.5);
+  background: linear-gradient(135deg, var(--gold-2), var(--gold-3));
+}
+
+.whiteboard-comment .comment-name {
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 0.4rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.whiteboard-comment .comment-text {
+  line-height: 1.4;
+  font-size: 0.85rem;
 }
 
 .whiteboard-info {
-  text-align: center;
-  color: var(--text-light);
-  font-size: 0.9rem;
-  font-style: italic;
   margin-top: 1rem;
   padding: 1rem;
   background: rgba(212,161,90,0.05);
   border-radius: 8px;
   border: 1px solid rgba(212,161,90,0.1);
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
 }
 
-/* Responsive design for whiteboard */
+/* Dynamic whiteboard sizing based on content */
+.whiteboard.expanded {
+  min-height: 700px;
+}
+
+.whiteboard.super-expanded {
+  min-height: 900px;
+}
+
+/* Success message styling */
+.success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--bg);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
   .whiteboard-container {
-    grid-template-columns: 1fr;
     gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .whiteboard-form {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .whiteboard {
-    min-height: 300px;
+    min-height: 400px;
     padding: 1.5rem;
   }
   
@@ -1188,6 +1298,12 @@ a:hover { color: var(--gold-2); }
     max-width: 150px;
     font-size: 0.8rem;
     padding: 0.8rem 1rem;
+  }
+  
+  .hyper-hyper-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    min-width: 150px;
   }
 }
 

@@ -276,20 +276,22 @@
           <p class="whiteboard-intro">Hinterlasse deine Hype-Nachricht für "The Last Chapter"!</p>
           
           <div class="whiteboard-container">
-            <div class="whiteboard" id="whiteboard-canvas">
-              <!-- Comments will be added here dynamically -->
+            <div class="whiteboard-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="comment-name">Dein voller Name</label>
+                  <input type="text" id="comment-name" placeholder="Dein voller Name" maxlength="30" required>
+                </div>
+                <div class="form-group">
+                  <label for="comment-text">Deine Hype-Nachricht</label>
+                  <textarea id="comment-text" placeholder="Deine Hype-Nachricht (max. 100 Zeichen)" maxlength="100" required></textarea>
+                </div>
+              </div>
+              <button type="button" id="add-comment-btn" class="hyper-hyper-btn">HYPER HYPER</button>
             </div>
             
-            <div class="whiteboard-form">
-              <div class="form-group">
-                <label for="comment-name">Dein voller Name</label>
-                <input type="text" id="comment-name" placeholder="Dein voller Name" maxlength="30" required>
-              </div>
-              <div class="form-group">
-                <label for="comment-text">Deine Hype-Nachricht</label>
-                <textarea id="comment-text" placeholder="Deine Hype-Nachricht (max. 100 Zeichen)" maxlength="100" required></textarea>
-              </div>
-              <button type="button" id="add-comment-btn" class="btn">Nachricht hinzufügen</button>
+            <div class="whiteboard" id="whiteboard-canvas">
+              <!-- Comments will be added here dynamically -->
             </div>
           </div>
           
@@ -304,65 +306,221 @@
           <h2>Release Notes</h2>
           <div class="release-notes">
             <div class="release-version">
-              <h3>v1.2.0 - Pre-Release Phase</h3>
+              <h3>v1.4.1 - Logo redesign and whiteboard optimization</h3>
+              <p class="release-date">19. August 2025</p>
+              <div class="release-changes">
+                <h4>🎨 Design Improvements</h4>
+                <ul>
+                  <li>New professional Baumholz Home logo with golden tree growing from chalice</li>
+                  <li>Enhanced logo design with rich golden gradients and circular frame</li>
+                  <li>Optimized whiteboard layout with form positioned above the board</li>
+                  <li>Larger, more prominent whiteboard with better visual hierarchy</li>
+                </ul>
+                
+                <h4>✨ New Features</h4>
+                <ul>
+                  <li>Dynamic whiteboard sizing that grows with more messages</li>
+                  <li>Improved comment positioning with better random distribution</li>
+                  <li>Enhanced "HYPER HYPER" button with professional styling</li>
+                  <li>Better form layout with side-by-side name and message fields</li>
+                </ul>
+                
+                <h4>🎯 UX Improvements</h4>
+                <ul>
+                  <li>Centered whiteboard design for better focus</li>
+                  <li>Improved comment animations with appear effects</li>
+                  <li>Enhanced success message styling and positioning</li>
+                  <li>Better responsive design for mobile devices</li>
+                </ul>
+                
+                <h4>🔧 Technical Enhancements</h4>
+                <ul>
+                  <li>Updated SVG logo with professional golden gradients</li>
+                  <li>Improved whiteboard JavaScript with dynamic sizing logic</li>
+                  <li>Enhanced CSS animations and transitions</li>
+                  <li>Better form validation and user feedback</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="release-version">
+              <h3>v1.4.0 - Baumholz Home Game integration</h3>
+              <p class="release-date">19. August 2025</p>
+              <div class="release-changes">
+                <h4>🎮 New Features</h4>
+                <ul>
+                  <li>Added interactive 'Destroy Baumholz Home' game to secrets page</li>
+                  <li>Game positioned between info cards and FAQ section as requested</li>
+                  <li>Full game functionality with airplane controls and house destruction</li>
+                  <li>Score tracking, highscore system, and time measurement</li>
+                  <li>Enemy spawning and bullet mechanics</li>
+                  <li>Professional game UI integrated with website theme</li>
+                </ul>
+                
+                <h4>🎨 Design Integration</h4>
+                <ul>
+                  <li>Adapted game styling to match website's dark theme with golden accents</li>
+                  <li>Responsive design for mobile and desktop</li>
+                  <li>Game container with proper borders and backdrop blur</li>
+                  <li>Score board with 4-column grid layout</li>
+                  <li>Game over modal with highscore input and leaderboard</li>
+                </ul>
+                
+                <h4>🔧 Technical Implementation</h4>
+                <ul>
+                  <li>Game files copied to assets directory (game.js, game.css)</li>
+                  <li>Modified game initialization for website context</li>
+                  <li>Added proper DOM event handling and canvas management</li>
+                  <li>Highscore system with localStorage persistence</li>
+                  <li>Auto-start functionality with 1-second delay</li>
+                  <li>Global game instance management</li>
+                </ul>
+                
+                <h4>✨ Game Features</h4>
+                <ul>
+                  <li>Arrow keys for airplane movement, spacebar for turbo</li>
+                  <li>Flying Baumholz Home target with multiple health parts</li>
+                  <li>Enemy defenders and bullet mechanics</li>
+                  <li>Explosion effects and particle systems</li>
+                  <li>Real-time score and health tracking</li>
+                  <li>Highscore leaderboard with medals</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="release-version">
+              <h3>v1.3.1 - Whiteboard design and functionality improvements</h3>
               <p class="release-date">19. August 2025</p>
               <div class="release-changes">
                 <h4>✨ New Features</h4>
                 <ul>
-                  <li>Simplified logo design for better compatibility</li>
-                  <li>Enhanced navigation with improved clickability and hover effects</li>
-                  <li>Updated hero section with "Baumholz Home" and "THE LAST CHAPTER" text</li>
-                  <li>Added floating review notifications every 30 seconds</li>
-                  <li>Implemented professional release notes section</li>
-                  <li>Enhanced review popup system with 10-second delay</li>
+                  <li>Interactive Hype Whiteboard with user comments and admin deletion</li>
+                  <li>Enhanced floating reviews with 8 random directions and longer animation</li>
+                  <li>Improved whiteboard design to match website theme</li>
                 </ul>
                 
                 <h4>🐛 Bug Fixes</h4>
                 <ul>
-                  <li>Fixed DJ name from "DJ Dome" to "Astralkickend" on Main Stage</li>
-                  <li>Corrected garage/wohnzimmer timing: Garage Bierpong until 22:00, then Wohnzimmer becomes Bierpong zone</li>
-                  <li>Resolved logo loading issues and 404 errors</li>
-                  <li>Improved navigation visibility and user experience</li>
+                  <li>Fixed whiteboard not displaying and styling issues</li>
+                  <li>Corrected whiteboard comment positioning</li>
                 </ul>
                 
                 <h4>🎨 UI/UX Improvements</h4>
                 <ul>
-                  <li>Enhanced navigation styling with background colors and hover effects</li>
-                  <li>Improved hero section layout and typography</li>
-                  <li>Added professional release notes tracking</li>
-                  <li>Optimized floating review animations</li>
+                  <li>Refined whiteboard comment and form styling</li>
+                  <li>Improved success message styling</li>
+                  <li>Improved form validation feedback</li>
                 </ul>
               </div>
             </div>
             
             <div class="release-version">
-              <h3>v1.1.0 - Feature Enhancement</h3>
-              <p class="release-date">18. August 2025</p>
+              <h3>v1.3.0 - Enhanced user engagement features</h3>
+              <p class="release-date">19. August 2025</p>
               <div class="release-changes">
                 <h4>✨ New Features</h4>
                 <ul>
-                  <li>Google Calendar integration with automatic event creation</li>
-                  <li>Review popup system with random Google reviews</li>
-                  <li>Enhanced secrets page with 12 new FAQ questions</li>
-                  <li>Piggy bank animation for donation section</li>
-                  <li>Confetti explosion added to agenda</li>
-                  <li>Multi-card reviews slider with touch/swipe support</li>
+                  <li>Interactive Hype Whiteboard for user comments</li>
+                  <li>Floating review messages appearing randomly every 15 seconds</li>
+                  <li>Review popup after 10 seconds with random Google reviews</li>
+                  <li>Professional Release Notes section with version history</li>
+                </ul>
+                
+                <h4>🎨 Design Improvements</h4>
+                <ul>
+                  <li>Enhanced navigation bar with improved clickability</li>
+                  <li>Centered countdown timer and RSVP buttons</li>
+                  <li>Improved hero section with separate brand name and title</li>
+                  <li>Better whiteboard design matching website theme</li>
+                </ul>
+                
+                <h4>🔧 Technical Enhancements</h4>
+                <ul>
+                  <li>Local storage for whiteboard comment persistence</li>
+                  <li>Enhanced floating review animations with 8 directions</li>
+                  <li>Improved review popup with non-auto-close functionality</li>
+                  <li>Better responsive design for all new features</li>
                 </ul>
               </div>
             </div>
             
             <div class="release-version">
-              <h3>v1.0.0 - Initial Release</h3>
-              <p class="release-date">18. August 2025</p>
+              <h3>v1.2.0 - Content and functionality updates</h3>
+              <p class="release-date">19. August 2025</p>
               <div class="release-changes">
-                <h4>🎉 Initial Features</h4>
+                <h4>📅 Event Updates</h4>
                 <ul>
-                  <li>Complete party website with event details</li>
-                  <li>Responsive design with golden theme</li>
-                  <li>Countdown timer and agenda timeline</li>
-                  <li>Ticketing system and donation goals</li>
-                  <li>Stage plan with house layout</li>
-                  <li>Contact information and RSVP system</li>
+                  <li>Updated event date to 13.09.2025</li>
+                  <li>Added detailed agenda with specific times and activities</li>
+                  <li>Implemented "Große Konfetti Explosion" at 00:00</li>
+                  <li>Corrected DJ name from "DJ Dome" to "Astralkickend"</li>
+                </ul>
+                
+                <h4>🎫 Ticketing System</h4>
+                <ul>
+                  <li>Added 15€ standard ticket with unlimited drinks</li>
+                  <li>Implemented 5€ additional tombola tickets</li>
+                  <li>Updated tombola prizes to "zahlreiche Gewinne mit unglaublichen Preisen"</li>
+                </ul>
+                
+                <h4>🎯 Stage Plan</h4>
+                <ul>
+                  <li>Detailed house layout with specific rooms and activities</li>
+                  <li>Keller: Techno Bunker, EG: Main Stage, 2. OG: Various zones</li>
+                  <li>Garage: Bierpong until 22:00, then Wohnzimmer</li>
+                  <li>Updated "Wohnzimmer" to "Bierpong Zone"</li>
+                </ul>
+                
+                <h4>💰 Donation Goal</h4>
+                <ul>
+                  <li>1000€ donation goal with progress bar</li>
+                  <li>Animated piggy bank with filling effect</li>
+                  <li>Top 5 participants list</li>
+                  <li>Manual progress and participant updates</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="release-version">
+              <h3>v1.1.0 - Contact and navigation improvements</h3>
+              <p class="release-date">19. August 2025</p>
+              <div class="release-changes">
+                <h4>📞 Contact Updates</h4>
+                <ul>
+                  <li>Removed email contact, using Instagram @baumholz.home</li>
+                  <li>Added WhatsApp number +4917687898048 (later removed)</li>
+                  <li>Updated RSVP section to link to Instagram</li>
+                </ul>
+                
+                <h4>🎨 Design Enhancements</h4>
+                <ul>
+                  <li>Professional styling to match "Baumholz Home" aesthetic</li>
+                  <li>Enhanced logo implementation with proper sizing</li>
+                  <li>Improved navigation with better visibility</li>
+                  <li>Added "Tickets", "Reviews", "Geheimnisse" to navigation</li>
+                </ul>
+                
+                <h4>📍 Location Updates</h4>
+                <ul>
+                  <li>Updated address to Kürräckerstraße 10, 71409 Schwaikheim</li>
+                  <li>Updated Google Maps link</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="release-version">
+              <h3>v1.0.0 - Initial release</h3>
+              <p class="release-date">19. August 2025</p>
+              <div class="release-changes">
+                <h4>🎉 Launch Features</h4>
+                <ul>
+                  <li>Complete "Baumholz Home – The Last Chapter" party website</li>
+                  <li>Professional dark theme with golden accents</li>
+                  <li>Responsive design for all devices</li>
+                  <li>Countdown timer to event date</li>
+                  <li>Google Calendar integration</li>
+                  <li>Google Reviews slider with 31 reviews</li>
+                  <li>Interactive elements and smooth animations</li>
                 </ul>
               </div>
             </div>

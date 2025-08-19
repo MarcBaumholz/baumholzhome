@@ -378,11 +378,11 @@ class WhiteboardManager {
   loadSampleComments() {
     if (this.comments.length === 0) {
       const sampleComments = [
-        { name: "Jakob M.", text: "Das wird EPISCH! 🔥", x: 20, y: 20 },
-        { name: "Bene_dikt17", text: "Techno Bunker here I come! 🎧", x: 70, y: 30 },
-        { name: "Odin S.", text: "33 von 33 Sternen! ⭐", x: 40, y: 60 },
-        { name: "Kübi", text: "Weltklasse Party incoming! 🎉", x: 80, y: 70 },
-        { name: "Julian S.", text: "Einzigartiges Erlebnis! 🚀", x: 15, y: 80 }
+        { name: "Jakob M.", text: "Das wird EPISCH! 🔥", x: 15, y: 20 },
+        { name: "Bene_dikt17", text: "Techno Bunker here I come! 🎧", x: 70, y: 15 },
+        { name: "Odin S.", text: "33 von 33 Sternen! ⭐", x: 25, y: 60 },
+        { name: "Kübi", text: "Weltklasse Party incoming! 🎉", x: 75, y: 70 },
+        { name: "Julian S.", text: "Einzigartiges Erlebnis! 🚀", x: 45, y: 40 }
       ];
       
       this.comments = sampleComments;
@@ -410,11 +410,15 @@ class WhiteboardManager {
       return;
     }
 
+    // Generate random position with better distribution
+    const x = Math.random() * 60 + 10; // 10% to 70%
+    const y = Math.random() * 60 + 10; // 10% to 70%
+
     const comment = {
       name: name,
       text: text,
-      x: Math.random() * 60 + 10, // Random position between 10% and 70%
-      y: Math.random() * 60 + 10,
+      x: x,
+      y: y,
       timestamp: Date.now()
     };
 
@@ -441,47 +445,52 @@ class WhiteboardManager {
       background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
       color: var(--bg);
       padding: 1rem 1.5rem;
-      border-radius: 8px;
+      border-radius: 12px;
       font-weight: 600;
       z-index: 1000;
-      animation: slideIn 0.3s ease-out;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      animation: slideIn 0.5s ease-out;
     `;
 
     document.body.appendChild(successMsg);
 
+    // Remove after 3 seconds
     setTimeout(() => {
-      successMsg.style.animation = 'slideOut 0.3s ease-in';
+      successMsg.style.animation = 'slideOut 0.5s ease-out';
       setTimeout(() => {
         if (document.body.contains(successMsg)) {
           document.body.removeChild(successMsg);
         }
-      }, 300);
-    }, 2000);
+      }, 500);
+    }, 3000);
   }
 
-  deleteComment(commentId) {
+  deleteComment(index) {
     if (!this.isAdmin) {
-      // For non-admins, show a message that they can't delete
-      alert('Nur Admins können Nachrichten löschen!');
-      return;
+      if (confirm('Nur Admins können Nachrichten löschen. Bist du ein Admin?')) {
+        this.isAdmin = true;
+      } else {
+        return;
+      }
     }
 
-    if (confirm('Möchtest du diese Nachricht wirklich löschen?')) {
-      this.comments.splice(commentId, 1);
+    if (confirm('Nachricht wirklich löschen?')) {
+      this.comments.splice(index, 1);
       this.saveComments();
       this.renderComments();
     }
   }
 
   renderComments() {
-    if (!this.canvas) {
-      console.error('Whiteboard canvas not found!');
-      return;
-    }
+    if (!this.canvas) return;
 
+    // Clear canvas
     this.canvas.innerHTML = '';
 
+    // Update whiteboard size based on comment count
+    this.updateWhiteboardSize();
+
+    // Render each comment
     this.comments.forEach((comment, index) => {
       const commentEl = document.createElement('div');
       commentEl.className = 'whiteboard-comment';
@@ -492,11 +501,25 @@ class WhiteboardManager {
         <div class="comment-text">${this.escapeHtml(comment.text)}</div>
       `;
 
+      // Add click listener for deletion
       commentEl.addEventListener('click', () => this.deleteComment(index));
+
       this.canvas.appendChild(commentEl);
     });
+  }
 
-    console.log(`Rendered ${this.comments.length} comments on whiteboard`);
+  updateWhiteboardSize() {
+    if (!this.canvas) return;
+
+    // Remove existing size classes
+    this.canvas.classList.remove('expanded', 'super-expanded');
+
+    // Add size class based on comment count
+    if (this.comments.length > 15) {
+      this.canvas.classList.add('super-expanded');
+    } else if (this.comments.length > 8) {
+      this.canvas.classList.add('expanded');
+    }
   }
 
   escapeHtml(text) {

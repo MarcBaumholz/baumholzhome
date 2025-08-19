@@ -1,40 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200" role="img" aria-label="Baumholz Home Logo">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300" role="img" aria-label="Baumholz Home Logo">
   <defs>
-    <!-- Simple golden gradient -->
+    <!-- Rich golden gradient for the emblem -->
     <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#D4A15A"/>
-      <stop offset="100%" stop-color="#B8945A"/>
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B8860B"/>
     </linearGradient>
     
     <!-- Tree gradient -->
     <linearGradient id="treeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4A7C59"/>
-      <stop offset="100%" stop-color="#2F6F3E"/>
+      <stop offset="0%" stop-color="#228B22"/>
+      <stop offset="100%" stop-color="#006400"/>
+    </linearGradient>
+    
+    <!-- Chalice gradient -->
+    <linearGradient id="chaliceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="50%" stop-color="#DAA520"/>
+      <stop offset="100%" stop-color="#B8860B"/>
     </linearGradient>
   </defs>
   
-  <!-- Simple chalice -->
+  <!-- Enclosing circle -->
+  <circle cx="150" cy="150" r="120" fill="none" stroke="url(#goldGradient)" stroke-width="3"/>
+  
+  <!-- Chalice/Cup -->
   <g>
+    <!-- Chalice bowl -->
+    <ellipse cx="150" cy="140" rx="45" ry="35" fill="url(#chaliceGradient)" stroke="url(#goldGradient)" stroke-width="2"/>
+    
     <!-- Chalice stem -->
-    <rect x="130" y="120" width="40" height="60" fill="url(#goldGradient)" rx="5"/>
+    <rect x="145" y="175" width="10" height="40" fill="url(#chaliceGradient)" rx="5"/>
     
-    <!-- Glass bowl -->
-    <ellipse cx="150" cy="100" rx="50" ry="40" fill="none" stroke="url(#goldGradient)" stroke-width="4"/>
-    
-    <!-- Tree inside -->
-    <circle cx="150" cy="90" r="15" fill="url(#treeGradient)"/>
-    <circle cx="145" cy="85" r="8" fill="url(#treeGradient)"/>
-    <circle cx="155" cy="85" r="8" fill="url(#treeGradient)"/>
-    <circle cx="150" cy="80" r="6" fill="url(#treeGradient)"/>
-    
-    <!-- Simple foam -->
-    <ellipse cx="150" cy="60" rx="35" ry="8" fill="#FFFFFF" opacity="0.9"/>
+    <!-- Chalice base -->
+    <ellipse cx="150" cy="215" rx="25" ry="8" fill="url(#chaliceGradient)" stroke="url(#goldGradient)" stroke-width="1"/>
   </g>
   
-  <!-- Simple text -->
-  <text x="150" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#D4A15A">
-    BAUMHOLZ HOME
-  </text>
+  <!-- Tree growing from chalice -->
+  <g>
+    <!-- Bottom tier (widest) -->
+    <path d="M 120 130 L 180 130 L 170 110 L 130 110 Z" fill="url(#treeGradient)"/>
+    
+    <!-- Middle tier -->
+    <path d="M 125 110 L 175 110 L 165 90 L 135 90 Z" fill="url(#treeGradient)"/>
+    
+    <!-- Top tier -->
+    <path d="M 130 90 L 170 90 L 160 70 L 140 70 Z" fill="url(#treeGradient)"/>
+    
+    <!-- Tree top -->
+    <path d="M 140 70 L 160 70 L 150 50 Z" fill="url(#treeGradient)"/>
+  </g>
+  
+  <!-- Glow effect around the emblem -->
+  <circle cx="150" cy="150" r="125" fill="none" stroke="url(#goldGradient)" stroke-width="1" opacity="0.3"/>
 </svg>
 
 
