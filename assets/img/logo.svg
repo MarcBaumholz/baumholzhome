@@ -1,108 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500" role="img" aria-label="Baumholz Home - The Last Chapter">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200" role="img" aria-label="Baumholz Home Logo">
   <defs>
-    <!-- Golden gradient for the chalice -->
+    <!-- Simple golden gradient -->
     <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F0D7A1"/>
-      <stop offset="50%" stop-color="#D4A15A"/>
+      <stop offset="0%" stop-color="#D4A15A"/>
       <stop offset="100%" stop-color="#B8945A"/>
     </linearGradient>
-    
-    <!-- Glow effect -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
     
     <!-- Tree gradient -->
     <linearGradient id="treeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4A7C59"/>
       <stop offset="100%" stop-color="#2F6F3E"/>
     </linearGradient>
-    
-    <!-- Water gradient -->
-    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1A3A4A"/>
-      <stop offset="100%" stop-color="#0F2A3A"/>
-    </linearGradient>
-    
-    <!-- Foam gradient -->
-    <linearGradient id="foamGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="50%" stop-color="#F8F8F8"/>
-      <stop offset="100%" stop-color="#E8E8E8"/>
-    </linearGradient>
-    
-    <!-- Background glow -->
-    <radialGradient id="bgGlow" cx="50%" cy="30%" r="70%">
-      <stop offset="0%" stop-color="#D4A15A" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#D4A15A" stop-opacity="0"/>
-    </radialGradient>
-    
-    <!-- Text glow effect -->
-    <filter id="textGlow">
-      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
   
-  <!-- Background glow -->
-  <circle cx="200" cy="150" r="150" fill="url(#bgGlow)"/>
-  
-  <!-- Chalice/Goblet -->
-  <g filter="url(#glow)">
-    <!-- Chalice stem and base -->
-    <path d="M160 400 L160 280 Q160 250 180 250 L220 250 Q240 250 240 280 L240 400 Q240 430 220 430 L180 430 Q160 430 160 400 Z" fill="url(#goldGradient)"/>
-    <path d="M120 430 L280 430 Q320 430 320 460 L320 480 Q320 510 280 510 L120 510 Q80 510 80 480 L80 460 Q80 430 120 430 Z" fill="url(#goldGradient)"/>
+  <!-- Simple chalice -->
+  <g>
+    <!-- Chalice stem -->
+    <rect x="130" y="120" width="40" height="60" fill="url(#goldGradient)" rx="5"/>
     
     <!-- Glass bowl -->
-    <ellipse cx="200" cy="220" rx="70" ry="80" fill="none" stroke="url(#goldGradient)" stroke-width="6" opacity="0.9"/>
-    <ellipse cx="200" cy="220" rx="55" ry="65" fill="none" stroke="url(#goldGradient)" stroke-width="3" opacity="0.7"/>
+    <ellipse cx="150" cy="100" rx="50" ry="40" fill="none" stroke="url(#goldGradient)" stroke-width="4"/>
     
-    <!-- Water in the glass -->
-    <ellipse cx="200" cy="250" rx="50" ry="50" fill="url(#waterGradient)" opacity="0.8"/>
+    <!-- Tree inside -->
+    <circle cx="150" cy="90" r="15" fill="url(#treeGradient)"/>
+    <circle cx="145" cy="85" r="8" fill="url(#treeGradient)"/>
+    <circle cx="155" cy="85" r="8" fill="url(#treeGradient)"/>
+    <circle cx="150" cy="80" r="6" fill="url(#treeGradient)"/>
     
-    <!-- Island/land -->
-    <ellipse cx="200" cy="240" rx="15" ry="8" fill="#8B4513" opacity="0.9"/>
-    
-    <!-- Tree trunk -->
-    <rect x="195" y="200" width="10" height="30" fill="#8B4513" opacity="0.9"/>
-    
-    <!-- Tree foliage -->
-    <circle cx="200" cy="180" r="20" fill="url(#treeGradient)"/>
-    <circle cx="190" cy="175" r="15" fill="url(#treeGradient)"/>
-    <circle cx="210" cy="175" r="15" fill="url(#treeGradient)"/>
-    <circle cx="200" cy="165" r="12" fill="url(#treeGradient)"/>
-    <circle cx="185" cy="170" r="8" fill="url(#treeGradient)"/>
-    <circle cx="215" cy="170" r="8" fill="url(#treeGradient)"/>
-    <circle cx="200" cy="155" r="6" fill="url(#treeGradient)"/>
-    
-    <!-- Foam/clouds on top -->
-    <ellipse cx="200" cy="120" rx="45" ry="18" fill="url(#foamGradient)" opacity="0.95"/>
-    <ellipse cx="185" cy="115" rx="18" ry="12" fill="url(#foamGradient)" opacity="0.9"/>
-    <ellipse cx="215" cy="115" rx="18" ry="12" fill="url(#foamGradient)" opacity="0.9"/>
-    <ellipse cx="200" cy="105" rx="12" ry="8" fill="url(#foamGradient)" opacity="0.8"/>
-    <ellipse cx="175" cy="110" rx="10" ry="6" fill="url(#foamGradient)" opacity="0.7"/>
-    <ellipse cx="225" cy="110" rx="10" ry="6" fill="url(#foamGradient)" opacity="0.7"/>
-    <ellipse cx="200" cy="95" rx="8" ry="5" fill="url(#foamGradient)" opacity="0.6"/>
+    <!-- Simple foam -->
+    <ellipse cx="150" cy="60" rx="35" ry="8" fill="#FFFFFF" opacity="0.9"/>
   </g>
   
-  <!-- Text: BAUMHOLZ HOME -->
-  <text x="200" y="420" text-anchor="middle" font-family="Cinzel, serif" font-size="32" font-weight="700" fill="#D4A15A" letter-spacing="3" filter="url(#textGlow)">
+  <!-- Simple text -->
+  <text x="150" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#D4A15A">
     BAUMHOLZ HOME
-  </text>
-  
-  <!-- Separator line -->
-  <line x1="120" y1="450" x2="280" y2="450" stroke="#D4A15A" stroke-width="3" opacity="0.8"/>
-  
-  <!-- Text: THE LAST CHAPTER -->
-  <text x="200" y="480" text-anchor="middle" font-family="Cinzel, serif" font-size="18" font-weight="600" fill="#D4A15A" letter-spacing="2" filter="url(#textGlow)">
-    THE LAST CHAPTER
   </text>
 </svg>
 

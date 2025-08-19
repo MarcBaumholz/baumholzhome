@@ -208,7 +208,9 @@ function createReviewPopup() {
   const closePopup = () => {
     popup.classList.add('fade-out');
     setTimeout(() => {
-      document.body.removeChild(popup);
+      if (document.body.contains(popup)) {
+        document.body.removeChild(popup);
+      }
     }, 300);
   };
 
@@ -221,12 +223,60 @@ function createReviewPopup() {
     window.open(googleReviewUrl, '_blank');
     closePopup();
   });
-
-  // Auto-close after 10 seconds
-  setTimeout(closePopup, 10000);
 }
 
-// Show review popup after 20 seconds
-setTimeout(createReviewPopup, 20000);
+// Floating Reviews System
+function createFloatingReview() {
+  const reviews = [
+    "Das was Schwaikheim fehlte! ⭐⭐⭐⭐⭐",
+    "Tolle Stimmung, im Keller wie im Lehmann! ⭐⭐⭐⭐⭐",
+    "Ein einzigartiges Erlebnis! ⭐⭐⭐⭐⭐",
+    "33 von 33 Sternen! ⭐⭐⭐⭐⭐",
+    "Weltklasse Gastfreundschaft! ⭐⭐⭐⭐⭐",
+    "Super Atmosphäre und gute Stimmung! ⭐⭐⭐⭐⭐",
+    "Verkotzt und versorgen - Baumholz home ist gut gelofen! ⭐⭐⭐⭐⭐",
+    "Der einzige Ort mit Schneemännern im Sommer! ⭐⭐⭐⭐⭐",
+    "Die beste Adresse von der ich je gehört habe! ⭐⭐⭐⭐⭐",
+    "Es war so gut hey! ⭐⭐⭐⭐⭐"
+  ];
+
+  const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
+  
+  const floatingReview = document.createElement('div');
+  floatingReview.className = 'floating-review';
+  floatingReview.innerHTML = `
+    <div class="floating-review-content">
+      <span class="floating-review-text">${randomReview}</span>
+    </div>
+  `;
+
+  // Random position
+  const startX = Math.random() * (window.innerWidth - 300);
+  const startY = window.innerHeight + 50;
+  
+  floatingReview.style.left = startX + 'px';
+  floatingReview.style.top = startY + 'px';
+  
+  document.body.appendChild(floatingReview);
+
+  // Animate floating up
+  setTimeout(() => {
+    floatingReview.style.transform = 'translateY(-100vh)';
+    floatingReview.style.opacity = '0';
+  }, 100);
+
+  // Remove after animation
+  setTimeout(() => {
+    if (document.body.contains(floatingReview)) {
+      document.body.removeChild(floatingReview);
+    }
+  }, 5000);
+}
+
+// Show review popup after 10 seconds
+setTimeout(createReviewPopup, 10000);
+
+// Show floating reviews every 30 seconds
+setInterval(createFloatingReview, 30000);
 
 
