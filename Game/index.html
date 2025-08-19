@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destroy Baumholz Home: The Last Chapter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="logo-background">
+            <div class="logo">
+                <div class="goblet">
+                    <div class="bowl">
+                        <div class="tree"></div>
+                        <div class="water"></div>
+                        <div class="foam"></div>
+                    </div>
+                    <div class="stem"></div>
+                    <div class="base"></div>
+                    <div class="glow-ring"></div>
+                </div>
+                <div class="logo-text">
+                    <div class="title">DESTROY BAUMHOLZ HOME</div>
+                    <div class="line"></div>
+                    <div class="subtitle">THE LAST CHAPTER</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-header">
+            <h1 class="game-title">BAUMHOLZ HOME</h1>
+            <h2 class="game-subtitle">THE LAST CHAPTER GAME</h2>
+        </div>
+        
+        <div class="game-ui">
+            <div class="score-board">
+                <div class="score">Score: <span id="score">0</span></div>
+                <div class="highscore">Highscore: <span id="highscore">0</span></div>
+                <div class="time">Zeit: <span id="time">0.0</span>s</div>
+                <div class="health">Health: <span id="playerHealth">100</span></div>
+            </div>
+            
+            <div class="game-area">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+            
+            <div class="controls">
+                <p>Steuerung: Pfeiltasten zum Fliegen, Leertaste für Turbo</p>
+            </div>
+            
+            <div id="gameOver" class="game-over hidden">
+                <h2>Spiel beendet!</h2>
+                <p>Dein Score: <span id="finalScore">0</span></p>
+                <p>Zeit: <span id="finalTime">0.0</span>s</p>
+                <div class="highscore-input">
+                    <label for="playerName">Dein Name:</label>
+                    <input type="text" id="playerName" placeholder="Gib deinen Namen ein" maxlength="20">
+                    <button onclick="saveHighscore()">Highscore speichern</button>
+                </div>
+                <div id="highscoreList" class="highscore-list"></div>
+                <button onclick="startGame()">Neues Spiel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1041,19 +1041,19 @@ a:hover { color: var(--gold-2); }
 
 .whiteboard-container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
 }
 
 .whiteboard {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, rgba(40,40,40,0.9) 0%, rgba(60,60,60,0.8) 100%);
   border: 3px solid var(--gold-2);
   border-radius: 16px;
   min-height: 400px;
   padding: 2rem;
   position: relative;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 0 20px rgba(212,161,90,0.1);
   overflow: hidden;
 }
 
@@ -1065,9 +1065,9 @@ a:hover { color: var(--gold-2); }
   right: 0;
   bottom: 0;
   background: 
-    linear-gradient(90deg, transparent 98%, rgba(0,0,0,0.1) 100%),
-    linear-gradient(0deg, transparent 98%, rgba(0,0,0,0.1) 100%);
-  background-size: 20px 20px;
+    linear-gradient(90deg, transparent 98%, rgba(212,161,90,0.1) 100%),
+    linear-gradient(0deg, transparent 98%, rgba(212,161,90,0.1) 100%);
+  background-size: 30px 30px;
   pointer-events: none;
 }
 
@@ -1075,54 +1075,69 @@ a:hover { color: var(--gold-2); }
   position: absolute;
   background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
   color: var(--bg);
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.2rem;
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.9rem;
   max-width: 200px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,161,90,0.3);
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 .whiteboard-comment:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  transform: scale(1.05) rotate(1deg);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 2px rgba(212,161,90,0.5);
+  background: linear-gradient(135deg, var(--gold-2), var(--gold-3));
 }
 
 .whiteboard-comment .comment-name {
   font-weight: 700;
   font-size: 0.8rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
   opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .whiteboard-comment .comment-text {
-  line-height: 1.3;
+  line-height: 1.4;
+  font-size: 0.85rem;
 }
 
 .whiteboard-form {
   background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(212,161,90,0.2);
+  border: 2px solid rgba(212,161,90,0.2);
   border-radius: 16px;
   padding: 2rem;
   height: fit-content;
+  backdrop-filter: blur(10px);
 }
 
 .form-group {
   margin-bottom: 1.5rem;
 }
 
+.form-group label {
+  display: block;
+  color: var(--gold-2);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 0.8rem;
-  border: 1px solid rgba(212,161,90,0.3);
+  padding: 1rem;
+  border: 2px solid rgba(212,161,90,0.3);
   border-radius: 8px;
   background: rgba(255,255,255,0.05);
   color: var(--text);
   font-family: inherit;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
 }
 
@@ -1134,9 +1149,15 @@ a:hover { color: var(--gold-2); }
   box-shadow: 0 0 0 3px rgba(212,161,90,0.1);
 }
 
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
 .form-group textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
 }
 
 .whiteboard-info {
@@ -1144,6 +1165,11 @@ a:hover { color: var(--gold-2); }
   color: var(--text-light);
   font-size: 0.9rem;
   font-style: italic;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(212,161,90,0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(212,161,90,0.1);
 }
 
 /* Responsive design for whiteboard */
@@ -1161,7 +1187,7 @@ a:hover { color: var(--gold-2); }
   .whiteboard-comment {
     max-width: 150px;
     font-size: 0.8rem;
-    padding: 0.6rem 0.8rem;
+    padding: 0.8rem 1rem;
   }
 }
 

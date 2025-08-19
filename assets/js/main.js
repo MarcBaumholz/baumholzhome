@@ -349,8 +349,26 @@ class WhiteboardManager {
     this.textInput = document.getElementById('comment-text');
     this.addBtn = document.getElementById('add-comment-btn');
 
+    // Debug logging
+    console.log('Whiteboard elements found:', {
+      canvas: !!this.canvas,
+      nameInput: !!this.nameInput,
+      textInput: !!this.textInput,
+      addBtn: !!this.addBtn
+    });
+
     if (this.addBtn) {
       this.addBtn.addEventListener('click', () => this.addComment());
+    }
+
+    // Add enter key support for textarea
+    if (this.textInput) {
+      this.textInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          this.addComment();
+        }
+      });
     }
 
     this.renderComments();
@@ -360,10 +378,11 @@ class WhiteboardManager {
   loadSampleComments() {
     if (this.comments.length === 0) {
       const sampleComments = [
-        { name: "Jakob M.", text: "Das wird EPISCH! 🔥", x: 50, y: 30 },
-        { name: "Bene_dikt17", text: "Techno Bunker here I come! 🎧", x: 70, y: 60 },
-        { name: "Odin S.", text: "33 von 33 Sternen! ⭐", x: 20, y: 80 },
-        { name: "Kübi", text: "Weltklasse Party incoming! 🎉", x: 80, y: 20 }
+        { name: "Jakob M.", text: "Das wird EPISCH! 🔥", x: 20, y: 20 },
+        { name: "Bene_dikt17", text: "Techno Bunker here I come! 🎧", x: 70, y: 30 },
+        { name: "Odin S.", text: "33 von 33 Sternen! ⭐", x: 40, y: 60 },
+        { name: "Kübi", text: "Weltklasse Party incoming! 🎉", x: 80, y: 70 },
+        { name: "Julian S.", text: "Einzigartiges Erlebnis! 🚀", x: 15, y: 80 }
       ];
       
       this.comments = sampleComments;
@@ -394,8 +413,8 @@ class WhiteboardManager {
     const comment = {
       name: name,
       text: text,
-      x: Math.random() * 70 + 10, // Random position between 10% and 80%
-      y: Math.random() * 70 + 10,
+      x: Math.random() * 60 + 10, // Random position between 10% and 70%
+      y: Math.random() * 60 + 10,
       timestamp: Date.now()
     };
 
@@ -426,6 +445,7 @@ class WhiteboardManager {
       font-weight: 600;
       z-index: 1000;
       animation: slideIn 0.3s ease-out;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     `;
 
     document.body.appendChild(successMsg);
@@ -455,7 +475,10 @@ class WhiteboardManager {
   }
 
   renderComments() {
-    if (!this.canvas) return;
+    if (!this.canvas) {
+      console.error('Whiteboard canvas not found!');
+      return;
+    }
 
     this.canvas.innerHTML = '';
 
@@ -472,6 +495,8 @@ class WhiteboardManager {
       commentEl.addEventListener('click', () => this.deleteComment(index));
       this.canvas.appendChild(commentEl);
     });
+
+    console.log(`Rendered ${this.comments.length} comments on whiteboard`);
   }
 
   escapeHtml(text) {
@@ -487,6 +512,7 @@ class WhiteboardManager {
 
 // Initialize whiteboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, initializing whiteboard...');
   new WhiteboardManager();
 });
 
