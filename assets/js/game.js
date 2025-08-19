@@ -23,7 +23,9 @@ class BaumholzGame {
             height: 20,
             speed: 5,
             turboSpeed: 8,
-            isTurbo: false
+            isTurbo: false,
+            targetY: null, // For touch controls
+            targetX: null // For touch controls
         };
         
         // Flying Baumholz Home - Much harder target
@@ -99,7 +101,7 @@ class BaumholzGame {
     }
     
     setupInputs() {
-        // Only handle inputs when game is running and canvas is focused
+        // Desktop keyboard controls
         this.canvas.addEventListener('keydown', (e) => {
             if (this.gameRunning) {
                 this.keys[e.code] = true;
@@ -113,6 +115,9 @@ class BaumholzGame {
                 e.preventDefault();
             }
         });
+        
+        // Mobile touch controls
+        this.setupTouchControls();
         
         // Make canvas focusable
         this.canvas.setAttribute('tabindex', '0');
@@ -131,6 +136,76 @@ class BaumholzGame {
                 this.canvas.focus();
             }
         });
+    }
+    
+    setupTouchControls() {
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let isTouching = false;
+        
+        // Touch start
+        this.canvas.addEventListener('touchstart', (e) => {
+            if (this.gameRunning) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                touchStartY = touch.clientY;
+                touchStartX = touch.clientX;
+                isTouching = true;
+                
+                // Auto-shoot on mobile
+                this.keys['KeyQ'] = true;
+            }
+        }, { passive: false });
+        
+        // Touch move
+        this.canvas.addEventListener('touchmove', (e) => {
+            if (this.gameRunning && isTouching) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                
+                // Get canvas position and size
+                const rect = this.canvas.getBoundingClientRect();
+                const touchY = touch.clientY - rect.top;
+                const touchX = touch.clientX - rect.left;
+                
+                // Convert touch position to game coordinates
+                const gameY = (touchY / rect.height) * this.canvas.height;
+                const gameX = (touchX / rect.width) * this.canvas.width;
+                
+                // Set target position for smooth movement
+                this.player.targetY = gameY;
+                this.player.targetX = gameX;
+                
+                // Auto-shoot on mobile
+                this.keys['KeyQ'] = true;
+            }
+        }, { passive: false });
+        
+        // Touch end
+        this.canvas.addEventListener('touchend', (e) => {
+            if (this.gameRunning) {
+                e.preventDefault();
+                isTouching = false;
+                
+                // Stop auto-shooting
+                this.keys['KeyQ'] = false;
+                
+                // Clear target positions
+                this.player.targetY = null;
+                this.player.targetX = null;
+            }
+        }, { passive: false });
+        
+        // Prevent default touch behaviors
+        this.canvas.addEventListener('touchcancel', (e) => {
+            if (this.gameRunning) {
+                e.preventDefault();
+                isTouching = false;
+                this.keys['KeyQ'] = false;
+                this.player.targetY = null;
+                this.player.targetX = null;
+            }
+        }, { passive: false });
     }
     
     startGame() {
@@ -770,7 +845,22 @@ class BaumholzGame {
         if (!this.gameRunning) return;
         
         this.currentTime = (Date.now() - this.startTime) / 1000;
-        this.handleInput();
+        
+        // Update player position based on touch or keyboard
+        if (this.player.targetY !== null && this.player.targetX !== null) {
+            const rect = this.canvas.getBoundingClientRect();
+            const touchY = this.player.targetY - rect.top;
+            const touchX = this.player.targetX - rect.left;
+            
+            const gameY = (touchY / rect.height) * this.canvas.height;
+            const gameX = (touchX / rect.width) * this.canvas.width;
+            
+            this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, gameY));
+            this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, gameX));
+        } else {
+            this.handleInput();
+        }
+        
         this.updateHouse();
         this.updateBullets();
         this.updateEnemies();
@@ -780,9 +870,48 @@ class BaumholzGame {
     }
     
     gameLoop() {
-        this.update();
-        this.draw();
+        if (this.gameRunning) {
+            this.currentTime = (Date.now() - this.startTime) / 1000;
+            
+            // Handle player movement
+            this.handlePlayerMovement();
+            
+            this.updateHouse();
+            this.updateBullets();
+            this.updateEnemyBullets();
+            this.updateEnemies();
+            this.updateExplosions();
+            this.checkCollisions();
+            this.spawnEnemies();
+            this.updateScore();
+        }
+        
+        this.render();
         requestAnimationFrame(() => this.gameLoop());
+    }
+    
+    handlePlayerMovement() {
+        // Mobile touch movement
+        if (this.player.targetY !== null && this.player.targetX !== null) {
+            // Smooth movement towards target position
+            const speed = this.player.speed;
+            const dx = this.player.targetX - this.player.x;
+            const dy = this.player.targetY - this.player.y;
+            
+            if (Math.abs(dx) > 2) {
+                this.player.x += Math.sign(dx) * speed;
+            }
+            if (Math.abs(dy) > 2) {
+                this.player.y += Math.sign(dy) * speed;
+            }
+        } else {
+            // Desktop keyboard movement
+            this.handleInput();
+        }
+        
+        // Keep player in bounds
+        this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, this.player.x));
+        this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, this.player.y));
     }
     
     saveHighscore() {
@@ -897,6 +1026,8 @@ class BaumholzGame {
         this.player.x = 100;
         this.player.y = 300; // Center of screen
         this.playerHealth = this.maxPlayerHealth;
+        this.player.targetY = null;
+        this.player.targetX = null;
         
         // Reset house
         this.house.health = this.house.maxHealth;
