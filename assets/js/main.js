@@ -329,11 +329,11 @@ function createFloatingReview() {
   }, 8000);
 }
 
-// Show review popup after 10 seconds
-setTimeout(createReviewPopup, 10000);
+// Show review popup after 25 seconds
+setTimeout(createReviewPopup, 25000);
 
-// Show floating reviews every 25 seconds
-setInterval(createFloatingReview, 25000);
+// Show floating reviews every 15 seconds
+setInterval(createFloatingReview, 15000);
 
 // Whiteboard System
 class WhiteboardManager {

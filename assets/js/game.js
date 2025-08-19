@@ -87,6 +87,10 @@ class BaumholzGame {
                 if (startScreen) {
                     startScreen.classList.add('hidden');
                 }
+                // Focus canvas immediately after starting
+                setTimeout(() => {
+                    this.canvas.focus();
+                }, 100);
             });
         }
     }
@@ -112,7 +116,17 @@ class BaumholzGame {
         
         // Focus canvas when clicked
         this.canvas.addEventListener('click', () => {
-            this.canvas.focus();
+            if (this.gameRunning) {
+                this.canvas.focus();
+            }
+        });
+        
+        // Prevent canvas from losing focus when clicking inside
+        this.canvas.addEventListener('mousedown', (e) => {
+            if (this.gameRunning) {
+                e.preventDefault();
+                this.canvas.focus();
+            }
         });
     }
     
@@ -270,8 +284,8 @@ class BaumholzGame {
             this.player.x += this.player.speed;
         }
         
-        // Firing (Spacebar)
-        if (this.keys['Space']) {
+        // Firing (Q key)
+        if (this.keys['KeyQ']) {
             this.fireBullet();
         }
         
