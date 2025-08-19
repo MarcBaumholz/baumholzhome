@@ -670,10 +670,27 @@ document.head.appendChild(style);
 
 // Scroll to top function
 function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+    // Smooth scroll to top with better compatibility
+    if ('scrollBehavior' in document.documentElement.style) {
+        // Modern browsers
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    } else {
+        // Fallback for older browsers
+        const scrollStep = -window.scrollY / (500 / 15);
+        const scrollInterval = setInterval(() => {
+            if (window.scrollY !== 0) {
+                window.scrollBy(0, scrollStep);
+            } else {
+                clearInterval(scrollInterval);
+            }
+        }, 15);
+    }
+    
+    // Prevent default link behavior
+    return false;
 }
 
 
