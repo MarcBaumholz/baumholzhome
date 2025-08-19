@@ -11,14 +11,14 @@ class BaumholzGame {
         this.gameRunning = false;
         this.gameStarted = false;
         this.score = 0;
-        this.highscore = localStorage.getItem('baumholzHighscore') || 0;
+        this.highscore = 0; // Reset highscore
         this.startTime = 0;
         this.currentTime = 0;
         
-        // Player (airplane)
+        // Player (airplane) - Start in center
         this.player = {
             x: 100,
-            y: 300,
+            y: 300, // Center of screen
             width: 40,
             height: 20,
             speed: 5,
@@ -71,6 +71,9 @@ class BaumholzGame {
         this.keys = {};
         this.setupInputs();
         this.setupStartButton();
+        
+        // Clear all highscores
+        this.clearAllHighscores();
         
         // Initialize
         this.updateHighscore();
@@ -147,9 +150,9 @@ class BaumholzGame {
             door: { health: 100, visible: true }
         };
         
-        // Reset player
+        // Reset player to center position
         this.player.x = 100;
-        this.player.y = 300;
+        this.player.y = 300; // Center of screen
         this.playerHealth = this.maxPlayerHealth;
         
         // Clear arrays
@@ -161,7 +164,7 @@ class BaumholzGame {
         // Focus canvas for input
         this.canvas.focus();
         
-        console.log('Game started!');
+        console.log('Game started! Player at center position:', this.player.x, this.player.y);
     }
     
     updateScore() {
@@ -255,7 +258,7 @@ class BaumholzGame {
         
         let html = '<h3>🏆 Top Highscores:</h3><div class="highscore-table">';
         highscores.forEach((hs, index) => {
-            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅';
+            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '��';
             html += `<div class="highscore-entry">
                 <span class="medal">${medal}</span>
                 <span class="name">${hs.name}</span>
@@ -892,7 +895,7 @@ class BaumholzGame {
         
         // Reset player
         this.player.x = 100;
-        this.player.y = 300;
+        this.player.y = 300; // Center of screen
         this.playerHealth = this.maxPlayerHealth;
         
         // Reset house
@@ -932,6 +935,14 @@ class BaumholzGame {
         // Same as reset but without showing game over screen
         this.resetGame();
         console.log('Exited to start screen');
+    }
+
+    clearAllHighscores() {
+        localStorage.removeItem('baumholzHighscores');
+        localStorage.removeItem('baumholzHighscore');
+        this.highscore = 0;
+        this.updateHighscore();
+        console.log('All highscores cleared.');
     }
 }
 
