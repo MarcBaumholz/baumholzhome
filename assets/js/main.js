@@ -332,8 +332,8 @@ function createFloatingReview() {
 // Show review popup after 10 seconds
 setTimeout(createReviewPopup, 10000);
 
-// Show floating reviews every 15 seconds
-setInterval(createFloatingReview, 15000);
+// Show floating reviews every 25 seconds
+setInterval(createFloatingReview, 25000);
 
 // Whiteboard System
 class WhiteboardManager {
@@ -512,10 +512,12 @@ class WhiteboardManager {
     if (!this.canvas) return;
 
     // Remove existing size classes
-    this.canvas.classList.remove('expanded', 'super-expanded');
+    this.canvas.classList.remove('expanded', 'super-expanded', 'ultra-expanded');
 
     // Add size class based on comment count
-    if (this.comments.length > 15) {
+    if (this.comments.length > 25) {
+      this.canvas.classList.add('ultra-expanded');
+    } else if (this.comments.length > 15) {
       this.canvas.classList.add('super-expanded');
     } else if (this.comments.length > 8) {
       this.canvas.classList.add('expanded');

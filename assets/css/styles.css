@@ -109,31 +109,70 @@ a:hover { color: var(--gold-2); }
 }
 
 /* Ticket Section */
-.ticket-info {
+.ticket-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-@media (max-width: 700px) { 
-  .ticket-info { grid-template-columns: 1fr; } 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .ticket-card {
-  background: linear-gradient(135deg, rgba(212,161,90,0.1), rgba(240,215,161,0.05));
-  border: 2px solid rgba(212,161,90,0.4);
+  background: rgba(255,255,255,0.03);
+  border: 2px solid rgba(212,161,90,0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
 
-.ticket-features {
+.ticket-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(212,161,90,0.4);
+  box-shadow: 0 10px 30px rgba(212,161,90,0.2);
+}
+
+.ticket-card h3 {
+  color: var(--gold-2);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold-1);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px rgba(212,161,90,0.3);
+}
+
+.ticket-card ul {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0 0;
+  margin-bottom: 1.5rem;
 }
 
-.ticket-features li {
-  padding: 0.3rem 0;
-  color: var(--gold-2);
-  font-weight: 500;
+.ticket-card li {
+  color: var(--text);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(212,161,90,0.1);
+  font-size: 1rem;
+}
+
+.ticket-card li:last-child {
+  border-bottom: none;
+}
+
+.ticket-note {
+  color: var(--text-light);
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(212,161,90,0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(212,161,90,0.1);
 }
 
 .tombola-card {
@@ -146,12 +185,6 @@ a:hover { color: var(--gold-2); }
   font-weight: 600;
   font-size: 1.1rem;
   margin-top: 0.5rem;
-}
-
-.ticket-note {
-  text-align: center;
-  color: var(--muted);
-  font-style: italic;
 }
 
 /* Donation section */
@@ -1031,7 +1064,7 @@ a:hover { color: var(--gold-2); }
   left: 0;
 }
 
-/* Whiteboard System - Optimized Design */
+/* Whiteboard System - Redesigned with White Background */
 .whiteboard-intro {
   text-align: center;
   color: var(--text-light);
@@ -1045,7 +1078,7 @@ a:hover { color: var(--gold-2); }
   align-items: center;
   gap: 2rem;
   margin-bottom: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -1056,7 +1089,7 @@ a:hover { color: var(--gold-2); }
   border-radius: 16px;
   padding: 2rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
@@ -1141,16 +1174,15 @@ a:hover { color: var(--gold-2); }
 }
 
 .whiteboard {
-  background: linear-gradient(135deg, rgba(40,40,40,0.9) 0%, rgba(60,60,60,0.8) 100%);
+  background: #ffffff;
   border: 3px solid var(--gold-2);
   border-radius: 16px;
   padding: 2rem;
   position: relative;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 0 20px rgba(212,161,90,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   overflow: hidden;
   width: 100%;
-  max-width: 1000px;
-  min-height: 500px;
+  min-height: 600px;
   transition: all 0.5s ease;
 }
 
@@ -1162,9 +1194,9 @@ a:hover { color: var(--gold-2); }
   right: 0;
   bottom: 0;
   background: 
-    linear-gradient(90deg, transparent 98%, rgba(212,161,90,0.1) 100%),
-    linear-gradient(0deg, transparent 98%, rgba(212,161,90,0.1) 100%);
-  background-size: 40px 40px;
+    linear-gradient(90deg, transparent 98%, rgba(212,161,90,0.2) 100%),
+    linear-gradient(0deg, transparent 98%, rgba(212,161,90,0.2) 100%);
+  background-size: 50px 50px;
   pointer-events: none;
 }
 
@@ -1177,7 +1209,7 @@ a:hover { color: var(--gold-2); }
   font-weight: 600;
   font-size: 0.9rem;
   max-width: 200px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,161,90,0.3);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(212,161,90,0.3);
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
@@ -1198,7 +1230,7 @@ a:hover { color: var(--gold-2); }
 
 .whiteboard-comment:hover {
   transform: scale(1.05) rotate(1deg);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 2px rgba(212,161,90,0.5);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 2px rgba(212,161,90,0.5);
   background: linear-gradient(135deg, var(--gold-2), var(--gold-3));
 }
 
@@ -1229,11 +1261,15 @@ a:hover { color: var(--gold-2); }
 
 /* Dynamic whiteboard sizing based on content */
 .whiteboard.expanded {
-  min-height: 700px;
+  min-height: 800px;
 }
 
 .whiteboard.super-expanded {
-  min-height: 900px;
+  min-height: 1000px;
+}
+
+.whiteboard.ultra-expanded {
+  min-height: 1200px;
 }
 
 /* Success message styling */
@@ -1290,7 +1326,7 @@ a:hover { color: var(--gold-2); }
   }
   
   .whiteboard {
-    min-height: 400px;
+    min-height: 500px;
     padding: 1.5rem;
   }
   

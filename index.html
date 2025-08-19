@@ -132,27 +132,36 @@
       <section id="tickets" class="section">
         <div class="container">
           <h2>Tickets</h2>
-          <div class="ticket-info">
-            <div class="card ticket-card">
-              <h3>Standard Ticket – 15€</h3>
-              <ul class="ticket-features">
-                <li>✓ Unlimited Bier</li>
-                <li>✓ Unlimited Aperol</li>
-                <li>✓ Sticker & Bierdeckel</li>
-                <li>✓ 1 Tombola Los im Topf</li>
+          <div class="ticket-grid">
+            <div class="ticket-card">
+              <h3>Standard Ticket</h3>
+              <div class="price">15€</div>
+              <ul>
+                <li>Unlimited Bier & Aperol</li>
+                <li>Gratis Pizza um 20:00 Uhr</li>
+                <li>Exklusive Sticker</li>
+                <li>Beer Mats</li>
+                <li>1 Tombola Ticket</li>
+              </ul>
+              <p class="ticket-note">Zahlreiche Gewinne mit unglaublichen Preisen</p>
+            </div>
+            <div class="ticket-card">
+              <h3>Zusätzliches Tombola Ticket</h3>
+              <div class="price">5€</div>
+              <ul>
+                <li>1 zusätzliches Tombola Ticket</li>
+                <li>Erhöhte Gewinnchancen</li>
+                <li>Zahlreiche Gewinne mit unglaublichen Preisen</li>
               </ul>
             </div>
-            <div class="card tombola-card">
-              <h3>Zusätzliche Tombola Lose</h3>
-              <p>Für 5€ pro zusätzliches Los</p>
-              <p class="tombola-prize">Zahlreiche Gewinne mit unglaublichen Preisen</p>
-            </div>
           </div>
-          <p class="ticket-note">Tickets nur über Instagram verfügbar</p>
-          
-          <!-- Donation Section moved here -->
+        </div>
+      </section>
+
+      <section id="donation" class="section">
+        <div class="container">
+          <h2>Spendenziel</h2>
           <div class="donation-section">
-            <h3>Spendenziel</h3>
             <div class="piggy-bank"></div>
             <div class="donation-progress">
               <div class="progress-bar">
@@ -305,6 +314,94 @@
         <div class="container">
           <h2>Release Notes</h2>
           <div class="release-notes">
+            <div class="release-version">
+              <h3>v1.4.3 - Ticket updates, logo fix, and whiteboard redesign</h3>
+              <p class="release-date">19. August 2025</p>
+              <div class="release-changes">
+                <h4>🎫 Ticket Improvements</h4>
+                <ul>
+                  <li>Added "Gratis Pizza um 20:00 Uhr" to Standard Ticket</li>
+                  <li>Redesigned ticket layout with better pricing display</li>
+                  <li>Enhanced ticket cards with hover effects and professional styling</li>
+                  <li>Improved ticket information hierarchy and readability</li>
+                </ul>
+                
+                <h4>🎨 Logo Fix</h4>
+                <ul>
+                  <li>Fixed logo to display the new golden tree and chalice design</li>
+                  <li>Ensured proper SVG rendering with rich golden gradients</li>
+                  <li>Verified logo appears correctly in header and hero sections</li>
+                </ul>
+                
+                <h4>⏰ Timing Updates</h4>
+                <ul>
+                  <li>Changed floating review popup timing from 15 to 25 seconds</li>
+                  <li>Improved user experience with less frequent popup interruptions</li>
+                </ul>
+                
+                <h4>📝 Whiteboard Redesign</h4>
+                <ul>
+                  <li>Complete whiteboard redesign with white background for better readability</li>
+                  <li>Form positioned at the top with name and message fields</li>
+                  <li>Full-width whiteboard that expands dynamically with more messages</li>
+                  <li>Enhanced "HYPER HYPER" button styling to match website theme</li>
+                  <li>Improved comment positioning and sizing as whiteboard grows</li>
+                  <li>Better grid pattern and visual hierarchy</li>
+                  <li>Enhanced responsive design for all devices</li>
+                </ul>
+                
+                <h4>🔧 Technical Enhancements</h4>
+                <ul>
+                  <li>Updated whiteboard sizing logic with ultra-expanded state</li>
+                  <li>Improved comment distribution and positioning algorithms</li>
+                  <li>Enhanced CSS animations and transitions</li>
+                  <li>Better form validation and user feedback</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="release-version">
+              <h3>v1.4.2 - Game controls and START button implementation</h3>
+              <p class="release-date">19. August 2025</p>
+              <div class="release-changes">
+                <h4>🎮 Game Improvements</h4>
+                <ul>
+                  <li>Added START button that appears before game begins</li>
+                  <li>Game only starts when START button is clicked</li>
+                  <li>Centered 'Baumholz Home Game' title</li>
+                  <li>Fixed controls to only work when game is active and canvas is focused</li>
+                  <li>Updated controls text to 'Leertaste zum Feuern' (no turbo)</li>
+                </ul>
+                
+                <h4>🎯 Control System</h4>
+                <ul>
+                  <li>Arrow keys for movement (WASD also supported)</li>
+                  <li>Spacebar for firing bullets (no turbo mode)</li>
+                  <li>Controls only active when game is running and canvas focused</li>
+                  <li>Prevents page scrolling when using game controls</li>
+                  <li>Canvas becomes focusable for proper input handling</li>
+                </ul>
+                
+                <h4>🔧 Technical Enhancements</h4>
+                <ul>
+                  <li>Game state management with proper start/stop logic</li>
+                  <li>Improved input handling with canvas focus detection</li>
+                  <li>Better game over and reset functionality</li>
+                  <li>Enhanced START button styling with hover effects</li>
+                  <li>Proper game initialization and cleanup</li>
+                </ul>
+                
+                <h4>✨ User Experience</h4>
+                <ul>
+                  <li>Clear visual indication when game is ready to start</li>
+                  <li>Professional START button with golden styling</li>
+                  <li>Smooth transitions between game states</li>
+                  <li>Better feedback for user interactions</li>
+                  <li>Improved game flow and accessibility</li>
+                </ul>
+              </div>
+            </div>
+            
             <div class="release-version">
               <h3>v1.4.1 - Logo redesign and whiteboard optimization</h3>
               <p class="release-date">19. August 2025</p>
