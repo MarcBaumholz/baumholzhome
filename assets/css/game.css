@@ -1,0 +1,174 @@
+/* Baumholz Home Game - Adapted for website integration */
+.game-intro {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.game-container {
+  background: rgba(255,255,255,0.03);
+  border: 2px solid rgba(212,161,90,0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.game-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.score-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 1rem;
+}
+
+.score-board > div {
+  background: rgba(212,161,90,0.1);
+  border: 1px solid rgba(212,161,90,0.3);
+  border-radius: 8px;
+  padding: 0.8rem;
+  text-align: center;
+  color: var(--gold-2);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.game-area {
+  position: relative;
+  border: 2px solid rgba(212,161,90,0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(40,40,40,0.9) 0%, rgba(60,60,60,0.8) 100%);
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #2a2a2a);
+}
+
+.controls {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  padding: 1rem;
+  background: rgba(212,161,90,0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(212,161,90,0.1);
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, var(--bg) 0%, rgba(40,40,40,0.95) 100%);
+  border: 2px solid var(--gold-2);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  min-width: 300px;
+}
+
+.game-over h2 {
+  color: var(--gold-2);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.game-over p {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.highscore-input {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.highscore-input label {
+  color: var(--gold-2);
+  font-weight: 600;
+}
+
+.highscore-input input {
+  padding: 0.8rem;
+  border: 1px solid rgba(212,161,90,0.3);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  font-family: inherit;
+  width: 200px;
+  text-align: center;
+}
+
+.highscore-input input:focus {
+  outline: none;
+  border-color: var(--gold-2);
+  background: rgba(255,255,255,0.1);
+}
+
+.highscore-list {
+  margin: 1rem 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.highscore-list div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(212,161,90,0.2);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.highscore-list div:last-child {
+  border-bottom: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .score-board {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .score-board > div {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+  
+  #gameCanvas {
+    height: 300px;
+  }
+  
+  .game-over {
+    min-width: 280px;
+    padding: 1.5rem;
+  }
+}
