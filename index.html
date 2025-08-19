@@ -132,29 +132,24 @@
       <section id="tickets" class="section">
         <div class="container">
           <h2>Tickets</h2>
-          <div class="ticket-grid">
-            <div class="ticket-card">
-              <h3>Standard Ticket</h3>
-              <div class="price">15€</div>
-              <ul>
-                <li>Unlimited Bier & Aperol</li>
-                <li>Gratis Pizza um 20:00 Uhr</li>
-                <li>Exklusive Sticker</li>
-                <li>Beer Mats</li>
-                <li>1 Tombola Ticket</li>
+          <div class="ticket-info">
+            <div class="card ticket-card">
+              <h3>Standard Ticket – 15€</h3>
+              <ul class="ticket-features">
+                <li>✓ Unlimited Bier</li>
+                <li>✓ Unlimited Aperol</li>
+                <li>✓ Gratis Pizza um 20:00 Uhr</li>
+                <li>✓ Sticker & Bierdeckel</li>
+                <li>✓ 1 Tombola Los im Topf</li>
               </ul>
-              <p class="ticket-note">Zahlreiche Gewinne mit unglaublichen Preisen</p>
             </div>
-            <div class="ticket-card">
-              <h3>Zusätzliches Tombola Ticket</h3>
-              <div class="price">5€</div>
-              <ul>
-                <li>1 zusätzliches Tombola Ticket</li>
-                <li>Erhöhte Gewinnchancen</li>
-                <li>Zahlreiche Gewinne mit unglaublichen Preisen</li>
-              </ul>
+            <div class="card tombola-card">
+              <h3>Zusätzliche Tombola Lose</h3>
+              <p>Für 5€ pro zusätzliches Los</p>
+              <p class="tombola-prize">Zahlreiche Gewinne mit unglaublichen Preisen</p>
             </div>
           </div>
+          <p class="ticket-note">Tickets nur über Instagram verfügbar</p>
         </div>
       </section>
 
@@ -288,15 +283,15 @@
             <div class="whiteboard-form">
               <div class="form-row">
                 <div class="form-group">
-                  <label for="comment-name">Dein voller Name</label>
-                  <input type="text" id="comment-name" placeholder="Dein voller Name" maxlength="30" required>
+                  <label for="comment-name">Name</label>
+                  <input type="text" id="comment-name" placeholder="Dein Name" maxlength="30" required>
                 </div>
                 <div class="form-group">
-                  <label for="comment-text">Deine Hype-Nachricht</label>
-                  <textarea id="comment-text" placeholder="Deine Hype-Nachricht (max. 100 Zeichen)" maxlength="100" required></textarea>
+                  <label for="comment-text">Nachricht</label>
+                  <input type="text" id="comment-text" placeholder="Deine Hype-Nachricht (max. 100 Zeichen)" maxlength="100" required>
                 </div>
+                <button type="button" id="add-comment-btn" class="hyper-hyper-btn">HYPER HYPER</button>
               </div>
-              <button type="button" id="add-comment-btn" class="hyper-hyper-btn">HYPER HYPER</button>
             </div>
             
             <div class="whiteboard" id="whiteboard-canvas">
