@@ -412,7 +412,8 @@ class WhiteboardManager {
             { name: 'MARC', text: 'hyper hyper', x: 20, y: 30 },
             { name: 'JAKOB M.', text: 'Das wird EPISCH! 🔥', x: 50, y: 20 },
             { name: 'KÜBI', text: 'Weltklasse Party incoming! 🎉', x: 70, y: 60 },
-            { name: 'BENE_DIKT17', text: 'Techno Bunker here I come!', x: 30, y: 70 }
+            { name: 'BENE_DIKT17', text: 'Techno Bunker here I come!', x: 30, y: 70 },
+            { name: 'ODIN S.', text: '33 von 33 Sternen! ⭐', x: 60, y: 40 }
         ];
         this.saveComments();
     }
@@ -532,10 +533,10 @@ class WhiteboardManager {
             `;
             
             commentEl.innerHTML = `
-                <div style="font-weight: 700; color: #333; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <div style="font-weight: 800; color: #000; margin-bottom: 0.5rem; font-size: 0.95rem; text-shadow: none;">
                     ${comment.name}
                 </div>
-                <div style="color: #000; font-size: 0.85rem; line-height: 1.3;">
+                <div style="color: #000; font-size: 0.9rem; line-height: 1.4; font-weight: 500; text-shadow: none;">
                     ${comment.text}
                 </div>
             `;
