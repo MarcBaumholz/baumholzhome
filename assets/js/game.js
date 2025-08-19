@@ -15,17 +15,17 @@ class BaumholzGame {
         this.startTime = 0;
         this.currentTime = 0;
         
-        // Mobile detection and faster gameplay
+        // Mobile detection and slower gameplay
         this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
-        // Faster mobile gameplay settings
+        // Slower mobile gameplay settings
         this.player = {
             x: 100,
             y: 300, // Center of screen
             width: 30,
             height: 20,
-            speed: this.isMobile ? 12 : 5, // Much faster on mobile
-            turboSpeed: this.isMobile ? 18 : 8,
+            speed: this.isMobile ? 6 : 5, // Slower on mobile (was 12)
+            turboSpeed: this.isMobile ? 9 : 8, // Slower turbo on mobile (was 18)
             isTurbo: false,
             targetX: null,
             targetY: null
@@ -36,9 +36,9 @@ class BaumholzGame {
             y: 300,
             width: 80,
             height: 100,
-            health: this.isMobile ? 120 : 200, // Less health on mobile for faster gameplay
-            maxHealth: this.isMobile ? 120 : 200,
-            speed: this.isMobile ? 6 : 2, // Much faster movement on mobile
+            health: this.isMobile ? 150 : 200, // More health on mobile for slower gameplay
+            maxHealth: this.isMobile ? 150 : 200,
+            speed: this.isMobile ? 3 : 2, // Slower movement on mobile (was 6)
             direction: 1,
             destroyed: false,
             damageLevel: 0,
@@ -50,12 +50,12 @@ class BaumholzGame {
             }
         };
         
-        // Faster bullets and gameplay on mobile
-        this.bulletSpeed = this.isMobile ? 15 : 6; // Much faster bullets on mobile
-        this.bulletDamage = this.isMobile ? 12 : 5; // More damage on mobile
-        this.fireRate = this.isMobile ? 50 : 200; // Much faster firing on mobile (50ms vs 200ms)
-        this.enemyBulletSpeed = this.isMobile ? 8 : 4; // Faster enemy bullets on mobile
-        this.enemySpawnRate = this.isMobile ? 40 : 120; // Much more frequent spawns on mobile
+        // Slower bullets and gameplay on mobile
+        this.bulletSpeed = this.isMobile ? 8 : 6; // Slower bullets on mobile (was 15)
+        this.bulletDamage = this.isMobile ? 8 : 5; // Less damage on mobile (was 12)
+        this.fireRate = this.isMobile ? 150 : 200; // Slower firing on mobile (was 50)
+        this.enemyBulletSpeed = this.isMobile ? 5 : 4; // Slower enemy bullets on mobile (was 8)
+        this.enemySpawnRate = this.isMobile ? 80 : 120; // Less frequent spawns on mobile (was 40)
         
         // Bullets - Faster on mobile
         this.bullets = [];
@@ -429,8 +429,8 @@ class BaumholzGame {
         
         this.bullets.push(bullet);
         
-        // Add multiple bullets on mobile for faster gameplay
-        if (this.isMobile && Math.random() < 0.5) { // 50% chance for second bullet
+        // Add multiple bullets on mobile less frequently
+        if (this.isMobile && Math.random() < 0.3) { // 30% chance for second bullet (reduced from 50%)
             const bullet2 = {
                 x: this.player.x + this.player.width,
                 y: this.player.y + this.player.height / 2 - 8,
@@ -442,7 +442,7 @@ class BaumholzGame {
         }
         
         // Add third bullet occasionally on mobile
-        if (this.isMobile && Math.random() < 0.3) { // 30% chance for third bullet
+        if (this.isMobile && Math.random() < 0.15) { // 15% chance for third bullet (reduced from 30%)
             const bullet3 = {
                 x: this.player.x + this.player.width,
                 y: this.player.y + this.player.height / 2 + 8,
@@ -520,8 +520,8 @@ class BaumholzGame {
             this.house.direction *= -1;
         }
         
-        // House shoots back more frequently on mobile
-        const shootChance = this.isMobile ? 0.04 : 0.02; // 4% chance on mobile vs 2% on desktop
+        // House shoots back less frequently on mobile
+        const shootChance = this.isMobile ? 0.02 : 0.02; // Same chance on mobile vs desktop (was 4%)
         if (Math.random() < shootChance) {
             this.enemyBullets.push({
                 x: this.house.x,
@@ -551,8 +551,8 @@ class BaumholzGame {
                 health: enemyHealth
             });
             
-            // Spawn additional enemies on mobile for more action
-            if (this.isMobile && Math.random() < 0.4) {
+            // Spawn additional enemies on mobile less frequently
+            if (this.isMobile && Math.random() < 0.2) { // Reduced from 0.4 to 0.2
                 this.enemies.push({
                     x: this.canvas.width + 100,
                     y: Math.random() * (this.canvas.height - 40),
@@ -589,8 +589,8 @@ class BaumholzGame {
                 this.updateScore();
             }
             
-            // Enemy shoots at player more frequently on mobile
-            const enemyShootChance = this.isMobile ? 0.02 : 0.01; // 2% chance on mobile vs 1% on desktop
+            // Enemy shoots at player less frequently on mobile
+            const enemyShootChance = this.isMobile ? 0.01 : 0.01; // Same chance on mobile vs desktop (was 2%)
             if (Math.random() < enemyShootChance) {
                 this.enemyBullets.push({
                     x: enemy.x,
