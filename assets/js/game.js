@@ -878,15 +878,13 @@ class BaumholzGame {
             
             this.updateHouse();
             this.updateBullets();
-            this.updateEnemyBullets();
             this.updateEnemies();
+            this.spawnEnemy();
             this.updateExplosions();
-            this.checkCollisions();
-            this.spawnEnemies();
             this.updateScore();
         }
         
-        this.render();
+        this.draw();
         requestAnimationFrame(() => this.gameLoop());
     }
     
