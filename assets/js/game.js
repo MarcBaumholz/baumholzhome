@@ -831,15 +831,15 @@ class BaumholzGame {
             return;
         }
         
+        let html = '<h3>🏆 Top Highscores:</h3>';
         highscores.forEach((score, index) => {
             const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅';
-            const div = document.createElement('div');
-            div.innerHTML = `
+            html += `<div>
                 <span>${medal} ${score.name}</span>
                 <span>${score.score} (${score.time.toFixed(1)}s)</span>
-            `;
-            highscoreList.appendChild(div);
+            </div>`;
         });
+        highscoreList.innerHTML = html;
     }
 
     gameOver() {
@@ -864,6 +864,9 @@ class BaumholzGame {
             this.updateHighscore();
         }
         
+        // Display highscores
+        this.displayHighscores();
+        
         console.log('Game Over! Score:', this.score);
     }
     
@@ -880,16 +883,55 @@ class BaumholzGame {
             startScreen.classList.remove('hidden');
         }
         
-        // Reset game state
+        // Reset game state completely
         this.gameRunning = false;
         this.gameStarted = false;
         this.score = 0;
         this.currentTime = 0;
+        this.startTime = 0;
+        
+        // Reset player
+        this.player.x = 100;
+        this.player.y = 300;
+        this.playerHealth = this.maxPlayerHealth;
+        
+        // Reset house
+        this.house.health = this.house.maxHealth;
+        this.house.destroyed = false;
+        this.house.damageLevel = 0;
+        this.house.y = 300;
+        this.house.direction = 1;
+        this.house.parts = {
+            roof: { health: 100, visible: true },
+            walls: { health: 100, visible: true },
+            windows: { health: 100, visible: true },
+            door: { health: 100, visible: true }
+        };
+        
+        // Clear all arrays
+        this.bullets = [];
+        this.enemyBullets = [];
+        this.explosions = [];
+        this.enemies = [];
+        
+        // Reset timers
+        this.enemySpawnTimer = 0;
+        this.lastFireTime = 0;
+        
+        // Clear all keys to prevent stuck input
+        this.keys = {};
         
         // Update displays
         this.updateScore();
-        this.updateTime();
-        this.updateHealth();
+        this.updateHighscore();
+        
+        console.log('Game reset complete');
+    }
+    
+    exitToStart() {
+        // Same as reset but without showing game over screen
+        this.resetGame();
+        console.log('Exited to start screen');
     }
 }
 
@@ -933,5 +975,11 @@ function startGame() {
 function saveHighscore() {
     if (gameInstance) {
         gameInstance.saveHighscore();
+    }
+}
+
+function exitToStart() {
+    if (gameInstance) {
+        gameInstance.exitToStart();
     }
 }
