@@ -324,26 +324,32 @@ class BaumholzGame {
     }
     
     displayHighscores() {
-        const highscores = this.getHighscores();
-        const container = document.getElementById('highscoreList');
+        const highscoreList = document.getElementById('highscoreList');
+        const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
         
         if (highscores.length === 0) {
-            container.innerHTML = '<p>Noch keine Highscores!</p>';
+            highscoreList.innerHTML = '<p style="color: var(--text-light); font-style: italic;">Noch keine Highscores vorhanden.</p>';
             return;
         }
         
-        let html = '<h3>🏆 Top Highscores:</h3><div class="highscore-table">';
-        highscores.forEach((hs, index) => {
-            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '��';
-            html += `<div class="highscore-entry">
-                <span class="medal">${medal}</span>
-                <span class="name">${hs.name}</span>
-                <span class="score">${hs.score}</span>
-                <span class="time">${hs.time.toFixed(1)}s</span>
-            </div>`;
+        // Sort highscores by score (descending)
+        highscores.sort((a, b) => b.score - a.score);
+        
+        // Take top 5 for game over screen
+        const topHighscores = highscores.slice(0, 5);
+        
+        let html = '<h4 style="color: var(--gold-2); margin-bottom: 1rem;">Top 5 Highscores:</h4>';
+        topHighscores.forEach((entry, index) => {
+            const rankIcon = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+            html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; margin: 0.3rem 0; background: rgba(255,255,255,0.05); border-radius: 6px; border: 1px solid rgba(212,161,90,0.2);">
+                    <span style="color: var(--gold-2); font-weight: 600;">${rankIcon} ${entry.name}</span>
+                    <span style="color: var(--text-light); font-weight: 600;">${entry.score}</span>
+                </div>
+            `;
         });
-        html += '</div>';
-        container.innerHTML = html;
+        
+        highscoreList.innerHTML = html;
     }
     
     handleInput() {
@@ -972,25 +978,30 @@ class BaumholzGame {
     
     displayHighscores() {
         const highscoreList = document.getElementById('highscoreList');
-        if (!highscoreList) return;
-        
         const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
         
-        highscoreList.innerHTML = '';
-        
         if (highscores.length === 0) {
-            highscoreList.innerHTML = '<div>Noch keine Highscores!</div>';
+            highscoreList.innerHTML = '<p style="color: var(--text-light); font-style: italic;">Noch keine Highscores vorhanden.</p>';
             return;
         }
         
-        let html = '<h3>🏆 Top Highscores:</h3>';
-        highscores.forEach((score, index) => {
-            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅';
-            html += `<div>
-                <span>${medal} ${score.name}</span>
-                <span>${score.score} (${score.time.toFixed(1)}s)</span>
-            </div>`;
+        // Sort highscores by score (descending)
+        highscores.sort((a, b) => b.score - a.score);
+        
+        // Take top 5 for game over screen
+        const topHighscores = highscores.slice(0, 5);
+        
+        let html = '<h4 style="color: var(--gold-2); margin-bottom: 1rem;">Top 5 Highscores:</h4>';
+        topHighscores.forEach((entry, index) => {
+            const rankIcon = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+            html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; margin: 0.3rem 0; background: rgba(255,255,255,0.05); border-radius: 6px; border: 1px solid rgba(212,161,90,0.2);">
+                    <span style="color: var(--gold-2); font-weight: 600;">${rankIcon} ${entry.name}</span>
+                    <span style="color: var(--text-light); font-weight: 600;">${entry.score}</span>
+                </div>
+            `;
         });
+        
         highscoreList.innerHTML = html;
     }
 
@@ -1143,5 +1154,110 @@ function saveHighscore() {
 function exitToStart() {
     if (gameInstance) {
         gameInstance.exitToStart();
+    }
+}
+
+// Highscore Switch Functionality
+function toggleHighscoreView() {
+    const gameView = document.getElementById('game-view');
+    const highscoreView = document.getElementById('highscore-view');
+    const switchBtn = document.querySelector('.highscore-switch');
+    
+    if (gameView.style.display === 'none') {
+        // Switch to game view
+        gameView.style.display = 'block';
+        highscoreView.style.display = 'none';
+        switchBtn.innerHTML = '<span class="switch-text">Highscores</span><span class="switch-icon">🏆</span>';
+    } else {
+        // Switch to highscore view
+        gameView.style.display = 'none';
+        highscoreView.style.display = 'block';
+        switchBtn.innerHTML = '<span class="switch-text">Spiel</span><span class="switch-icon">🎮</span>';
+        loadHighscoreTable();
+    }
+}
+
+// Load and display highscore table
+function loadHighscoreTable() {
+    const highscoreTable = document.getElementById('highscoreTable');
+    const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
+    
+    if (highscores.length === 0) {
+        highscoreTable.innerHTML = `
+            <div style="color: var(--text-light); font-style: italic; padding: 2rem;">
+                Noch keine Highscores vorhanden. Sei der Erste! 🏆
+            </div>
+        `;
+        return;
+    }
+    
+    // Sort highscores by score (descending)
+    highscores.sort((a, b) => b.score - a.score);
+    
+    // Take top 10
+    const topHighscores = highscores.slice(0, 10);
+    
+    let tableHTML = '';
+    topHighscores.forEach((entry, index) => {
+        const rank = index + 1;
+        const rankClass = rank <= 3 ? `rank-${rank}` : '';
+        const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+        
+        tableHTML += `
+            <div class="highscore-entry ${rankClass}">
+                <div class="highscore-rank">${rankIcon}</div>
+                <div class="highscore-name">${entry.name}</div>
+                <div class="highscore-score">${entry.score}</div>
+            </div>
+        `;
+    });
+    
+    highscoreTable.innerHTML = tableHTML;
+}
+
+// Save score function
+function saveScore() {
+    const playerName = document.getElementById('playerName').value.trim();
+    const finalScore = parseInt(document.getElementById('finalScore').textContent);
+    
+    if (!playerName) {
+        alert('Bitte gib deinen Namen ein!');
+        return;
+    }
+    
+    if (finalScore <= 0) {
+        alert('Du musst einen Score haben, um ihn zu speichern!');
+        return;
+    }
+    
+    // Load existing highscores
+    const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
+    
+    // Add new score
+    highscores.push({
+        name: playerName,
+        score: finalScore,
+        date: new Date().toLocaleDateString('de-DE'),
+        time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+    });
+    
+    // Save back to localStorage
+    localStorage.setItem('baumholzHighscores', JSON.stringify(highscores));
+    
+    // Update highscore display
+    displayHighscores();
+    
+    // Show success message
+    alert(`Score von ${finalScore} für ${playerName} gespeichert! 🏆`);
+    
+    // Clear input
+    document.getElementById('playerName').value = '';
+}
+
+// New game function
+function newGame() {
+    if (window.baumholzGame) {
+        window.baumholzGame.resetGame();
+        window.baumholzGame.startGame();
     }
 }

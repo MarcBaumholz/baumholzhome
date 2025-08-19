@@ -2455,5 +2455,325 @@ p, h1, h2, h3, h4, h5, h6, span, div {
   overflow-wrap: break-word;
 }
 
+/* Game Header with Highscore Switch */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .game-header {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}
+
+.highscore-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: #2b1f12;
+  border: 1px solid rgba(212,161,90,0.5);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(212,161,90,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .highscore-switch {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+}
+
+.highscore-switch:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 20px rgba(212,161,90,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+  transform: translateY(-2px);
+}
+
+.highscore-switch:active {
+  transform: translateY(0);
+}
+
+.switch-icon {
+  font-size: 1.1rem;
+}
+
+/* Highscore View */
+.highscore-view {
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
+}
+
+@media (max-width: 767px) {
+  .highscore-view {
+    padding: 1rem;
+  }
+}
+
+.highscore-header h3 {
+  color: var(--gold-2);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px rgba(212,161,90,0.3);
+}
+
+@media (max-width: 767px) {
+  .highscore-header h3 {
+    font-size: 1.5rem;
+  }
+}
+
+.highscore-header p {
+  color: var(--text-light);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 767px) {
+  .highscore-header p {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.highscore-table {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212,161,90,0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 767px) {
+  .highscore-table {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+}
+
+.highscore-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,161,90,0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 767px) {
+  .highscore-entry {
+    padding: 0.6rem 0.8rem;
+    margin: 0.3rem 0;
+  }
+}
+
+.highscore-entry:hover {
+  background: rgba(212,161,90,0.1);
+  border-color: rgba(212,161,90,0.4);
+  transform: translateX(5px);
+}
+
+.highscore-entry.rank-1 {
+  background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.1));
+  border-color: rgba(255,215,0,0.5);
+}
+
+.highscore-entry.rank-2 {
+  background: linear-gradient(135deg, rgba(192,192,192,0.2), rgba(192,192,192,0.1));
+  border-color: rgba(192,192,192,0.5);
+}
+
+.highscore-entry.rank-3 {
+  background: linear-gradient(135deg, rgba(205,127,50,0.2), rgba(205,127,50,0.1));
+  border-color: rgba(205,127,50,0.5);
+}
+
+.highscore-rank {
+  font-weight: 700;
+  color: var(--gold-2);
+  font-size: 1.1rem;
+  min-width: 40px;
+}
+
+@media (max-width: 767px) {
+  .highscore-rank {
+    font-size: 1rem;
+    min-width: 35px;
+  }
+}
+
+.highscore-name {
+  color: var(--text-light);
+  font-weight: 600;
+  font-size: 1rem;
+  flex: 1;
+  text-align: left;
+  margin-left: 1rem;
+}
+
+@media (max-width: 767px) {
+  .highscore-name {
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+  }
+}
+
+.highscore-score {
+  color: var(--gold-2);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-shadow: 0 0 10px rgba(212,161,90,0.3);
+}
+
+@media (max-width: 767px) {
+  .highscore-score {
+    font-size: 1rem;
+  }
+}
+
+.back-to-game-btn {
+  display: inline-block;
+  background: linear-gradient(180deg, var(--gold-2), var(--gold));
+  color: #2b1f12;
+  border: 1px solid rgba(212,161,90,0.5);
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(212,161,90,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  margin-top: 1rem;
+}
+
+@media (max-width: 767px) {
+  .back-to-game-btn {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.back-to-game-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 20px rgba(212,161,90,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+  transform: translateY(-2px);
+}
+
+.back-to-game-btn:active {
+  transform: translateY(0);
+}
+
+/* Footer - Beautiful Golden Design */
+.footer {
+  background: linear-gradient(180deg, rgba(10,8,5,0.95), rgba(10,8,5,0.9));
+  border-top: 1px solid rgba(212,161,90,0.25);
+  padding: 2rem 0;
+  margin-top: 4rem;
+  backdrop-filter: blur(12px);
+}
+
+@media (max-width: 767px) {
+  .footer {
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+  }
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  .footer-links {
+    gap: 1.5rem;
+  }
+}
+
+.footer-link {
+  color: var(--gold-2);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: rgba(212,161,90,0.05);
+  border: 1px solid transparent;
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .footer-link {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+.footer-link:hover {
+  background: rgba(212,161,90,0.15);
+  border-color: rgba(212,161,90,0.3);
+  color: var(--gold-1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212,161,90,0.2);
+}
+
+.footer-link:active {
+  transform: translateY(0);
+}
+
+.footer-copyright {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+@media (max-width: 767px) {
+  .footer-copyright {
+    font-size: 0.85rem;
+  }
+}
+
 
 
