@@ -150,183 +150,136 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Review Popup System
 function createReviewPopup() {
-  const reviews = [
-    {
-      quote: "Das was Schwaikheim fehlte! Für Spaß, Unterhaltung und netter Gesellschaft ist hier gesorgt.",
-      reviewer: "Jakob Mühlpointner",
-      stars: 5
-    },
-    {
-      quote: "Tolle Stimmung, im Keller habe ich mich gefühlt wie im Lehmann. Überall verrückte Vögel welche auf den Brutalen Beat der Anlage abgegangen sind.",
-      reviewer: "Bene_dikt17",
-      stars: 5
-    },
-    {
-      quote: "Ein einzigartiges Erlebnis. Wer auf Abenteuer und neue Erfahrungen steht, ist herzlich willkommen.",
-      reviewer: "Julian Slangen",
-      stars: 5
-    },
-    {
-      quote: "Ich würde diesen Ort mit 33 von 33 Sternen bewerten. Die Gastgeber waren sehr zuvorkommend.",
-      reviewer: "Odin Schreiber",
-      stars: 5
-    },
-    {
-      quote: "Weltklasse!! Gastfreundschaft auf höchster Stufe und und um die Uhr geöffnet!!",
-      reviewer: "Kübi",
-      stars: 5
-    }
-  ];
-
-  const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
-  
-  const popup = document.createElement('div');
-  popup.className = 'review-popup';
-  popup.innerHTML = `
-    <div class="review-popup-content">
-      <button class="review-popup-close" aria-label="Schließen">×</button>
-      <div class="review-popup-header">
-        <h3>Was andere sagen</h3>
-        <div class="review-popup-stars">
-          ${'★'.repeat(randomReview.stars)}
-        </div>
-      </div>
-      <blockquote class="review-popup-quote">
-        "${randomReview.quote}"
-      </blockquote>
-      <cite class="review-popup-reviewer">— ${randomReview.reviewer}</cite>
-      <div class="review-popup-actions">
-        <button class="btn btn-ghost review-popup-close-btn">Schließen</button>
-        <button class="btn review-popup-write-btn">Ja, mach ich!</button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(popup);
-
-  // Close functionality
-  const closePopup = () => {
-    popup.classList.add('fade-out');
-    setTimeout(() => {
-      if (document.body.contains(popup)) {
-        document.body.removeChild(popup);
+  // Load all reviews from JSON file
+  fetch('./assets/js/reviews.json')
+    .then(response => response.json())
+    .then(reviews => {
+      // Filter out reviews with empty text
+      const validReviews = reviews.filter(review => review.text && review.text.trim() !== '' && review.text !== '—');
+      
+      if (validReviews.length === 0) {
+        console.log('No valid reviews found');
+        return;
       }
-    }, 300);
-  };
+      
+      const randomReview = validReviews[Math.floor(Math.random() * validReviews.length)];
+      
+      const popup = document.createElement('div');
+      popup.className = 'review-popup';
+      popup.innerHTML = `
+        <div class="review-popup-content">
+          <button class="review-popup-close" aria-label="Schließen">×</button>
+          <div class="review-popup-header">
+            <h3>Was andere sagen</h3>
+            <div class="review-popup-stars">
+              ${'★'.repeat(randomReview.rating)}
+            </div>
+          </div>
+          <blockquote class="review-popup-quote">
+            "${randomReview.text}"
+          </blockquote>
+          <cite class="review-popup-reviewer">— ${randomReview.name}</cite>
+          <div class="review-popup-actions">
+            <button class="btn btn-ghost review-popup-close-btn">Schließen</button>
+            <button class="btn review-popup-write-btn">Ja, mach ich!</button>
+          </div>
+        </div>
+      `;
 
-  popup.querySelector('.review-popup-close').addEventListener('click', closePopup);
-  popup.querySelector('.review-popup-close-btn').addEventListener('click', closePopup);
+      document.body.appendChild(popup);
 
-  // Write review functionality
-  popup.querySelector('.review-popup-write-btn').addEventListener('click', () => {
-    const googleReviewUrl = 'https://www.google.com/search?sca_esv=0cad35c59d313fc9&rlz=1C5CHFA_enDE1156DE1156&biw=1652&bih=916&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-Ez7tBuSJudopwFXMsQc6eF2EIYw4FwHGZsbikYxEuSxSJUKoSFSVYOaIdJZU5AI6AjtPrK7AC2bdHdhGNKc3m1_cN7wX&q=Baumholz+Home+Reviews&sa=X&ved=2ahUKEwj7hPXRqZWPAxUx1gIHHaXRHWIQ0bkNegQIJBAC';
-    window.open(googleReviewUrl, '_blank');
-    closePopup();
-  });
+      // Close functionality
+      const closePopup = () => {
+        popup.classList.add('fade-out');
+        setTimeout(() => {
+          if (document.body.contains(popup)) {
+            document.body.removeChild(popup);
+          }
+        }, 300);
+      };
+
+      popup.querySelector('.review-popup-close').addEventListener('click', closePopup);
+      popup.querySelector('.review-popup-close-btn').addEventListener('click', closePopup);
+
+      // Write review functionality
+      popup.querySelector('.review-popup-write-btn').addEventListener('click', () => {
+        const googleReviewUrl = 'https://www.google.com/search?sca_esv=0cad35c59d313fc9&rlz=1C5CHFA_enDE1156DE1156&biw=1652&bih=916&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-Ez7tBuSJudopwFXMsQc6eF2EIYw4FwHGZsbikYxEuSxSJUKoSFSVYOaIdJZU5AI6AjtPrK7AC2bdHdhGNKc3m1_cN7wX&q=Baumholz+Home+Reviews&sa=X&ved=2ahUKEwj7hPXRqZWPAxUx1gIHHaXRHWIQ0bkNegQIJBAC';
+        window.open(googleReviewUrl, '_blank');
+        closePopup();
+      });
+    })
+    .catch(error => {
+      console.error('Error loading reviews:', error);
+    });
 }
 
 // Floating Reviews System
 function createFloatingReview() {
-  const reviews = [
-    "Das was Schwaikheim fehlte! ⭐⭐⭐⭐⭐",
-    "Tolle Stimmung, im Keller wie im Lehmann! ⭐⭐⭐⭐⭐",
-    "Ein einzigartiges Erlebnis! ⭐⭐⭐⭐⭐",
-    "33 von 33 Sternen! ⭐⭐⭐⭐⭐",
-    "Weltklasse Gastfreundschaft! ⭐⭐⭐⭐⭐",
-    "Super Atmosphäre und gute Stimmung! ⭐⭐⭐⭐⭐",
-    "Verkotzt und versorgen - Baumholz home ist gut gelofen! ⭐⭐⭐⭐⭐",
-    "Der einzige Ort mit Schneemännern im Sommer! ⭐⭐⭐⭐⭐",
-    "Die beste Adresse von der ich je gehört habe! ⭐⭐⭐⭐⭐",
-    "Es war so gut hey! ⭐⭐⭐⭐⭐"
-  ];
-
-  const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
-  
-  const floatingReview = document.createElement('div');
-  floatingReview.className = 'floating-review';
-  floatingReview.innerHTML = `
-    <div class="floating-review-content">
-      <span class="floating-review-text">${randomReview}</span>
-    </div>
-  `;
-
-  // Random direction (0: top-left, 1: top-right, 2: bottom-left, 3: bottom-right, 4: left, 5: right, 6: top, 7: bottom)
-  const direction = Math.floor(Math.random() * 8);
-  let startX, startY, endX, endY;
-  
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
-  const reviewWidth = 280;
-  const reviewHeight = 60;
-  
-  switch(direction) {
-    case 0: // top-left to bottom-right
-      startX = -reviewWidth;
-      startY = -reviewHeight;
-      endX = screenWidth;
-      endY = screenHeight;
-      break;
-    case 1: // top-right to bottom-left
-      startX = screenWidth;
-      startY = -reviewHeight;
-      endX = -reviewWidth;
-      endY = screenHeight;
-      break;
-    case 2: // bottom-left to top-right
-      startX = -reviewWidth;
-      startY = screenHeight;
-      endX = screenWidth;
-      endY = -reviewHeight;
-      break;
-    case 3: // bottom-right to top-left
-      startX = screenWidth;
-      startY = screenHeight;
-      endX = -reviewWidth;
-      endY = -reviewHeight;
-      break;
-    case 4: // left to right
-      startX = -reviewWidth;
-      startY = Math.random() * (screenHeight - reviewHeight);
-      endX = screenWidth;
-      endY = startY;
-      break;
-    case 5: // right to left
-      startX = screenWidth;
-      startY = Math.random() * (screenHeight - reviewHeight);
-      endX = -reviewWidth;
-      endY = startY;
-      break;
-    case 6: // top to bottom
-      startX = Math.random() * (screenWidth - reviewWidth);
-      startY = -reviewHeight;
-      endX = startX;
-      endY = screenHeight;
-      break;
-    case 7: // bottom to top
-      startX = Math.random() * (screenWidth - reviewWidth);
-      startY = screenHeight;
-      endX = startX;
-      endY = -reviewHeight;
-      break;
-  }
-  
-  floatingReview.style.left = startX + 'px';
-  floatingReview.style.top = startY + 'px';
-  
-  document.body.appendChild(floatingReview);
-
-  // Animate floating with longer duration
-  setTimeout(() => {
-    floatingReview.style.transform = `translate(${endX - startX}px, ${endY - startY}px)`;
-    floatingReview.style.opacity = '0';
-  }, 100);
-
-  // Remove after longer animation
-  setTimeout(() => {
-    if (document.body.contains(floatingReview)) {
-      document.body.removeChild(floatingReview);
-    }
-  }, 8000);
+  // Load all reviews from JSON file
+  fetch('./assets/js/reviews.json')
+    .then(response => response.json())
+    .then(reviews => {
+      // Filter out reviews with empty text and create floating review text
+      const validReviews = reviews.filter(review => review.text && review.text.trim() !== '' && review.text !== '—');
+      
+      if (validReviews.length === 0) {
+        console.log('No valid reviews found for floating reviews');
+        return;
+      }
+      
+      const randomReview = validReviews[Math.floor(Math.random() * validReviews.length)];
+      const reviewText = randomReview.text.length > 50 ? randomReview.text.substring(0, 50) + '...' : randomReview.text;
+      const floatingText = `${reviewText} ⭐⭐⭐⭐⭐`;
+      
+      const floatingReview = document.createElement('div');
+      floatingReview.className = 'floating-review';
+      floatingReview.innerHTML = `
+        <div class="floating-review-content">
+          <span class="floating-review-text">${floatingText}</span>
+        </div>
+      `;
+      
+      // Random start position (8 different directions)
+      const directions = [
+        { start: { x: -20, y: 20 }, end: { x: 120, y: 80 } },   // Top-left to bottom-right
+        { start: { x: 120, y: 20 }, end: { x: -20, y: 80 } },   // Top-right to bottom-left
+        { start: { x: 50, y: -20 }, end: { x: 50, y: 120 } },   // Top to bottom
+        { start: { x: 50, y: 120 }, end: { x: 50, y: -20 } },   // Bottom to top
+        { start: { x: -20, y: 50 }, end: { x: 120, y: 50 } },   // Left to right
+        { start: { x: 120, y: 50 }, end: { x: -20, y: 50 } },   // Right to left
+        { start: { x: 20, y: 20 }, end: { x: 80, y: 80 } },     // Top-left to bottom-right (diagonal)
+        { start: { x: 80, y: 20 }, end: { x: 20, y: 80 } }      // Top-right to bottom-left (diagonal)
+      ];
+      
+      const direction = directions[Math.floor(Math.random() * directions.length)];
+      
+      floatingReview.style.cssText = `
+        position: fixed;
+        left: ${direction.start.x}vw;
+        top: ${direction.start.y}vh;
+        z-index: 1000;
+        pointer-events: none;
+        transition: all 7s ease-in-out;
+      `;
+      
+      document.body.appendChild(floatingReview);
+      
+      // Animate to end position
+      setTimeout(() => {
+        floatingReview.style.left = `${direction.end.x}vw`;
+        floatingReview.style.top = `${direction.end.y}vh`;
+      }, 100);
+      
+      // Remove after animation
+      setTimeout(() => {
+        if (document.body.contains(floatingReview)) {
+          document.body.removeChild(floatingReview);
+        }
+      }, 8000);
+    })
+    .catch(error => {
+      console.error('Error loading reviews for floating reviews:', error);
+    });
 }
 
 // Show review popup after 25 seconds
