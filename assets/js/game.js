@@ -11,35 +11,38 @@ class BaumholzGame {
         this.gameRunning = false;
         this.gameStarted = false;
         this.score = 0;
-        this.highscore = 0; // Reset highscore
+        this.highscore = 0;
         this.startTime = 0;
         this.currentTime = 0;
+        
+        // Mobile detection
+        this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         // Player (airplane) - Start in center
         this.player = {
             x: 100,
-            y: 300, // Center of screen
+            y: 300,
             width: 40,
             height: 20,
-            speed: 5,
-            turboSpeed: 8,
+            speed: this.isMobile ? 8 : 5, // Faster on mobile
+            turboSpeed: this.isMobile ? 12 : 8,
             isTurbo: false,
-            targetY: null, // For touch controls
-            targetX: null // For touch controls
+            targetY: null,
+            targetX: null
         };
         
-        // Flying Baumholz Home - Much harder target
+        // Flying Baumholz Home - Faster on mobile
         this.house = {
             x: 700,
             y: 300,
             width: 100,
             height: 120,
-            health: 200, // Much more health
-            maxHealth: 200,
+            health: this.isMobile ? 150 : 200, // Less health on mobile
+            maxHealth: this.isMobile ? 150 : 200,
             destroyed: false,
             damageLevel: 0,
-            speed: 2, // Flying speed
-            direction: 1, // 1 = up, -1 = down
+            speed: this.isMobile ? 4 : 2, // Faster movement on mobile
+            direction: 1,
             parts: {
                 roof: { health: 100, visible: true },
                 walls: { health: 100, visible: true },
@@ -48,22 +51,23 @@ class BaumholzGame {
             }
         };
         
-        // Bullets - Much harder
+        // Bullets - Faster on mobile
         this.bullets = [];
-        this.bulletSpeed = 6; // Slower bullets
-        this.bulletDamage = 5; // Less damage per bullet
+        this.bulletSpeed = this.isMobile ? 10 : 6; // Faster bullets on mobile
+        this.bulletDamage = this.isMobile ? 8 : 5; // More damage on mobile
+        this.fireRate = this.isMobile ? 100 : 200; // Faster firing on mobile
         
-        // Enemy bullets (shooting back!)
+        // Enemy bullets
         this.enemyBullets = [];
-        this.enemyBulletSpeed = 4;
+        this.enemyBulletSpeed = this.isMobile ? 6 : 4; // Faster enemy bullets on mobile
         
         // Explosions
         this.explosions = [];
         
-        // Enemies (defending the house)
+        // Enemies - More frequent on mobile
         this.enemies = [];
         this.enemySpawnTimer = 0;
-        this.enemySpawnRate = 120; // Frames between enemy spawns
+        this.enemySpawnRate = this.isMobile ? 80 : 120; // More frequent spawns on mobile
         
         // Player health
         this.playerHealth = 100;
@@ -370,20 +374,34 @@ class BaumholzGame {
     }
     
     fireBullet() {
-        // Prevent rapid firing
-        if (this.lastFireTime && Date.now() - this.lastFireTime < 200) return;
+        // Prevent rapid firing based on mobile detection
+        const minFireInterval = this.isMobile ? this.fireRate : 200;
+        
+        if (this.lastFireTime && Date.now() - this.lastFireTime < minFireInterval) return;
         
         this.lastFireTime = Date.now();
         
         const bullet = {
             x: this.player.x + this.player.width,
             y: this.player.y + this.player.height / 2,
-            width: 8,
-            height: 4,
+            width: this.isMobile ? 10 : 8, // Bigger bullets on mobile
+            height: this.isMobile ? 6 : 4,
             speed: this.bulletSpeed
         };
         
         this.bullets.push(bullet);
+        
+        // Add multiple bullets on mobile for faster gameplay
+        if (this.isMobile && Math.random() < 0.3) {
+            const bullet2 = {
+                x: this.player.x + this.player.width,
+                y: this.player.y + this.player.height / 2 - 5,
+                width: 8,
+                height: 4,
+                speed: this.bulletSpeed
+            };
+            this.bullets.push(bullet2);
+        }
     }
     
     updateBullets() {
@@ -444,7 +462,7 @@ class BaumholzGame {
     }
     
     updateHouse() {
-        // Make house fly up and down
+        // Make house fly up and down with faster movement on mobile
         this.house.y += this.house.speed * this.house.direction;
         
         // Change direction at boundaries
@@ -452,13 +470,14 @@ class BaumholzGame {
             this.house.direction *= -1;
         }
         
-        // House shoots back occasionally
-        if (Math.random() < 0.02) { // 2% chance per frame
+        // House shoots back more frequently on mobile
+        const shootChance = this.isMobile ? 0.04 : 0.02; // 4% chance on mobile vs 2% on desktop
+        if (Math.random() < shootChance) {
             this.enemyBullets.push({
                 x: this.house.x,
                 y: this.house.y + this.house.height / 2,
-                width: 8,
-                height: 4,
+                width: this.isMobile ? 10 : 8,
+                height: this.isMobile ? 6 : 4,
                 speed: this.enemyBulletSpeed
             });
         }
@@ -469,15 +488,30 @@ class BaumholzGame {
         if (this.enemySpawnTimer >= this.enemySpawnRate) {
             this.enemySpawnTimer = 0;
             
-            // Spawn enemy from right side
+            // Spawn enemy from right side with faster movement on mobile
+            const enemySpeed = this.isMobile ? (3 + Math.random() * 3) : (2 + Math.random() * 2);
+            const enemyHealth = this.isMobile ? 20 : 30; // Less health on mobile for faster kills
+            
             this.enemies.push({
                 x: this.canvas.width + 50,
                 y: Math.random() * (this.canvas.height - 40),
-                width: 30,
-                height: 30,
-                speed: 2 + Math.random() * 2,
-                health: 30
+                width: this.isMobile ? 25 : 30, // Smaller enemies on mobile
+                height: this.isMobile ? 25 : 30,
+                speed: enemySpeed,
+                health: enemyHealth
             });
+            
+            // Spawn additional enemies on mobile for more action
+            if (this.isMobile && Math.random() < 0.4) {
+                this.enemies.push({
+                    x: this.canvas.width + 100,
+                    y: Math.random() * (this.canvas.height - 40),
+                    width: 20,
+                    height: 20,
+                    speed: enemySpeed + 1,
+                    health: 15
+                });
+            }
         }
     }
     
@@ -495,7 +529,7 @@ class BaumholzGame {
             // Check collision with player
             if (this.checkCollision(enemy, this.player)) {
                 this.enemies.splice(i, 1);
-                this.playerHealth -= 30;
+                this.playerHealth -= this.isMobile ? 20 : 30; // Less damage on mobile
                 this.createExplosion(enemy.x, enemy.y);
                 
                 if (this.playerHealth <= 0) {
@@ -505,13 +539,14 @@ class BaumholzGame {
                 this.updateScore();
             }
             
-            // Enemy shoots at player
-            if (Math.random() < 0.01) { // 1% chance per frame
+            // Enemy shoots at player more frequently on mobile
+            const enemyShootChance = this.isMobile ? 0.02 : 0.01; // 2% chance on mobile vs 1% on desktop
+            if (Math.random() < enemyShootChance) {
                 this.enemyBullets.push({
                     x: enemy.x,
                     y: enemy.y + enemy.height / 2,
-                    width: 6,
-                    height: 3,
+                    width: this.isMobile ? 8 : 6,
+                    height: this.isMobile ? 5 : 3,
                     speed: this.enemyBulletSpeed
                 });
             }
