@@ -1054,13 +1054,19 @@ class BaumholzGame {
         
         // Show game over screen
         const gameOverEl = document.getElementById('gameOver');
-        const finalScoreEl = document.getElementById('finalScore');
-        
-        if (finalScoreEl) finalScoreEl.textContent = this.score;
         
         if (gameOverEl) {
             gameOverEl.style.display = 'block';
         }
+        
+        // Update final values
+        const finalScoreEl = document.getElementById('finalScore');
+        const finalTimeEl = document.getElementById('finalTime');
+        const finalLivesEl = document.getElementById('finalLives');
+        
+        if (finalScoreEl) finalScoreEl.textContent = this.score;
+        if (finalTimeEl) finalTimeEl.textContent = this.currentTime.toFixed(1) + 's';
+        if (finalLivesEl) finalLivesEl.textContent = this.playerHealth;
         
         // Update highscore if needed
         if (this.score > this.highscore) {
@@ -1072,7 +1078,13 @@ class BaumholzGame {
         // Display highscores
         this.displayHighscores();
         
-        console.log('Game Over! Score:', this.score);
+        // Focus on name input
+        setTimeout(() => {
+            const playerNameInput = document.getElementById('playerName');
+            if (playerNameInput) playerNameInput.focus();
+        }, 100);
+        
+        console.log('Game Over! Score:', this.score, 'Time:', this.gameTime, 'Lives:', this.lives);
     }
     
     resetGame() {
@@ -1227,92 +1239,135 @@ function toggleHighscoreView() {
     }
 }
 
-// Load and display highscore table
-function loadHighscoreTable() {
-    const highscoreTable = document.getElementById('highscoreTable');
-    const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
-    
-    if (highscores.length === 0) {
-        highscoreTable.innerHTML = `
-            <div style="color: var(--text-light); font-style: italic; padding: 2rem;">
-                Noch keine Highscores vorhanden. Sei der Erste! 🏆
-            </div>
-        `;
-        return;
-    }
-    
-    // Sort highscores by score (descending)
-    highscores.sort((a, b) => b.score - a.score);
-    
-    // Take top 10
-    const topHighscores = highscores.slice(0, 10);
-    
-    let tableHTML = '';
-    topHighscores.forEach((entry, index) => {
-        const rank = index + 1;
-        const rankClass = rank <= 3 ? `rank-${rank}` : '';
-        const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
-        
-        tableHTML += `
-            <div class="highscore-entry ${rankClass}">
-                <div class="highscore-rank">${rankIcon}</div>
-                <div class="highscore-name">${entry.name}</div>
-                <div class="highscore-score">${entry.score}</div>
-            </div>
-        `;
-    });
-    
-    highscoreTable.innerHTML = tableHTML;
-}
-
-// Save score function
+// Enhanced Highscore System with Score, Time, and Lives
 function saveScore() {
     const playerName = document.getElementById('playerName').value.trim();
     const finalScore = parseInt(document.getElementById('finalScore').textContent);
+    const finalTime = parseFloat(document.getElementById('finalTime').textContent.replace('s', ''));
+    const finalLives = parseInt(document.getElementById('finalLives').textContent);
     
-    if (!playerName) {
-        alert('Bitte gib deinen Namen ein!');
-        return;
+    if (!playerName) { 
+        alert('Bitte gib deinen Namen ein!'); 
+        return; 
     }
     
-    if (finalScore <= 0) {
-        alert('Du musst einen Score haben, um ihn zu speichern!');
-        return;
+    if (finalScore <= 0) { 
+        alert('Du musst einen Score haben, um ihn zu speichern!'); 
+        return; 
     }
     
-    // Load existing highscores
     const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
     
-    // Add new score
-    highscores.push({
-        name: playerName,
-        score: finalScore,
-        date: new Date().toLocaleDateString('de-DE'),
-        time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+    // Add new score with all three values
+    highscores.push({ 
+        name: playerName, 
+        score: finalScore, 
+        time: finalTime,
+        lives: finalLives,
+        date: new Date().toLocaleDateString('de-DE'), 
+        timeStamp: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) 
     });
     
-    // Sort by score (highest first)
-    highscores.sort((a, b) => b.score - a.score);
+    // Enhanced ranking: Score (desc), Time (asc), Lives (asc)
+    highscores.sort((a, b) => {
+        // Primary: Score (highest first)
+        if (b.score !== a.score) {
+            return b.score - a.score;
+        }
+        // Secondary: Time (lowest first)
+        if (a.time !== b.time) {
+            return a.time - b.time;
+        }
+        // Tertiary: Lives (lowest first)
+        return a.lives - b.lives;
+    });
     
-    // Keep only top 20 (more than 10 for variety)
+    // Keep top 20 scores
     const topHighscores = highscores.slice(0, 20);
-    
-    // Save back to localStorage
     localStorage.setItem('baumholzHighscores', JSON.stringify(topHighscores));
     
-    // Update highscore display
-    if (gameInstance) {
-        gameInstance.displayHighscores();
+    if (gameInstance) { 
+        gameInstance.displayHighscores(); 
     }
     
-    // Show success message
     alert(`Score von ${finalScore} für ${playerName} gespeichert! 🏆`);
-    
-    // Clear input
     document.getElementById('playerName').value = '';
+}
+
+// Enhanced display highscores for game over screen
+function displayHighscores() {
+    const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
+    const highscoreList = document.getElementById('highscoreList');
     
-    console.log('Score saved:', { name: playerName, score: finalScore });
-    console.log('All highscores:', topHighscores);
+    if (highscores.length === 0) {
+        highscoreList.innerHTML = '<p style="text-align: center; color: rgba(212,161,90,0.6); font-style: italic;">Noch keine Highscores vorhanden</p>';
+        return;
+    }
+    
+    const top5 = highscores.slice(0, 5);
+    let html = '<h4>🏆 Top 5 Highscores:</h4>';
+    
+    top5.forEach((entry, index) => {
+        const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+        html += `
+            <div class="highscore-entry" style="margin: 0.3rem 0; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 6px;">
+                <span class="highscore-rank ${rankClass}" style="font-weight: 700; margin-right: 0.5rem;">#${index + 1}</span>
+                <span class="highscore-name" style="color: var(--gold-2); font-weight: 600;">${entry.name}</span>
+                <span class="highscore-score" style="color: #fff; font-weight: 700; margin-left: auto;">${entry.score}</span>
+                <span class="highscore-time" style="color: var(--gold-2); font-size: 0.8rem; margin-left: 0.5rem;">${entry.time.toFixed(1)}s</span>
+                <span class="highscore-lives" style="color: #4CAF50; font-size: 0.8rem; margin-left: 0.5rem;">${entry.lives}</span>
+            </div>
+        `;
+    });
+    
+    highscoreList.innerHTML = html;
+}
+
+// Enhanced load highscore table for the dedicated view
+function loadHighscoreTable() {
+    const highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
+    const highscoreEntries = document.getElementById('highscoreEntries');
+    
+    if (highscores.length === 0) {
+        highscoreEntries.innerHTML = '<div class="highscore-empty">Noch keine Highscores vorhanden</div>';
+        return;
+    }
+    
+    let html = '';
+    
+    highscores.forEach((entry, index) => {
+        const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+        html += `
+            <div class="highscore-entry">
+                <div class="highscore-rank ${rankClass}">#${index + 1}</div>
+                <div class="highscore-name">${entry.name}</div>
+                <div class="highscore-score">${entry.score}</div>
+                <div class="highscore-time">${entry.time.toFixed(1)}s</div>
+                <div class="highscore-lives">${entry.lives}</div>
+            </div>
+        `;
+    });
+    
+    highscoreEntries.innerHTML = html;
+}
+
+// Enhanced game over function to capture all values
+function gameOver() {
+    this.gameRunning = false;
+    this.gameOverEl.style.display = 'block';
+    
+    // Update final values
+    document.getElementById('finalScore').textContent = this.score;
+    document.getElementById('finalTime').textContent = this.gameTime.toFixed(1) + 's';
+    document.getElementById('finalLives').textContent = this.lives;
+    
+    // Display highscores
+    displayHighscores();
+    
+    // Focus on name input
+    setTimeout(() => {
+        document.getElementById('playerName').focus();
+    }, 100);
 }
 
 // New game function

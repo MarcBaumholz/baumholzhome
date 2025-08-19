@@ -488,3 +488,200 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+/* Enhanced START Button - Golden Theme */
+.game-start-btn {
+  background: linear-gradient(180deg, var(--gold-2), var(--gold));
+  color: #2b1f12;
+  font-weight: 600;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(212,161,90,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(212,161,90,0.6);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-start-btn:hover {
+  background: linear-gradient(180deg, var(--gold), var(--gold-2));
+  box-shadow: 0 8px 25px rgba(212,161,90,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+  transform: translateY(-2px);
+  border-color: rgba(212,161,90,0.8);
+}
+
+.game-start-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(212,161,90,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.game-start-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.game-start-btn:hover::before {
+  left: 100%;
+}
+
+/* Enhanced Highscore Table */
+.highscore-table {
+  background: linear-gradient(135deg, rgba(212,161,90,0.1), rgba(212,161,90,0.05));
+  border: 1px solid rgba(212,161,90,0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.highscore-entry {
+  display: grid;
+  grid-template-columns: 50px 1fr 80px 80px 80px;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(212,161,90,0.2);
+  transition: all 0.3s ease;
+}
+
+.highscore-entry:hover {
+  background: rgba(212,161,90,0.1);
+  border-color: rgba(212,161,90,0.4);
+  transform: translateX(5px);
+}
+
+.highscore-rank {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  min-width: 50px;
+}
+
+.highscore-rank.rank-1 {
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255,215,0,0.5);
+}
+
+.highscore-rank.rank-2 {
+  color: #C0C0C0;
+  text-shadow: 0 0 8px rgba(192,192,192,0.5);
+}
+
+.highscore-rank.rank-3 {
+  color: #CD7F32;
+  text-shadow: 0 0 6px rgba(205,127,50,0.5);
+}
+
+.highscore-name {
+  font-weight: 600;
+  color: var(--gold-2);
+  font-size: 1rem;
+}
+
+.highscore-score {
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.highscore-time {
+  font-weight: 600;
+  color: var(--gold-2);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.highscore-lives {
+  font-weight: 600;
+  color: #4CAF50;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Highscore Table Header */
+.highscore-table-header {
+  display: grid;
+  grid-template-columns: 50px 1fr 80px 80px 80px;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, rgba(212,161,90,0.2), rgba(212,161,90,0.1));
+  border-radius: 8px;
+  border: 1px solid rgba(212,161,90,0.3);
+  font-weight: 700;
+  color: var(--gold-2);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.highscore-table-header > div {
+  text-align: center;
+}
+
+.highscore-table-header > div:first-child {
+  text-align: center;
+}
+
+.highscore-table-header > div:nth-child(2) {
+  text-align: left;
+}
+
+/* Empty state */
+.highscore-empty {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(212,161,90,0.6);
+  font-style: italic;
+}
+
+/* Mobile responsive highscore table */
+@media (max-width: 767px) {
+  .highscore-entry {
+    grid-template-columns: 40px 1fr 70px 70px 70px;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .highscore-table-header {
+    grid-template-columns: 40px 1fr 70px 70px 70px;
+    gap: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.7rem;
+  }
+  
+  .highscore-rank {
+    font-size: 1rem;
+    min-width: 40px;
+  }
+  
+  .highscore-name {
+    font-size: 0.9rem;
+  }
+  
+  .highscore-score {
+    font-size: 1rem;
+  }
+  
+  .highscore-time,
+  .highscore-lives {
+    font-size: 0.8rem;
+  }
+}
