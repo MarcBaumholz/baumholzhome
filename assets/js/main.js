@@ -250,33 +250,259 @@ function createFloatingReview() {
     </div>
   `;
 
-  // Random position
-  const startX = Math.random() * (window.innerWidth - 300);
-  const startY = window.innerHeight + 50;
+  // Random direction (0: top-left, 1: top-right, 2: bottom-left, 3: bottom-right, 4: left, 5: right, 6: top, 7: bottom)
+  const direction = Math.floor(Math.random() * 8);
+  let startX, startY, endX, endY;
+  
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  const reviewWidth = 280;
+  const reviewHeight = 60;
+  
+  switch(direction) {
+    case 0: // top-left to bottom-right
+      startX = -reviewWidth;
+      startY = -reviewHeight;
+      endX = screenWidth;
+      endY = screenHeight;
+      break;
+    case 1: // top-right to bottom-left
+      startX = screenWidth;
+      startY = -reviewHeight;
+      endX = -reviewWidth;
+      endY = screenHeight;
+      break;
+    case 2: // bottom-left to top-right
+      startX = -reviewWidth;
+      startY = screenHeight;
+      endX = screenWidth;
+      endY = -reviewHeight;
+      break;
+    case 3: // bottom-right to top-left
+      startX = screenWidth;
+      startY = screenHeight;
+      endX = -reviewWidth;
+      endY = -reviewHeight;
+      break;
+    case 4: // left to right
+      startX = -reviewWidth;
+      startY = Math.random() * (screenHeight - reviewHeight);
+      endX = screenWidth;
+      endY = startY;
+      break;
+    case 5: // right to left
+      startX = screenWidth;
+      startY = Math.random() * (screenHeight - reviewHeight);
+      endX = -reviewWidth;
+      endY = startY;
+      break;
+    case 6: // top to bottom
+      startX = Math.random() * (screenWidth - reviewWidth);
+      startY = -reviewHeight;
+      endX = startX;
+      endY = screenHeight;
+      break;
+    case 7: // bottom to top
+      startX = Math.random() * (screenWidth - reviewWidth);
+      startY = screenHeight;
+      endX = startX;
+      endY = -reviewHeight;
+      break;
+  }
   
   floatingReview.style.left = startX + 'px';
   floatingReview.style.top = startY + 'px';
   
   document.body.appendChild(floatingReview);
 
-  // Animate floating up
+  // Animate floating with longer duration
   setTimeout(() => {
-    floatingReview.style.transform = 'translateY(-100vh)';
+    floatingReview.style.transform = `translate(${endX - startX}px, ${endY - startY}px)`;
     floatingReview.style.opacity = '0';
   }, 100);
 
-  // Remove after animation
+  // Remove after longer animation
   setTimeout(() => {
     if (document.body.contains(floatingReview)) {
       document.body.removeChild(floatingReview);
     }
-  }, 5000);
+  }, 8000);
 }
 
 // Show review popup after 10 seconds
 setTimeout(createReviewPopup, 10000);
 
-// Show floating reviews every 30 seconds
-setInterval(createFloatingReview, 30000);
+// Show floating reviews every 15 seconds
+setInterval(createFloatingReview, 15000);
+
+// Whiteboard System
+class WhiteboardManager {
+  constructor() {
+    this.comments = JSON.parse(localStorage.getItem('whiteboardComments') || '[]');
+    this.isAdmin = false; // Set to true for admin access
+    this.init();
+  }
+
+  init() {
+    this.canvas = document.getElementById('whiteboard-canvas');
+    this.nameInput = document.getElementById('comment-name');
+    this.textInput = document.getElementById('comment-text');
+    this.addBtn = document.getElementById('add-comment-btn');
+
+    if (this.addBtn) {
+      this.addBtn.addEventListener('click', () => this.addComment());
+    }
+
+    this.renderComments();
+    this.loadSampleComments();
+  }
+
+  loadSampleComments() {
+    if (this.comments.length === 0) {
+      const sampleComments = [
+        { name: "Jakob M.", text: "Das wird EPISCH! 🔥", x: 50, y: 30 },
+        { name: "Bene_dikt17", text: "Techno Bunker here I come! 🎧", x: 70, y: 60 },
+        { name: "Odin S.", text: "33 von 33 Sternen! ⭐", x: 20, y: 80 },
+        { name: "Kübi", text: "Weltklasse Party incoming! 🎉", x: 80, y: 20 }
+      ];
+      
+      this.comments = sampleComments;
+      this.saveComments();
+      this.renderComments();
+    }
+  }
+
+  addComment() {
+    const name = this.nameInput.value.trim();
+    const text = this.textInput.value.trim();
+
+    if (!name || !text) {
+      alert('Bitte fülle alle Felder aus!');
+      return;
+    }
+
+    if (name.length > 30) {
+      alert('Name darf maximal 30 Zeichen haben!');
+      return;
+    }
+
+    if (text.length > 100) {
+      alert('Nachricht darf maximal 100 Zeichen haben!');
+      return;
+    }
+
+    const comment = {
+      name: name,
+      text: text,
+      x: Math.random() * 70 + 10, // Random position between 10% and 80%
+      y: Math.random() * 70 + 10,
+      timestamp: Date.now()
+    };
+
+    this.comments.push(comment);
+    this.saveComments();
+    this.renderComments();
+
+    // Clear form
+    this.nameInput.value = '';
+    this.textInput.value = '';
+
+    // Show success message
+    this.showSuccessMessage();
+  }
+
+  showSuccessMessage() {
+    const successMsg = document.createElement('div');
+    successMsg.className = 'success-message';
+    successMsg.textContent = 'Nachricht hinzugefügt! 🎉';
+    successMsg.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+      color: var(--bg);
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+    `;
+
+    document.body.appendChild(successMsg);
+
+    setTimeout(() => {
+      successMsg.style.animation = 'slideOut 0.3s ease-in';
+      setTimeout(() => {
+        if (document.body.contains(successMsg)) {
+          document.body.removeChild(successMsg);
+        }
+      }, 300);
+    }, 2000);
+  }
+
+  deleteComment(commentId) {
+    if (!this.isAdmin) {
+      // For non-admins, show a message that they can't delete
+      alert('Nur Admins können Nachrichten löschen!');
+      return;
+    }
+
+    if (confirm('Möchtest du diese Nachricht wirklich löschen?')) {
+      this.comments.splice(commentId, 1);
+      this.saveComments();
+      this.renderComments();
+    }
+  }
+
+  renderComments() {
+    if (!this.canvas) return;
+
+    this.canvas.innerHTML = '';
+
+    this.comments.forEach((comment, index) => {
+      const commentEl = document.createElement('div');
+      commentEl.className = 'whiteboard-comment';
+      commentEl.style.left = comment.x + '%';
+      commentEl.style.top = comment.y + '%';
+      commentEl.innerHTML = `
+        <div class="comment-name">${this.escapeHtml(comment.name)}</div>
+        <div class="comment-text">${this.escapeHtml(comment.text)}</div>
+      `;
+
+      commentEl.addEventListener('click', () => this.deleteComment(index));
+      this.canvas.appendChild(commentEl);
+    });
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  saveComments() {
+    localStorage.setItem('whiteboardComments', JSON.stringify(this.comments));
+  }
+}
+
+// Initialize whiteboard when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  new WhiteboardManager();
+});
+
+// Add CSS animations for success message
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
 
 
