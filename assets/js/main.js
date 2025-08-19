@@ -380,10 +380,36 @@ class WhiteboardManager {
     }
     
     init() {
+        this.clearOldData(); // Clear any old unwanted data
         this.loadComments();
         this.setupEventListeners();
         this.renderComments();
         this.updatePostingStatus();
+    }
+    
+    clearOldData() {
+        // Clear any old unwanted comments from localStorage
+        const saved = localStorage.getItem('whiteboardComments');
+        if (saved) {
+            try {
+                const oldComments = JSON.parse(saved);
+                const unwantedNames = ['sad', 'assa', 'asdasd', 'asdfadsd'];
+                const unwantedTexts = ['sad', '213123', '34234', 'assa', 'asdasd', 'asdfadsd'];
+                
+                const hasUnwanted = oldComments.some(comment => 
+                    unwantedNames.includes(comment.name) || 
+                    unwantedTexts.includes(comment.text)
+                );
+                
+                if (hasUnwanted) {
+                    // Clear all whiteboard data and start fresh
+                    localStorage.removeItem('whiteboardComments');
+                    console.log('Cleared old unwanted whiteboard data');
+                }
+            } catch (e) {
+                console.error('Error checking old data:', e);
+            }
+        }
     }
     
     updatePostingStatus() {
@@ -421,12 +447,20 @@ class WhiteboardManager {
         if (saved) {
             try {
                 this.comments = JSON.parse(saved);
+                // Filter out unwanted old comments
+                this.comments = this.comments.filter(comment => {
+                    const unwantedNames = ['sad', 'assa', 'asdasd', 'asdfadsd'];
+                    const unwantedTexts = ['sad', '213123', '34234', 'assa', 'asdasd', 'asdfadsd'];
+                    
+                    return !unwantedNames.includes(comment.name) && 
+                           !unwantedTexts.includes(comment.text);
+                });
             } catch (e) {
+                console.error('Error loading comments:', e);
                 this.comments = [];
             }
         }
         
-        // Load sample comments if empty
         if (this.comments.length === 0) {
             this.loadSampleComments();
         }
