@@ -529,6 +529,7 @@ class WhiteboardManager {
                 cursor: pointer;
                 transition: all 0.3s ease;
                 backdrop-filter: blur(5px);
+                box-shadow: 0 4px 16px rgba(212,161,90,0.2);
             `;
             
             commentEl.innerHTML = `
@@ -545,10 +546,12 @@ class WhiteboardManager {
             commentEl.addEventListener('mouseenter', () => {
                 commentEl.style.transform = 'scale(1.05)';
                 commentEl.style.borderColor = 'rgba(212,161,90,0.6)';
+                commentEl.style.boxShadow = '0 6px 20px rgba(212,161,90,0.3)';
             });
             commentEl.addEventListener('mouseleave', () => {
                 commentEl.style.transform = 'scale(1)';
                 commentEl.style.borderColor = 'rgba(212,161,90,0.3)';
+                commentEl.style.boxShadow = '0 4px 16px rgba(212,161,90,0.2)';
             });
             
             this.canvas.appendChild(commentEl);
