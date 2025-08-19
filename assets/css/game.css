@@ -281,3 +281,210 @@
     min-width: 250px;
   }
 }
+
+/* Enhanced Mobile Game Styling */
+@media (max-width: 767px) {
+  .game-container {
+    padding: 1rem;
+    margin: 1rem auto;
+    gap: 1rem;
+  }
+  
+  .game-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .game-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .highscore-switch {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    min-height: 50px;
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .game-controls {
+    font-size: 0.85rem;
+    margin: 1rem 0;
+    padding: 0 1rem;
+  }
+  
+  .game-score-board {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin: 1rem 0;
+  }
+  
+  .game-score-item {
+    padding: 0.8rem;
+    min-height: 60px;
+  }
+  
+  .game-score-label {
+    font-size: 0.75rem;
+  }
+  
+  .game-score-value {
+    font-size: 1rem;
+  }
+  
+  .game-start-btn {
+    padding: 1.5rem 2rem;
+    font-size: 1.2rem;
+    width: 100%;
+    max-width: 250px;
+    min-height: 60px;
+  }
+  
+  .game-canvas {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-width: 2px;
+    border-radius: 8px;
+    touch-action: none;
+  }
+  
+  .game-over {
+    padding: 1.5rem;
+    margin: 1rem;
+    min-width: 280px;
+    max-width: 90vw;
+  }
+  
+  .game-over h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .game-over p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .game-over input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .game-over button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    min-height: 50px;
+  }
+  
+  .exit-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    padding: 0;
+  }
+  
+  .highscore-list {
+    margin-top: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  /* Highscore view mobile improvements */
+  .highscore-view {
+    padding: 1rem;
+  }
+  
+  .highscore-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .highscore-header p {
+    font-size: 0.9rem;
+  }
+  
+  .highscore-table {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .highscore-entry {
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+  }
+  
+  .highscore-rank {
+    font-size: 0.9rem;
+    min-width: 30px;
+  }
+  
+  .highscore-name {
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+  }
+  
+  .highscore-score {
+    font-size: 0.9rem;
+  }
+  
+  .back-to-game-btn {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 250px;
+    min-height: 50px;
+  }
+}
+
+/* Better touch controls for game */
+.game-canvas {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* Prevent zoom on game canvas */
+.game-canvas:active {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Better focus states for game elements */
+.game-start-btn:focus,
+.highscore-switch:focus,
+.game-over button:focus,
+.exit-btn:focus,
+.back-to-game-btn:focus {
+  outline: 2px solid var(--gold-2);
+  outline-offset: 2px;
+}
+
+/* Prevent text selection on game buttons */
+.game-start-btn,
+.highscore-switch,
+.game-over button,
+.exit-btn,
+.back-to-game-btn {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

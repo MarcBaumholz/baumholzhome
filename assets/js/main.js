@@ -668,8 +668,11 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Scroll to top function
+// Scroll to top function - Fixed
 function scrollToTop() {
+    // Prevent default link behavior
+    event.preventDefault();
+    
     // Smooth scroll to top with better compatibility
     if ('scrollBehavior' in document.documentElement.style) {
         // Modern browsers
@@ -689,8 +692,52 @@ function scrollToTop() {
         }, 15);
     }
     
-    // Prevent default link behavior
     return false;
 }
+
+// Mobile optimization improvements
+document.addEventListener('DOMContentLoaded', function() {
+    // Add mobile-specific optimizations
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // Improve touch targets for mobile
+        const touchTargets = document.querySelectorAll('a, button, .btn, .nav a, .footer-link');
+        touchTargets.forEach(target => {
+            target.style.minHeight = '44px';
+            target.style.minWidth = '44px';
+        });
+        
+        // Improve scrolling performance
+        document.body.style.webkitOverflowScrolling = 'touch';
+        
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    }
+    
+    // Initialize existing functionality
+    if (typeof initReviewsSlider === 'function') {
+        initReviewsSlider();
+    }
+    
+    if (typeof initWhiteboard === 'function') {
+        initWhiteboard();
+    }
+    
+    if (typeof initReviewPopup === 'function') {
+        initReviewPopup();
+    }
+    
+    if (typeof initFloatingReviews === 'function') {
+        initFloatingReviews();
+    }
+});
 
 
