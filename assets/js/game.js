@@ -139,8 +139,6 @@ class BaumholzGame {
     }
     
     setupTouchControls() {
-        let touchStartY = 0;
-        let touchStartX = 0;
         let isTouching = false;
         
         // Touch start
@@ -148,12 +146,19 @@ class BaumholzGame {
             if (this.gameRunning) {
                 e.preventDefault();
                 const touch = e.touches[0];
-                touchStartY = touch.clientY;
-                touchStartX = touch.clientX;
-                isTouching = true;
+                const rect = this.canvas.getBoundingClientRect();
+                
+                // Convert touch position to game coordinates
+                const touchX = touch.clientX - rect.left;
+                const touchY = touch.clientY - rect.top;
+                
+                // Set target position for direct movement
+                this.player.targetX = touchX;
+                this.player.targetY = touchY;
                 
                 // Auto-shoot on mobile
                 this.keys['KeyQ'] = true;
+                isTouching = true;
             }
         }, { passive: false });
         
@@ -162,19 +167,15 @@ class BaumholzGame {
             if (this.gameRunning && isTouching) {
                 e.preventDefault();
                 const touch = e.touches[0];
-                
-                // Get canvas position and size
                 const rect = this.canvas.getBoundingClientRect();
-                const touchY = touch.clientY - rect.top;
-                const touchX = touch.clientX - rect.left;
                 
                 // Convert touch position to game coordinates
-                const gameY = (touchY / rect.height) * this.canvas.height;
-                const gameX = (touchX / rect.width) * this.canvas.width;
+                const touchX = touch.clientX - rect.left;
+                const touchY = touch.clientY - rect.top;
                 
-                // Set target position for smooth movement
-                this.player.targetY = gameY;
-                this.player.targetX = gameX;
+                // Update target position for direct movement
+                this.player.targetX = touchX;
+                this.player.targetY = touchY;
                 
                 // Auto-shoot on mobile
                 this.keys['KeyQ'] = true;
@@ -190,20 +191,16 @@ class BaumholzGame {
                 // Stop auto-shooting
                 this.keys['KeyQ'] = false;
                 
-                // Clear target positions
-                this.player.targetY = null;
-                this.player.targetX = null;
+                // Keep last position (don't clear targets)
             }
         }, { passive: false });
         
-        // Prevent default touch behaviors
+        // Touch cancel
         this.canvas.addEventListener('touchcancel', (e) => {
             if (this.gameRunning) {
                 e.preventDefault();
                 isTouching = false;
                 this.keys['KeyQ'] = false;
-                this.player.targetY = null;
-                this.player.targetX = null;
             }
         }, { passive: false });
     }
@@ -889,27 +886,17 @@ class BaumholzGame {
     }
     
     handlePlayerMovement() {
-        // Mobile touch movement
-        if (this.player.targetY !== null && this.player.targetX !== null) {
-            // Smooth movement towards target position
-            const speed = this.player.speed;
-            const dx = this.player.targetX - this.player.x;
-            const dy = this.player.targetY - this.player.y;
-            
-            if (Math.abs(dx) > 2) {
-                this.player.x += Math.sign(dx) * speed;
-            }
-            if (Math.abs(dy) > 2) {
-                this.player.y += Math.sign(dy) * speed;
-            }
+        // Mobile touch movement - direct positioning
+        if (this.player.targetX !== null && this.player.targetY !== null) {
+            // Direct positioning for responsive mobile control
+            this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, 
+                this.player.targetX - this.player.width / 2));
+            this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, 
+                this.player.targetY - this.player.height / 2));
         } else {
             // Desktop keyboard movement
             this.handleInput();
         }
-        
-        // Keep player in bounds
-        this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, this.player.x));
-        this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, this.player.y));
     }
     
     saveHighscore() {
