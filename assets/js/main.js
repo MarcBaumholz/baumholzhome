@@ -540,7 +540,7 @@ class WhiteboardManager {
                 border-radius: 12px;
                 padding: 1rem;
                 max-width: 200px;
-                cursor: ${this.isAdmin ? 'pointer' : 'default'};
+                cursor: default;
                 transition: all 0.3s ease;
                 backdrop-filter: blur(5px);
             `;
@@ -552,9 +552,9 @@ class WhiteboardManager {
                 <div style="color: var(--text); font-size: 0.85rem; line-height: 1.3;">
                     ${comment.text}
                 </div>
-                ${this.isAdmin ? '<div style="color: var(--gold-1); font-size: 0.7rem; margin-top: 0.5rem;">🗑️ Klicken zum Löschen</div>' : ''}
             `;
             
+            // Only add click functionality if admin mode is active
             if (this.isAdmin) {
                 commentEl.addEventListener('click', () => this.deleteComment(index));
                 commentEl.addEventListener('mouseenter', () => {
@@ -565,6 +565,17 @@ class WhiteboardManager {
                     commentEl.style.transform = 'scale(1)';
                     commentEl.style.borderColor = 'rgba(212,161,90,0.3)';
                 });
+                
+                // Add delete indicator only in admin mode
+                const deleteIndicator = document.createElement('div');
+                deleteIndicator.style.cssText = `
+                    color: var(--gold-1);
+                    font-size: 0.7rem;
+                    margin-top: 0.5rem;
+                    text-align: center;
+                `;
+                deleteIndicator.textContent = '🗑️ Klicken zum Löschen';
+                commentEl.appendChild(deleteIndicator);
             }
             
             this.canvas.appendChild(commentEl);
