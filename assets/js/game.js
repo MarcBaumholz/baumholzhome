@@ -15,34 +15,33 @@ class BaumholzGame {
         this.startTime = 0;
         this.currentTime = 0;
         
-        // Mobile detection
+        // Mobile detection and faster gameplay
         this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
-        // Player (airplane) - Start in center
+        // Faster mobile gameplay settings
         this.player = {
             x: 100,
-            y: 300,
-            width: 40,
+            y: 300, // Center of screen
+            width: 30,
             height: 20,
-            speed: this.isMobile ? 8 : 5, // Faster on mobile
-            turboSpeed: this.isMobile ? 12 : 8,
+            speed: this.isMobile ? 12 : 5, // Much faster on mobile
+            turboSpeed: this.isMobile ? 18 : 8,
             isTurbo: false,
-            targetY: null,
-            targetX: null
+            targetX: null,
+            targetY: null
         };
         
-        // Flying Baumholz Home - Faster on mobile
         this.house = {
-            x: 700,
+            x: 650,
             y: 300,
-            width: 100,
-            height: 120,
-            health: this.isMobile ? 150 : 200, // Less health on mobile
-            maxHealth: this.isMobile ? 150 : 200,
+            width: 80,
+            height: 100,
+            health: this.isMobile ? 120 : 200, // Less health on mobile for faster gameplay
+            maxHealth: this.isMobile ? 120 : 200,
+            speed: this.isMobile ? 6 : 2, // Much faster movement on mobile
+            direction: 1,
             destroyed: false,
             damageLevel: 0,
-            speed: this.isMobile ? 4 : 2, // Faster movement on mobile
-            direction: 1,
             parts: {
                 roof: { health: 100, visible: true },
                 walls: { health: 100, visible: true },
@@ -51,15 +50,22 @@ class BaumholzGame {
             }
         };
         
+        // Faster bullets and gameplay on mobile
+        this.bulletSpeed = this.isMobile ? 15 : 6; // Much faster bullets on mobile
+        this.bulletDamage = this.isMobile ? 12 : 5; // More damage on mobile
+        this.fireRate = this.isMobile ? 50 : 200; // Much faster firing on mobile (50ms vs 200ms)
+        this.enemyBulletSpeed = this.isMobile ? 8 : 4; // Faster enemy bullets on mobile
+        this.enemySpawnRate = this.isMobile ? 40 : 120; // Much more frequent spawns on mobile
+        
         // Bullets - Faster on mobile
         this.bullets = [];
-        this.bulletSpeed = this.isMobile ? 10 : 6; // Faster bullets on mobile
-        this.bulletDamage = this.isMobile ? 8 : 5; // More damage on mobile
-        this.fireRate = this.isMobile ? 100 : 200; // Faster firing on mobile
+        // this.bulletSpeed = this.isMobile ? 10 : 6; // Faster bullets on mobile
+        // this.bulletDamage = this.isMobile ? 8 : 5; // More damage on mobile
+        // this.fireRate = this.isMobile ? 100 : 200; // Faster firing on mobile
         
         // Enemy bullets
         this.enemyBullets = [];
-        this.enemyBulletSpeed = this.isMobile ? 6 : 4; // Faster enemy bullets on mobile
+        // this.enemyBulletSpeed = this.isMobile ? 6 : 4; // Faster enemy bullets on mobile
         
         // Explosions
         this.explosions = [];
@@ -67,7 +73,7 @@ class BaumholzGame {
         // Enemies - More frequent on mobile
         this.enemies = [];
         this.enemySpawnTimer = 0;
-        this.enemySpawnRate = this.isMobile ? 80 : 120; // More frequent spawns on mobile
+        // this.enemySpawnRate = this.isMobile ? 80 : 120; // More frequent spawns on mobile
         
         // Player health
         this.playerHealth = 100;
@@ -108,14 +114,14 @@ class BaumholzGame {
         // Desktop keyboard controls
         this.canvas.addEventListener('keydown', (e) => {
             if (this.gameRunning) {
-                this.keys[e.code] = true;
+            this.keys[e.code] = true;
                 e.preventDefault(); // Prevent page scrolling
             }
         });
         
         this.canvas.addEventListener('keyup', (e) => {
             if (this.gameRunning) {
-                this.keys[e.code] = false;
+            this.keys[e.code] = false;
                 e.preventDefault();
             }
         });
@@ -144,6 +150,7 @@ class BaumholzGame {
     
     setupTouchControls() {
         let isTouching = false;
+        let autoShootInterval = null;
         
         // Touch start
         this.canvas.addEventListener('touchstart', (e) => {
@@ -160,9 +167,18 @@ class BaumholzGame {
                 this.player.targetX = touchX;
                 this.player.targetY = touchY;
                 
-                // Auto-shoot on mobile
-                this.keys['KeyQ'] = true;
+                // Start auto-shooting on mobile
                 isTouching = true;
+                this.keys['KeyQ'] = true;
+                
+                // Set up continuous auto-shooting
+                if (this.isMobile && !autoShootInterval) {
+                    autoShootInterval = setInterval(() => {
+                        if (this.gameRunning && isTouching) {
+                            this.fireBullet();
+                        }
+                    }, this.fireRate); // Use the mobile fire rate
+                }
             }
         }, { passive: false });
         
@@ -181,7 +197,7 @@ class BaumholzGame {
                 this.player.targetX = touchX;
                 this.player.targetY = touchY;
                 
-                // Auto-shoot on mobile
+                // Keep auto-shooting active
                 this.keys['KeyQ'] = true;
             }
         }, { passive: false });
@@ -195,6 +211,12 @@ class BaumholzGame {
                 // Stop auto-shooting
                 this.keys['KeyQ'] = false;
                 
+                // Clear auto-shoot interval
+                if (autoShootInterval) {
+                    clearInterval(autoShootInterval);
+                    autoShootInterval = null;
+                }
+                
                 // Keep last position (don't clear targets)
             }
         }, { passive: false });
@@ -205,6 +227,12 @@ class BaumholzGame {
                 e.preventDefault();
                 isTouching = false;
                 this.keys['KeyQ'] = false;
+                
+                // Clear auto-shoot interval
+                if (autoShootInterval) {
+                    clearInterval(autoShootInterval);
+                    autoShootInterval = null;
+                }
             }
         }, { passive: false });
     }
@@ -244,9 +272,13 @@ class BaumholzGame {
     }
     
     updateScore() {
-        document.getElementById('score').textContent = this.score;
-        document.getElementById('time').textContent = this.currentTime.toFixed(1);
-        document.getElementById('playerHealth').textContent = this.playerHealth;
+        const scoreEl = document.getElementById('score');
+        const timeEl = document.getElementById('time');
+        const livesEl = document.getElementById('lives');
+        
+        if (scoreEl) scoreEl.textContent = this.score;
+        if (timeEl) timeEl.textContent = this.currentTime.toFixed(1) + 's';
+        if (livesEl) livesEl.textContent = this.playerHealth;
     }
     
     updateHighscore() {
@@ -380,7 +412,7 @@ class BaumholzGame {
     }
     
     fireBullet() {
-        // Prevent rapid firing based on mobile detection
+        // Much faster firing on mobile
         const minFireInterval = this.isMobile ? this.fireRate : 200;
         
         if (this.lastFireTime && Date.now() - this.lastFireTime < minFireInterval) return;
@@ -390,23 +422,35 @@ class BaumholzGame {
         const bullet = {
             x: this.player.x + this.player.width,
             y: this.player.y + this.player.height / 2,
-            width: this.isMobile ? 10 : 8, // Bigger bullets on mobile
-            height: this.isMobile ? 6 : 4,
+            width: this.isMobile ? 12 : 8, // Bigger bullets on mobile
+            height: this.isMobile ? 8 : 4,
             speed: this.bulletSpeed
         };
         
         this.bullets.push(bullet);
         
         // Add multiple bullets on mobile for faster gameplay
-        if (this.isMobile && Math.random() < 0.3) {
+        if (this.isMobile && Math.random() < 0.5) { // 50% chance for second bullet
             const bullet2 = {
                 x: this.player.x + this.player.width,
-                y: this.player.y + this.player.height / 2 - 5,
-                width: 8,
-                height: 4,
+                y: this.player.y + this.player.height / 2 - 8,
+                width: 10,
+                height: 6,
                 speed: this.bulletSpeed
             };
             this.bullets.push(bullet2);
+        }
+        
+        // Add third bullet occasionally on mobile
+        if (this.isMobile && Math.random() < 0.3) { // 30% chance for third bullet
+            const bullet3 = {
+                x: this.player.x + this.player.width,
+                y: this.player.y + this.player.height / 2 + 8,
+                width: 10,
+                height: 6,
+                speed: this.bulletSpeed
+            };
+            this.bullets.push(bullet3);
         }
     }
     
@@ -896,7 +940,7 @@ class BaumholzGame {
             this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, gameY));
             this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, gameX));
         } else {
-            this.handleInput();
+        this.handleInput();
         }
         
         this.updateHouse();
@@ -1011,13 +1055,11 @@ class BaumholzGame {
         // Show game over screen
         const gameOverEl = document.getElementById('gameOver');
         const finalScoreEl = document.getElementById('finalScore');
-        const finalTimeEl = document.getElementById('finalTime');
         
         if (finalScoreEl) finalScoreEl.textContent = this.score;
-        if (finalTimeEl) finalTimeEl.textContent = this.currentTime.toFixed(1);
         
         if (gameOverEl) {
-            gameOverEl.classList.remove('hidden');
+            gameOverEl.style.display = 'block';
         }
         
         // Update highscore if needed
@@ -1037,13 +1079,13 @@ class BaumholzGame {
         // Hide game over screen
         const gameOverEl = document.getElementById('gameOver');
         if (gameOverEl) {
-            gameOverEl.classList.add('hidden');
+            gameOverEl.style.display = 'none';
         }
         
         // Show start screen again
         const startScreen = document.getElementById('startScreen');
         if (startScreen) {
-            startScreen.classList.remove('hidden');
+            startScreen.style.display = 'flex';
         }
         
         // Reset game state completely
@@ -1137,9 +1179,17 @@ function startGame() {
         } else {
             // Start new game
             gameInstance.startGame();
+            
+            // Hide start screen
             const startScreen = document.getElementById('startScreen');
             if (startScreen) {
-                startScreen.classList.add('hidden');
+                startScreen.style.display = 'none';
+            }
+            
+            // Hide game over screen if visible
+            const gameOverEl = document.getElementById('gameOver');
+            if (gameOverEl) {
+                gameOverEl.style.display = 'none';
             }
         }
     }
@@ -1241,23 +1291,46 @@ function saveScore() {
         time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
     });
     
+    // Sort by score (highest first)
+    highscores.sort((a, b) => b.score - a.score);
+    
+    // Keep only top 20 (more than 10 for variety)
+    const topHighscores = highscores.slice(0, 20);
+    
     // Save back to localStorage
-    localStorage.setItem('baumholzHighscores', JSON.stringify(highscores));
+    localStorage.setItem('baumholzHighscores', JSON.stringify(topHighscores));
     
     // Update highscore display
-    displayHighscores();
+    if (gameInstance) {
+        gameInstance.displayHighscores();
+    }
     
     // Show success message
     alert(`Score von ${finalScore} für ${playerName} gespeichert! 🏆`);
     
     // Clear input
     document.getElementById('playerName').value = '';
+    
+    console.log('Score saved:', { name: playerName, score: finalScore });
+    console.log('All highscores:', topHighscores);
 }
 
 // New game function
 function newGame() {
-    if (window.baumholzGame) {
-        window.baumholzGame.resetGame();
-        window.baumholzGame.startGame();
+    if (gameInstance) {
+        gameInstance.resetGame();
+        gameInstance.startGame();
+        
+        // Hide game over screen
+        const gameOverEl = document.getElementById('gameOver');
+        if (gameOverEl) {
+            gameOverEl.style.display = 'none';
+        }
+        
+        // Hide start screen
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.style.display = 'none';
+        }
     }
 }
