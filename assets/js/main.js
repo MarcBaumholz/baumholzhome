@@ -379,27 +379,16 @@ class WhiteboardManager {
         if (this.addBtn) {
             this.addBtn.addEventListener('click', () => this.addComment());
         }
-        
-        // Add keyboard shortcut for deletion code
-        document.addEventListener('keydown', (e) => {
-            // Ctrl+Shift+D to enter deletion mode
-            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-                this.promptForDeletionCode();
-            }
-        });
     }
     
     promptForDeletionCode() {
         const code = prompt('🔐 Lösch-Code eingeben:');
         if (code && this.verifyDeletionCode(code)) {
-            this.isAdmin = true;
-            this.showSuccessMessage('✅ Admin-Modus aktiviert! Klicke auf Nachrichten zum Löschen.');
-            setTimeout(() => {
-                this.isAdmin = false;
-            }, 30000); // Admin mode expires after 30 seconds
+            return true;
         } else if (code) {
             alert('❌ Falscher Code!');
         }
+        return false;
     }
     
     loadComments() {
@@ -467,17 +456,14 @@ class WhiteboardManager {
     }
     
     deleteComment(index) {
-        if (!this.isAdmin) {
-            this.promptForDeletionCode();
-            return;
-        }
-        
-        if (confirm('Nachricht wirklich löschen?')) {
-            this.comments.splice(index, 1);
-            this.saveComments();
-            this.renderComments();
-            this.updateWhiteboardSize();
-            this.showSuccessMessage('🗑️ Nachricht gelöscht!');
+        if (this.promptForDeletionCode()) {
+            if (confirm('Nachricht wirklich löschen?')) {
+                this.comments.splice(index, 1);
+                this.saveComments();
+                this.renderComments();
+                this.updateWhiteboardSize();
+                this.showSuccessMessage('🗑️ Nachricht gelöscht!');
+            }
         }
     }
     
@@ -540,7 +526,7 @@ class WhiteboardManager {
                 border-radius: 12px;
                 padding: 1rem;
                 max-width: 200px;
-                cursor: default;
+                cursor: pointer;
                 transition: all 0.3s ease;
                 backdrop-filter: blur(5px);
             `;
@@ -554,29 +540,16 @@ class WhiteboardManager {
                 </div>
             `;
             
-            // Only add click functionality if admin mode is active
-            if (this.isAdmin) {
-                commentEl.addEventListener('click', () => this.deleteComment(index));
-                commentEl.addEventListener('mouseenter', () => {
-                    commentEl.style.transform = 'scale(1.05)';
-                    commentEl.style.borderColor = 'rgba(212,161,90,0.6)';
-                });
-                commentEl.addEventListener('mouseleave', () => {
-                    commentEl.style.transform = 'scale(1)';
-                    commentEl.style.borderColor = 'rgba(212,161,90,0.3)';
-                });
-                
-                // Add delete indicator only in admin mode
-                const deleteIndicator = document.createElement('div');
-                deleteIndicator.style.cssText = `
-                    color: var(--gold-1);
-                    font-size: 0.7rem;
-                    margin-top: 0.5rem;
-                    text-align: center;
-                `;
-                deleteIndicator.textContent = '🗑️ Klicken zum Löschen';
-                commentEl.appendChild(deleteIndicator);
-            }
+            // Add click functionality for deletion
+            commentEl.addEventListener('click', () => this.deleteComment(index));
+            commentEl.addEventListener('mouseenter', () => {
+                commentEl.style.transform = 'scale(1.05)';
+                commentEl.style.borderColor = 'rgba(212,161,90,0.6)';
+            });
+            commentEl.addEventListener('mouseleave', () => {
+                commentEl.style.transform = 'scale(1)';
+                commentEl.style.borderColor = 'rgba(212,161,90,0.3)';
+            });
             
             this.canvas.appendChild(commentEl);
         });
