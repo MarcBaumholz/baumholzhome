@@ -58,6 +58,49 @@
   background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #2a2a2a);
 }
 
+.start-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.start-btn {
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--bg);
+  border: none;
+  border-radius: 12px;
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 8px 24px rgba(212,161,90,0.4);
+  min-width: 200px;
+}
+
+.start-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(212,161,90,0.6);
+  background: linear-gradient(135deg, var(--gold-2), var(--gold-3));
+}
+
+.start-btn:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.start-screen.hidden {
+  display: none;
+}
+
 .controls {
   text-align: center;
   color: var(--text-light);
@@ -170,5 +213,11 @@
   .game-over {
     min-width: 280px;
     padding: 1.5rem;
+  }
+  
+  .start-btn {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    min-width: 150px;
   }
 }

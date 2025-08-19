@@ -9,6 +9,7 @@ class BaumholzGame {
         
         // Game state
         this.gameRunning = false;
+        this.gameStarted = false;
         this.score = 0;
         this.highscore = localStorage.getItem('baumholzHighscore') || 0;
         this.startTime = 0;
@@ -69,24 +70,55 @@ class BaumholzGame {
         // Input handling
         this.keys = {};
         this.setupInputs();
+        this.setupStartButton();
         
         // Initialize
         this.updateHighscore();
         this.gameLoop();
     }
     
+    setupStartButton() {
+        const startBtn = document.getElementById('startGameBtn');
+        const startScreen = document.getElementById('startScreen');
+        
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                this.startGame();
+                if (startScreen) {
+                    startScreen.classList.add('hidden');
+                }
+            });
+        }
+    }
+    
     setupInputs() {
-        document.addEventListener('keydown', (e) => {
-            this.keys[e.code] = true;
+        // Only handle inputs when game is running and canvas is focused
+        this.canvas.addEventListener('keydown', (e) => {
+            if (this.gameRunning) {
+                this.keys[e.code] = true;
+                e.preventDefault(); // Prevent page scrolling
+            }
         });
         
-        document.addEventListener('keyup', (e) => {
-            this.keys[e.code] = false;
+        this.canvas.addEventListener('keyup', (e) => {
+            if (this.gameRunning) {
+                this.keys[e.code] = false;
+                e.preventDefault();
+            }
+        });
+        
+        // Make canvas focusable
+        this.canvas.setAttribute('tabindex', '0');
+        
+        // Focus canvas when clicked
+        this.canvas.addEventListener('click', () => {
+            this.canvas.focus();
         });
     }
     
     startGame() {
         this.gameRunning = true;
+        this.gameStarted = true;
         this.score = 0;
         this.startTime = Date.now();
         this.house.health = this.house.maxHealth;
@@ -100,29 +132,22 @@ class BaumholzGame {
             windows: { health: 100, visible: true },
             door: { health: 100, visible: true }
         };
-        this.bullets = [];
-        this.enemyBullets = [];
-        this.enemies = [];
-        this.explosions = [];
+        
+        // Reset player
         this.player.x = 100;
         this.player.y = 300;
         this.playerHealth = this.maxPlayerHealth;
-        this.enemySpawnTimer = 0;
         
-        document.getElementById('gameOver').classList.add('hidden');
-        this.updateScore();
-    }
-    
-    endGame() {
-        this.gameRunning = false;
-        this.currentTime = (Date.now() - this.startTime) / 1000;
+        // Clear arrays
+        this.bullets = [];
+        this.enemyBullets = [];
+        this.explosions = [];
+        this.enemies = [];
         
-        document.getElementById('finalScore').textContent = this.score;
-        document.getElementById('finalTime').textContent = this.currentTime.toFixed(1);
-        document.getElementById('gameOver').classList.remove('hidden');
+        // Focus canvas for input
+        this.canvas.focus();
         
-        // Show highscore list
-        this.displayHighscores();
+        console.log('Game started!');
     }
     
     updateScore() {
@@ -169,25 +194,40 @@ class BaumholzGame {
         return highscores ? JSON.parse(highscores) : [];
     }
     
-    saveHighscore(name, score, time) {
-        const highscores = this.getHighscores();
-        highscores.push({ name, score, time, date: new Date().toISOString() });
+    saveHighscore() {
+        const playerName = document.getElementById('playerName').value.trim();
+        if (!playerName) {
+            alert('Bitte gib deinen Namen ein!');
+            return;
+        }
         
-        // Sort by score (highest first), then by time (fastest first)
-        highscores.sort((a, b) => {
-            if (b.score !== a.score) return b.score - a.score;
-            return a.time - b.time;
+        // Get existing highscores
+        let highscores = JSON.parse(localStorage.getItem('baumholzHighscores') || '[]');
+        
+        // Add new score
+        highscores.push({
+            name: playerName,
+            score: this.score,
+            time: this.currentTime,
+            date: new Date().toISOString()
         });
         
-        // Keep only top 10
-        const topHighscores = highscores.slice(0, 10);
-        localStorage.setItem('baumholzHighscores', JSON.stringify(topHighscores));
+        // Sort by score (highest first)
+        highscores.sort((a, b) => b.score - a.score);
         
-        // Update current highscore
-        if (topHighscores.length > 0) {
-            this.highscore = topHighscores[0].score;
-            this.updateHighscore();
-        }
+        // Keep only top 10
+        highscores = highscores.slice(0, 10);
+        
+        // Save to localStorage
+        localStorage.setItem('baumholzHighscores', JSON.stringify(highscores));
+        
+        // Update display
+        this.displayHighscores();
+        
+        // Clear input
+        document.getElementById('playerName').value = '';
+        
+        alert('Highscore gespeichert!');
     }
     
     displayHighscores() {
@@ -216,25 +256,23 @@ class BaumholzGame {
     handleInput() {
         if (!this.gameRunning) return;
         
-        const speed = this.player.isTurbo ? this.player.turboSpeed : this.player.speed;
+        // Movement
+        if (this.keys['ArrowUp'] || this.keys['KeyW']) {
+            this.player.y -= this.player.speed;
+        }
+        if (this.keys['ArrowDown'] || this.keys['KeyS']) {
+            this.player.y += this.player.speed;
+        }
+        if (this.keys['ArrowLeft'] || this.keys['KeyA']) {
+            this.player.x -= this.player.speed;
+        }
+        if (this.keys['ArrowRight'] || this.keys['KeyD']) {
+            this.player.x += this.player.speed;
+        }
         
-        if (this.keys['ArrowUp']) {
-            this.player.y -= speed;
-        }
-        if (this.keys['ArrowDown']) {
-            this.player.y += speed;
-        }
-        if (this.keys['ArrowLeft']) {
-            this.player.x -= speed;
-        }
-        if (this.keys['ArrowRight']) {
-            this.player.x += speed;
-        }
+        // Firing (Spacebar)
         if (this.keys['Space']) {
-            this.player.isTurbo = true;
-            this.shoot();
-        } else {
-            this.player.isTurbo = false;
+            this.fireBullet();
         }
         
         // Keep player in bounds
@@ -242,16 +280,21 @@ class BaumholzGame {
         this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, this.player.y));
     }
     
-    shoot() {
-        if (!this.gameRunning) return;
+    fireBullet() {
+        // Prevent rapid firing
+        if (this.lastFireTime && Date.now() - this.lastFireTime < 200) return;
         
-        this.bullets.push({
+        this.lastFireTime = Date.now();
+        
+        const bullet = {
             x: this.player.x + this.player.width,
             y: this.player.y + this.player.height / 2,
             width: 8,
             height: 4,
             speed: this.bulletSpeed
-        });
+        };
+        
+        this.bullets.push(bullet);
     }
     
     updateBullets() {
@@ -278,7 +321,7 @@ class BaumholzGame {
                 if (this.house.health <= 0) {
                     this.house.destroyed = true;
                     this.score += 100; // Bonus for destroying the house
-                    this.endGame();
+                    this.gameOver();
                 }
                 
                 this.updateScore();
@@ -303,7 +346,7 @@ class BaumholzGame {
                 this.createExplosion(bullet.x, bullet.y);
                 
                 if (this.playerHealth <= 0) {
-                    this.endGame();
+                    this.gameOver();
                 }
                 
                 this.updateScore();
@@ -367,7 +410,7 @@ class BaumholzGame {
                 this.createExplosion(enemy.x, enemy.y);
                 
                 if (this.playerHealth <= 0) {
-                    this.endGame();
+                    this.gameOver();
                 }
                 
                 this.updateScore();
@@ -784,6 +827,56 @@ class BaumholzGame {
             highscoreList.appendChild(div);
         });
     }
+
+    gameOver() {
+        this.gameRunning = false;
+        
+        // Show game over screen
+        const gameOverEl = document.getElementById('gameOver');
+        const finalScoreEl = document.getElementById('finalScore');
+        const finalTimeEl = document.getElementById('finalTime');
+        
+        if (finalScoreEl) finalScoreEl.textContent = this.score;
+        if (finalTimeEl) finalTimeEl.textContent = this.currentTime.toFixed(1);
+        
+        if (gameOverEl) {
+            gameOverEl.classList.remove('hidden');
+        }
+        
+        // Update highscore if needed
+        if (this.score > this.highscore) {
+            this.highscore = this.score;
+            localStorage.setItem('baumholzHighscore', this.highscore);
+            this.updateHighscore();
+        }
+        
+        console.log('Game Over! Score:', this.score);
+    }
+    
+    resetGame() {
+        // Hide game over screen
+        const gameOverEl = document.getElementById('gameOver');
+        if (gameOverEl) {
+            gameOverEl.classList.add('hidden');
+        }
+        
+        // Show start screen again
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.classList.remove('hidden');
+        }
+        
+        // Reset game state
+        this.gameRunning = false;
+        this.gameStarted = false;
+        this.score = 0;
+        this.currentTime = 0;
+        
+        // Update displays
+        this.updateScore();
+        this.updateTime();
+        this.updateHealth();
+    }
 }
 
 // Global game instance
@@ -796,15 +889,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if we're on the secrets page
     const gameCanvas = document.getElementById('gameCanvas');
     if (gameCanvas) {
-        console.log('Game canvas found, starting game...');
+        console.log('Game canvas found, initializing game...');
         gameInstance = new BaumholzGame();
         
-        // Auto-start the game after a short delay
-        setTimeout(() => {
-            if (gameInstance) {
-                gameInstance.startGame();
-            }
-        }, 1000);
+        // Don't auto-start, wait for START button click
+        console.log('Game ready, waiting for START button click...');
     } else {
         console.log('Game canvas not found, not on secrets page');
     }
@@ -813,7 +902,17 @@ document.addEventListener('DOMContentLoaded', function() {
 // Global functions for HTML buttons
 function startGame() {
     if (gameInstance) {
-        gameInstance.startGame();
+        if (gameInstance.gameRunning) {
+            // If game is running, reset it
+            gameInstance.resetGame();
+        } else {
+            // Start new game
+            gameInstance.startGame();
+            const startScreen = document.getElementById('startScreen');
+            if (startScreen) {
+                startScreen.classList.add('hidden');
+            }
+        }
     }
 }
 
