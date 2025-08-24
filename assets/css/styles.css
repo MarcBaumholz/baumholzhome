@@ -607,6 +607,15 @@ h4 { font-size: 1rem; }
   background: rgba(30,215,96,0.1);
   color: #1ed760;
   border-color: rgba(30,215,96,0.3);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.dj-info .platform:hover {
+  background: rgba(30,215,96,0.2);
+  border-color: rgba(30,215,96,0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30,215,96,0.3);
 }
 
 .dj-info .stats {
@@ -631,6 +640,43 @@ h4 { font-size: 1rem; }
   .dj-info span {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Playlist Link Styling */
+.playlist-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(30,215,96,0.1), rgba(30,215,96,0.05));
+  color: #1ed760;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  border: 2px solid rgba(30,215,96,0.3);
+  transition: all 0.3s ease;
+  margin-top: 0.8rem;
+}
+
+.playlist-link:hover {
+  background: linear-gradient(135deg, rgba(30,215,96,0.2), rgba(30,215,96,0.1));
+  border-color: rgba(30,215,96,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30,215,96,0.3);
+  color: #1ed760;
+}
+
+.playlist-link .spotify-icon {
+  font-size: 1.2em;
+}
+
+@media (max-width: 767px) {
+  .playlist-link {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+    width: 100%;
+    justify-content: center;
   }
 }
 
