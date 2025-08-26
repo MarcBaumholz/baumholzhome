@@ -8,6 +8,7 @@
 	if (cd) {
 		var start = cd.getAttribute('data-start');
 		var target = start ? new Date(start) : null;
+		console.log('Countdown target date:', target);
 		if (target) {
 			function pad(n) { return String(n).padStart(2, '0'); }
 			function tick() {
@@ -305,7 +306,7 @@ class WhiteboardManager {
         this.userIPs = JSON.parse(localStorage.getItem('whiteboardUserIPs') || '{}');
         this.currentIP = this.getUserIP();
         
-        image.png        this.init();
+        this.init();
     }
     
     // Get user IP (simplified - in production use a proper IP service)
