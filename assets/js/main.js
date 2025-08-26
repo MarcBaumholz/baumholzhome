@@ -305,7 +305,7 @@ class WhiteboardManager {
         this.userIPs = JSON.parse(localStorage.getItem('whiteboardUserIPs') || '{}');
         this.currentIP = this.getUserIP();
         
-        this.init();
+        image.png        this.init();
     }
     
     // Get user IP (simplified - in production use a proper IP service)

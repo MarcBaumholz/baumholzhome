@@ -4,15 +4,18 @@ PRODID:-//Baumholz Home//The Last Chapter//DE
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:baumholz-home-last-chapter@baumholzhome.lol
+UID:baumholz-home-last-chapter-v2@baumholzhome.lol
+DTSTAMP:20250119T120000Z
+CREATED:20250119T120000Z
+LAST-MODIFIED:20250119T120000Z
 DTSTART:20250920T200000
 DTEND:20250921T080000
 SUMMARY:Baumholz Home – The Last Chapter
-DESCRIPTION:Baumholz Home – The Last Chapter\n\n🎉 HAUSPARTY AGENDA:\n20:00 - Einlass & Ankommen\n21:00 - Erste Pizza Lieferung 🍕\n22:00 - Zweite Pizza Lieferung 🍕\n22:00 - Party nur noch drinnen auf den 3 Stages\n24:00 - Tombola Verlosung mit Preisen\n24:00 - 🎉 Große Konfetti Explosion 🎉\n00:30 - Nicolas Binder auf der Main Stage\n02:00 - Astralkickend spielt auf der Main Stage\n08:00 - 🎭 Offizielles Party Ende\n\n📍 Adresse: Kürräckerstraße 10, 71409 Schwaikheim\n\n🎫 Tickets: 15€ (Unlimited Bier & Aperol, Sticker, Bierdeckel, 1 Tombola Los)\n\n🎵 Baumholz Home Playlist: https://open.spotify.com/playlist/0VsDoFkyVtAqnACdV1RwPz\n\n📱 Mehr Infos: https://baumholzhome.lol
+DESCRIPTION:Baumholz Home – The Last Chapter\n\n📅 DATUM: 20. September 2025\n⏰ ZEIT: 20:00 Uhr - 08:00 Uhr (12 Stunden)\n\n🎉 HAUSPARTY AGENDA:\n20:00 - Einlass & Ankommen\n21:00 - Erste Pizza Lieferung 🍕\n22:00 - Zweite Pizza Lieferung 🍕\n22:00 - Party nur noch drinnen auf den 3 Stages\n24:00 - Tombola Verlosung mit Preisen\n24:00 - 🎉 Große Konfetti Explosion 🎉\n00:30 - Nicolas Binder auf der Main Stage\n02:00 - Astralkickend spielt auf der Main Stage\n08:00 - 🎭 Offizielles Party Ende\n\n📍 Adresse: Kürräckerstraße 10, 71409 Schwaikheim\n\n🎫 Tickets: 15€ (Unlimited Bier & Aperol, Sticker, Bierdeckel, 1 Tombola Los)\n\n🎵 Baumholz Home Playlist: https://open.spotify.com/playlist/0VsDoFkyVtAqnACdV1RwPz\n\n📱 Mehr Infos: https://baumholzhome.lol
 LOCATION:Baumholz Home, Kürräckerstraße 10, 71409 Schwaikheim
 URL:https://baumholzhome.lol
 STATUS:CONFIRMED
-SEQUENCE:0
+SEQUENCE:1
 BEGIN:VALARM
 TRIGGER:-PT2H
 DESCRIPTION:Baumholz Home – The Last Chapter beginnt in 2 Stunden
