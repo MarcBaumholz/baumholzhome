@@ -918,20 +918,13 @@ h4 { font-size: 1rem; }
   background-clip: text;
 }
 
-.donors-leaderboard h4 {
-  background: linear-gradient(135deg, #32cd32, #90ee90);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.participants-list, .donors-list {
+.participants-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.participant, .donor {
+.participant {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -944,7 +937,7 @@ h4 { font-size: 1rem; }
   overflow: hidden;
 }
 
-.participant::before, .donor::before {
+.participant::before {
   content: '';
   position: absolute;
   top: 0;
@@ -955,30 +948,30 @@ h4 { font-size: 1rem; }
   transition: left 0.5s ease;
 }
 
-.participant:hover::before, .donor:hover::before {
+.participant:hover::before {
   left: 100%;
 }
 
-.participant:hover, .donor:hover {
+.participant:hover {
   background: rgba(212,161,90,0.08);
   transform: translateX(8px);
   border-color: rgba(212,161,90,0.25);
 }
 
-.participant .rank, .donor .rank {
+.participant .rank {
   font-size: 1.2rem;
   min-width: 40px;
   text-align: center;
 }
 
-.participant .name, .donor .name {
+.participant .name {
   font-weight: 600;
   color: var(--gold-2);
   flex: 1;
   margin-left: 0.5rem;
 }
 
-.participant .tickets, .donor .amount {
+.participant .tickets {
   color: var(--text);
   font-size: 0.9em;
   font-weight: 500;
@@ -989,17 +982,17 @@ h4 { font-size: 1rem; }
 }
 
 /* Special styling for top 3 */
-.participant:nth-child(1), .donor:nth-child(1) {
+.participant:nth-child(1) {
   background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
   border-color: rgba(255,215,0,0.4);
 }
 
-.participant:nth-child(2), .donor:nth-child(2) {
+.participant:nth-child(2) {
   background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(192,192,192,0.05));
   border-color: rgba(192,192,192,0.4);
 }
 
-.participant:nth-child(3), .donor:nth-child(3) {
+.participant:nth-child(3) {
   background: linear-gradient(135deg, rgba(205,127,50,0.15), rgba(205,127,50,0.05));
   border-color: rgba(205,127,50,0.4);
 }
