@@ -854,52 +854,7 @@ h4 { font-size: 1rem; }
   color: var(--muted);
 }
 
-/* Top Participants */
-.top-participants {
-  text-align: center;
-}
-
-.top-participants h4 {
-  color: var(--gold-2);
-  margin-bottom: 1rem;
-}
-
-.participants-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.participant {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  background: rgba(255,255,255,0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(212,161,90,0.2);
-  transition: all 0.3s ease;
-}
-
-.participant:hover {
-  background: rgba(212,161,90,0.1);
-  transform: translateX(5px);
-}
-
-.participant.empty {
-  opacity: 0.6;
-  font-style: italic;
-}
-
-.participant .name {
-  font-weight: 600;
-  color: var(--gold-2);
-}
-
-.participant .tickets {
-  color: var(--text-light);
-  font-size: 0.9em;
-}
+/* Top Participants - Legacy styles removed, replaced with leaderboards */
 
 /* Piggy bank animation */
 .piggy-bank {
@@ -917,6 +872,136 @@ h4 { font-size: 1rem; }
   top: 0;
   left: 0;
   animation: piggyFill 3s ease-in-out infinite;
+}
+
+/* Leaderboards Layout */
+.leaderboards-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+  .leaderboards-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.leaderboard {
+  background: linear-gradient(135deg, rgba(212,161,90,0.08) 0%, rgba(184,148,90,0.04) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(212,161,90,0.15);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.leaderboard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212,161,90,0.15);
+  border-color: rgba(212,161,90,0.25);
+}
+
+.leaderboard h4 {
+  color: var(--gold-2);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.tombola-leaderboard h4 {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.donors-leaderboard h4 {
+  background: linear-gradient(135deg, #32cd32, #90ee90);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.participants-list, .donors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.participant, .donor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(212,161,90,0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.participant::before, .donor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212,161,90,0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.participant:hover::before, .donor:hover::before {
+  left: 100%;
+}
+
+.participant:hover, .donor:hover {
+  background: rgba(212,161,90,0.08);
+  transform: translateX(8px);
+  border-color: rgba(212,161,90,0.25);
+}
+
+.participant .rank, .donor .rank {
+  font-size: 1.2rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+.participant .name, .donor .name {
+  font-weight: 600;
+  color: var(--gold-2);
+  flex: 1;
+  margin-left: 0.5rem;
+}
+
+.participant .tickets, .donor .amount {
+  color: var(--text);
+  font-size: 0.9em;
+  font-weight: 500;
+  background: rgba(212,161,90,0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(212,161,90,0.2);
+}
+
+/* Special styling for top 3 */
+.participant:nth-child(1), .donor:nth-child(1) {
+  background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+  border-color: rgba(255,215,0,0.4);
+}
+
+.participant:nth-child(2), .donor:nth-child(2) {
+  background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(192,192,192,0.05));
+  border-color: rgba(192,192,192,0.4);
+}
+
+.participant:nth-child(3), .donor:nth-child(3) {
+  background: linear-gradient(135deg, rgba(205,127,50,0.15), rgba(205,127,50,0.05));
+  border-color: rgba(205,127,50,0.4);
 }
 
 @keyframes piggyBounce {
