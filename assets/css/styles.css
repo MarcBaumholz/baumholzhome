@@ -896,10 +896,6 @@ h4 { font-size: 1rem; }
   text-align: center;
   font-size: 1.3rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .tombola-table {
@@ -1003,18 +999,18 @@ h4 { font-size: 1rem; }
   border: 1px solid rgba(212,161,90,0.2);
 }
 
-/* Special styling for top 3 */
-.participant:nth-child(1) {
+/* Special styling for top 3 - only in left column */
+.left-column .participant:nth-child(1) {
   background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
   border-color: rgba(255,215,0,0.4);
 }
 
-.participant:nth-child(2) {
+.left-column .participant:nth-child(2) {
   background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(192,192,192,0.05));
   border-color: rgba(192,192,192,0.4);
 }
 
-.participant:nth-child(3) {
+.left-column .participant:nth-child(3) {
   background: linear-gradient(135deg, rgba(205,127,50,0.15), rgba(205,127,50,0.05));
   border-color: rgba(205,127,50,0.4);
 }
