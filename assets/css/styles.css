@@ -3105,6 +3105,151 @@ p, h1, h2, h3, h4, h5, h6, span, div {
   text-shadow: 0 0 10px rgba(212,161,90,0.3);
 }
 
+/* Ronnie Coleman Special Styling */
+.ronnie-card {
+  background: linear-gradient(135deg, rgba(255,69,0,0.15), rgba(255,140,0,0.08));
+  border: 2px solid rgba(255,69,0,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.ronnie-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,69,0,0.1), transparent);
+  animation: ronnieShine 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ronnieShine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+}
+
+.ronnie-card:hover {
+  border-color: rgba(255,69,0,0.7);
+  box-shadow: 0 8px 30px rgba(255,69,0,0.3), 0 0 20px rgba(255,69,0,0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.ronnie-link {
+  background: linear-gradient(135deg, rgba(255,69,0,0.2), rgba(255,140,0,0.1));
+  color: #ff4500 !important;
+  border-color: rgba(255,69,0,0.4) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: ronniePulse 2s ease-in-out infinite;
+}
+
+@keyframes ronniePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.ronnie-link:hover {
+  background: linear-gradient(135deg, rgba(255,69,0,0.3), rgba(255,140,0,0.2));
+  border-color: rgba(255,69,0,0.6) !important;
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 6px 20px rgba(255,69,0,0.4);
+}
+
+.ronnie-cta {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.btn-ronnie {
+  background: linear-gradient(135deg, #ff4500, #ff8c00);
+  color: #fff;
+  border: 2px solid rgba(255,69,0,0.6);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 20px rgba(255,69,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  animation: ronnieButtonPulse 2s ease-in-out infinite;
+}
+
+@keyframes ronnieButtonPulse {
+  0%, 100% { 
+    box-shadow: 0 6px 20px rgba(255,69,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 8px 25px rgba(255,69,0,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+    transform: scale(1.05);
+  }
+}
+
+.btn-ronnie:hover {
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 10px 30px rgba(255,69,0,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.btn-ronnie:active {
+  transform: translateY(-1px) scale(1.05);
+}
+
+/* Hype Me Button in Hero */
+.btn-hype {
+  background: linear-gradient(135deg, #ff4500, #ff8c00);
+  color: #fff;
+  border: 2px solid rgba(255,69,0,0.6);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 20px rgba(255,69,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  animation: hypeButtonGlow 2s ease-in-out infinite;
+}
+
+@keyframes hypeButtonGlow {
+  0%, 100% { 
+    box-shadow: 0 6px 20px rgba(255,69,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  50% { 
+    box-shadow: 0 8px 25px rgba(255,69,0,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+}
+
+.btn-hype:hover {
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(255,69,0,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+  filter: brightness(1.1);
+}
+
+.btn-hype:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Mobile adjustments for Ronnie elements */
+@media (max-width: 767px) {
+  .btn-hype {
+    padding: 0.9rem 1.4rem;
+    font-size: 1rem;
+    min-width: 140px;
+  }
+  
+  .btn-ronnie {
+    padding: 0.9rem 1.4rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .ronnie-cta {
+    margin-top: 1.2rem;
+  }
+}
+
 /* Enhanced Mobile Friendliness */
 @media (max-width: 767px) {
   /* Better touch targets */
