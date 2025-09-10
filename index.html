@@ -65,6 +65,7 @@
           <a href="#tickets">Tickets</a>
           <a href="#infos">Infos</a>
           <a href="#reviews">Reviews</a>
+          <a href="#memes">Memes</a>
           <a href="#anfahrt">Anfahrt</a>
           <a href="secrets.html">Geheimnisse</a>
           <a class="btn" href="#rsvp">RSVP</a>
@@ -413,6 +414,191 @@
             
             <div class="whiteboard" id="whiteboard-canvas">
               <!-- Comments will be added here dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="memes" class="section">
+        <div class="container">
+          <h2>🎭 Meme Gallery</h2>
+          <p class="memes-intro">Wähle deinen Lieblingsstil für unsere Meme-Sammlung!</p>
+          
+          <!-- Meme Style Selector -->
+          <div class="meme-style-selector">
+            <button class="meme-style-btn active" data-style="carousel">🎪 Karussell</button>
+            <button class="meme-style-btn" data-style="random">🎲 Zufall</button>
+            <button class="meme-style-btn" data-style="pinterest">📌 Pinterest</button>
+            <button class="meme-style-btn" data-style="theater">🎭 Theater</button>
+            <button class="meme-style-btn" data-style="tv">📺 TV-Kanal</button>
+          </div>
+
+          <!-- Version 3: Karussell-Galerie -->
+          <div class="meme-gallery carousel-gallery active" data-gallery="carousel">
+            <div class="carousel-container">
+              <button class="carousel-nav prev" aria-label="Vorheriges Meme">‹</button>
+              <div class="carousel-track">
+                <div class="carousel-slide">
+                  <img src="./memes/WhatsApp Image 2025-09-04 at 20.07.37.jpeg" alt="Meme 1" class="meme-image">
+                  <div class="carousel-caption">Party Vibes! 🎉</div>
+                </div>
+                <div class="carousel-slide">
+                  <img src="./memes/WhatsApp GIF 2025-08-24 at 18.19.39.gif" alt="Meme 2" class="meme-image">
+                  <div class="carousel-caption">Hype Mode! 🔥</div>
+                </div>
+                <div class="carousel-slide">
+                  <video class="meme-video" controls>
+                    <source src="./memes/WhatsApp Video 2025-08-24 at 18.26.09.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption">Epic Moment! ⚡</div>
+                </div>
+                <div class="carousel-slide">
+                  <video class="meme-video" controls>
+                    <source src="./memes/WhatsApp Video 2025-08-24 at 18.28.37.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption">Legendary! 🏆</div>
+                </div>
+                <div class="carousel-slide">
+                  <video class="meme-video" controls>
+                    <source src="./memes/WhatsApp Video 2025-09-10 at 22.39.52.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption">Pure Gold! ✨</div>
+                </div>
+              </div>
+              <button class="carousel-nav next" aria-label="Nächstes Meme">›</button>
+            </div>
+            <div class="carousel-dots"></div>
+          </div>
+
+          <!-- Version 4: Zufalls-Meme Generator -->
+          <div class="meme-gallery random-gallery" data-gallery="random">
+            <div class="random-container">
+              <div class="random-meme-display">
+                <div class="meme-content" id="random-meme-content">
+                  <img src="./memes/WhatsApp Image 2025-09-04 at 20.07.37.jpeg" alt="Random Meme" class="meme-image">
+                  <div class="meme-title">Willkommen zur Meme-Lotterie! 🎲</div>
+                </div>
+              </div>
+              <div class="random-controls">
+                <button class="shuffle-btn">🎲 Shuffle Meme</button>
+                <button class="favorite-btn">❤️ Favorit</button>
+                <div class="random-stats">
+                  <span class="shuffle-count">Shuffles: <span id="shuffle-count">0</span></span>
+                  <span class="favorites-count">Favoriten: <span id="favorites-count">0</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Version 6: Pinterest-Style Masonry -->
+          <div class="meme-gallery pinterest-gallery" data-gallery="pinterest">
+            <div class="masonry-container">
+              <div class="masonry-item">
+                <img src="./memes/WhatsApp Image 2025-09-04 at 20.07.37.jpeg" alt="Meme" class="meme-image">
+                <div class="masonry-overlay">
+                  <span class="meme-type">📸 Bild</span>
+                  <button class="masonry-like">❤️</button>
+                </div>
+              </div>
+              <div class="masonry-item large">
+                <video class="meme-video" controls>
+                  <source src="./memes/WhatsApp Video 2025-08-24 at 18.26.09.mp4" type="video/mp4">
+                </video>
+                <div class="masonry-overlay">
+                  <span class="meme-type">🎬 Video</span>
+                  <button class="masonry-like">❤️</button>
+                </div>
+              </div>
+              <div class="masonry-item">
+                <img src="./memes/WhatsApp GIF 2025-08-24 at 18.19.39.gif" alt="GIF" class="meme-image">
+                <div class="masonry-overlay">
+                  <span class="meme-type">🎞️ GIF</span>
+                  <button class="masonry-like">❤️</button>
+                </div>
+              </div>
+              <div class="masonry-item medium">
+                <video class="meme-video" controls>
+                  <source src="./memes/WhatsApp Video 2025-08-24 at 18.28.37.mp4" type="video/mp4">
+                </video>
+                <div class="masonry-overlay">
+                  <span class="meme-type">🎬 Video</span>
+                  <button class="masonry-like">❤️</button>
+                </div>
+              </div>
+              <div class="masonry-item">
+                <video class="meme-video" controls>
+                  <source src="./memes/WhatsApp Video 2025-09-10 at 22.39.52.mp4" type="video/mp4">
+                </video>
+                <div class="masonry-overlay">
+                  <span class="meme-type">🎬 Video</span>
+                  <button class="masonry-like">❤️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Version 7: Theater-Bühne -->
+          <div class="meme-gallery theater-gallery" data-gallery="theater">
+            <div class="theater-container">
+              <div class="theater-stage">
+                <div class="theater-curtains">
+                  <div class="curtain left"></div>
+                  <div class="curtain right"></div>
+                </div>
+                <div class="theater-spotlight">
+                  <div class="meme-actor" id="theater-meme">
+                    <img src="./memes/WhatsApp Image 2025-09-04 at 20.07.37.jpeg" alt="Theater Meme" class="meme-image">
+                    <div class="actor-name">Meme Star #1</div>
+                  </div>
+                </div>
+                <div class="theater-audience">
+                  <div class="audience-reaction">👏👏👏</div>
+                </div>
+              </div>
+              <div class="theater-controls">
+                <button class="theater-next">🎭 Nächster Auftritt</button>
+                <div class="theater-program">
+                  <span class="current-act">Akt 1 von 5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Version 9: TV-Kanal Simulator -->
+          <div class="meme-gallery tv-gallery" data-gallery="tv">
+            <div class="tv-container">
+              <div class="tv-screen">
+                <div class="tv-channel-info">
+                  <span class="channel-number">MEME TV</span>
+                  <span class="current-time" id="tv-time">20:00</span>
+                </div>
+                <div class="tv-content">
+                  <div class="meme-program" id="tv-meme">
+                    <img src="./memes/WhatsApp Image 2025-09-04 at 20.07.37.jpeg" alt="TV Meme" class="meme-image">
+                    <div class="program-title">Baumholz Home Memes</div>
+                    <div class="program-subtitle">Live • HD</div>
+                  </div>
+                </div>
+                <div class="tv-controls-overlay">
+                  <div class="volume-bar">🔊</div>
+                  <div class="signal-indicator">📡</div>
+                </div>
+              </div>
+              <div class="tv-remote">
+                <button class="channel-btn" data-channel="1">1</button>
+                <button class="channel-btn" data-channel="2">2</button>
+                <button class="channel-btn" data-channel="3">3</button>
+                <button class="channel-btn" data-channel="4">4</button>
+                <button class="channel-btn" data-channel="5">5</button>
+                <button class="power-btn">⏻</button>
+              </div>
+              <div class="tv-guide">
+                <div class="guide-item">20:00 - Baumholz Home Memes</div>
+                <div class="guide-item">20:05 - Party Highlights</div>
+                <div class="guide-item">20:10 - Hype Moments</div>
+                <div class="guide-item">20:15 - Epic Fails</div>
+                <div class="guide-item">20:20 - Legendary Clips</div>
+              </div>
             </div>
           </div>
         </div>

@@ -3373,6 +3373,571 @@ p, h1, h2, h3, h4, h5, h6, span, div {
   }
 }
 
+/* Meme Gallery Styles */
+.memes-intro {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.meme-style-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.meme-style-btn {
+  background: rgba(255,255,255,0.05);
+  color: var(--gold-2);
+  border: 2px solid rgba(212,161,90,0.3);
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.meme-style-btn:hover {
+  background: rgba(212,161,90,0.1);
+  border-color: rgba(212,161,90,0.5);
+  transform: translateY(-2px);
+}
+
+.meme-style-btn.active {
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--bg);
+  border-color: var(--gold);
+  box-shadow: 0 4px 16px rgba(212,161,90,0.3);
+}
+
+.meme-gallery {
+  display: none;
+  min-height: 400px;
+}
+
+.meme-gallery.active {
+  display: block;
+}
+
+.meme-image, .meme-video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* Version 3: Karussell-Galerie */
+.carousel-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 2px solid rgba(212,161,90,0.2);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  position: relative;
+  text-align: center;
+  padding: 2rem;
+}
+
+.carousel-caption {
+  margin-top: 1rem;
+  color: var(--gold-2);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(212,161,90,0.9);
+  color: var(--bg);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-nav:hover {
+  background: var(--gold-2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav.prev {
+  left: 20px;
+}
+
+.carousel-nav.next {
+  right: 20px;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(212,161,90,0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: var(--gold-2);
+  transform: scale(1.2);
+}
+
+/* Version 4: Zufalls-Meme Generator */
+.random-container {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.random-meme-display {
+  background: rgba(255,255,255,0.03);
+  border: 2px solid rgba(212,161,90,0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meme-content {
+  transition: all 0.5s ease;
+}
+
+.meme-title {
+  margin-top: 1rem;
+  color: var(--gold-2);
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.random-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.shuffle-btn, .favorite-btn {
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--bg);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.shuffle-btn:hover, .favorite-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212,161,90,0.4);
+}
+
+.favorite-btn.liked {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+}
+
+.random-stats {
+  display: flex;
+  gap: 2rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Version 6: Pinterest-Style Masonry */
+.masonry-container {
+  columns: 3;
+  column-gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,161,90,0.2);
+  transition: all 0.3s ease;
+}
+
+.masonry-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.masonry-item.large {
+  height: 300px;
+}
+
+.masonry-item.medium {
+  height: 200px;
+}
+
+.masonry-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.7));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.masonry-item:hover .masonry-overlay {
+  opacity: 1;
+}
+
+.meme-type {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.masonry-like {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.masonry-like:hover {
+  background: #ff6b6b;
+  transform: scale(1.1);
+}
+
+/* Version 7: Theater-Bühne */
+.theater-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.theater-stage {
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.theater-curtains {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  z-index: 5;
+}
+
+.curtain {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, #8B0000, #DC143C);
+  transition: transform 0.5s ease;
+}
+
+.curtain.left {
+  left: 0;
+  transform-origin: left;
+}
+
+.curtain.right {
+  right: 0;
+  transform-origin: right;
+}
+
+.theater-stage:hover .curtain.left {
+  transform: rotateY(-15deg);
+}
+
+.theater-stage:hover .curtain.right {
+  transform: rotateY(15deg);
+}
+
+.theater-spotlight {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.meme-actor {
+  position: relative;
+  display: inline-block;
+}
+
+.meme-actor::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.3), transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: spotlight 2s ease-in-out infinite;
+}
+
+@keyframes spotlight {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.actor-name {
+  margin-top: 1rem;
+  color: var(--gold-2);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.theater-audience {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.audience-reaction {
+  font-size: 1.5rem;
+  animation: applause 1s ease-in-out infinite;
+}
+
+@keyframes applause {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.theater-controls {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.theater-next {
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--bg);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.theater-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212,161,90,0.4);
+}
+
+.theater-program {
+  margin-top: 1rem;
+  color: var(--text-light);
+}
+
+/* Version 9: TV-Kanal Simulator */
+.tv-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.tv-screen {
+  background: #000;
+  border-radius: 12px;
+  padding: 1rem;
+  position: relative;
+  min-height: 400px;
+  margin-bottom: 2rem;
+}
+
+.tv-channel-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: 600;
+}
+
+.channel-number {
+  background: var(--gold-2);
+  color: var(--bg);
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.current-time {
+  font-size: 0.9rem;
+}
+
+.tv-content {
+  text-align: center;
+}
+
+.meme-program {
+  position: relative;
+}
+
+.program-title {
+  color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.program-subtitle {
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.tv-controls-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1rem;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.tv-remote {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.channel-btn, .power-btn {
+  background: #333;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.channel-btn:hover, .power-btn:hover {
+  background: var(--gold-2);
+  color: var(--bg);
+  transform: scale(1.1);
+}
+
+.power-btn {
+  background: #8B0000;
+}
+
+.tv-guide {
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.guide-item {
+  color: var(--text-light);
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.9rem;
+}
+
+.guide-item:last-child {
+  border-bottom: none;
+}
+
+/* Mobile adjustments for meme galleries */
+@media (max-width: 767px) {
+  .meme-style-selector {
+    gap: 0.5rem;
+  }
+  
+  .meme-style-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .masonry-container {
+    columns: 1;
+  }
+  
+  .carousel-nav {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .carousel-nav.prev {
+    left: 10px;
+  }
+  
+  .carousel-nav.next {
+    right: 10px;
+  }
+  
+  .tv-remote {
+    flex-wrap: wrap;
+  }
+  
+  .channel-btn, .power-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 0.8rem;
+  }
+}
+
 /* Enhanced Mobile Friendliness */
 @media (max-width: 767px) {
   /* Better touch targets */
