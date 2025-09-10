@@ -741,182 +741,94 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Meme Gallery System
-class MemeGalleryManager {
+// Meme Carousel System
+class MemeCarouselManager {
     constructor() {
-        this.currentStyle = 'carousel';
         this.currentSlide = 0;
-        this.currentRandomIndex = 0;
-        this.currentTheaterAct = 0;
-        this.currentTVChannel = 1;
-        this.shuffleCount = 0;
-        this.favoritesCount = 0;
-        
-        // Meme data
-        this.memes = [
-            { src: './memes/WhatsApp Image 2025-09-04 at 20.07.37.jpeg', type: 'image', title: 'Party Vibes! 🎉' },
-            { src: './memes/WhatsApp GIF 2025-08-24 at 18.19.39.gif', type: 'gif', title: 'Hype Mode! 🔥' },
-            { src: './memes/WhatsApp Video 2025-08-24 at 18.26.09.mp4', type: 'video', title: 'Epic Moment! ⚡' },
-            { src: './memes/WhatsApp Video 2025-08-24 at 18.28.37.mp4', type: 'video', title: 'Legendary! 🏆' },
-            { src: './memes/WhatsApp Video 2025-09-10 at 22.39.52.mp4', type: 'video', title: 'Pure Gold! ✨' }
-        ];
+        this.totalSlides = 8; // Total number of meme slides
+        this.autoAdvanceInterval = null;
         
         this.init();
     }
     
     init() {
-        this.setupStyleSelector();
         this.setupCarousel();
-        this.setupRandom();
-        this.setupPinterest();
-        this.setupTheater();
-        this.setupTV();
-        this.updateTVTime();
-    }
-    
-    setupStyleSelector() {
-        const styleBtns = document.querySelectorAll('.meme-style-btn');
-        const galleries = document.querySelectorAll('.meme-gallery');
-        
-        styleBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const style = btn.dataset.style;
-                
-                // Update active button
-                styleBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // Show/hide galleries
-                galleries.forEach(gallery => {
-                    gallery.classList.remove('active');
-                    if (gallery.dataset.gallery === style) {
-                        gallery.classList.add('active');
-                    }
-                });
-                
-                this.currentStyle = style;
-                
-                // Initialize specific gallery
-                if (style === 'carousel') {
-                    this.initCarousel();
-                } else if (style === 'random') {
-                    this.initRandom();
-                } else if (style === 'theater') {
-                    this.initTheater();
-                } else if (style === 'tv') {
-                    this.initTV();
-                }
-            });
-        });
+        this.createDots();
+        this.startAutoAdvance();
     }
     
     setupCarousel() {
         const prevBtn = document.querySelector('.carousel-nav.prev');
         const nextBtn = document.querySelector('.carousel-nav.next');
-        const track = document.querySelector('.carousel-track');
-        const dotsContainer = document.querySelector('.carousel-dots');
         
         if (prevBtn) prevBtn.addEventListener('click', () => this.prevSlide());
         if (nextBtn) nextBtn.addEventListener('click', () => this.nextSlide());
         
-        // Create dots
-        if (dotsContainer) {
-            this.memes.forEach((_, index) => {
-                const dot = document.createElement('button');
-                dot.className = 'carousel-dot';
-                if (index === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => this.goToSlide(index));
-                dotsContainer.appendChild(dot);
+        // Touch/swipe support
+        const track = document.querySelector('.carousel-track');
+        if (track) {
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+                this.stopAutoAdvance();
+            });
+            
+            track.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                currentX = e.touches[0].clientX;
+                const diff = startX - currentX;
+                const threshold = 50;
+                
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) {
+                        this.nextSlide();
+                    } else {
+                        this.prevSlide();
+                    }
+                    isDragging = false;
+                }
+            });
+            
+            track.addEventListener('touchend', () => {
+                isDragging = false;
+                this.startAutoAdvance();
             });
         }
-        
-        // Auto-advance
-        setInterval(() => {
-            if (this.currentStyle === 'carousel') {
-                this.nextSlide();
-            }
-        }, 5000);
     }
     
-    setupRandom() {
-        const shuffleBtn = document.querySelector('.shuffle-btn');
-        const favoriteBtn = document.querySelector('.favorite-btn');
+    createDots() {
+        const dotsContainer = document.querySelector('.carousel-dots');
+        if (!dotsContainer) return;
         
-        if (shuffleBtn) {
-            shuffleBtn.addEventListener('click', () => this.shuffleMeme());
+        for (let i = 0; i < this.totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => this.goToSlide(i));
+            dotsContainer.appendChild(dot);
         }
-        
-        if (favoriteBtn) {
-            favoriteBtn.addEventListener('click', () => this.toggleFavorite());
-        }
-    }
-    
-    setupPinterest() {
-        const likeBtns = document.querySelectorAll('.masonry-like');
-        likeBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                btn.style.background = '#ff6b6b';
-                btn.textContent = '❤️';
-            });
-        });
-    }
-    
-    setupTheater() {
-        const nextBtn = document.querySelector('.theater-next');
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => this.nextTheaterAct());
-        }
-    }
-    
-    setupTV() {
-        const channelBtns = document.querySelectorAll('.channel-btn');
-        const powerBtn = document.querySelector('.power-btn');
-        
-        channelBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const channel = parseInt(btn.dataset.channel);
-                this.changeTVChannel(channel);
-            });
-        });
-        
-        if (powerBtn) {
-            powerBtn.addEventListener('click', () => this.toggleTVPower());
-        }
-    }
-    
-    initCarousel() {
-        this.currentSlide = 0;
-        this.updateCarousel();
-    }
-    
-    initRandom() {
-        this.shuffleMeme();
-    }
-    
-    initTheater() {
-        this.currentTheaterAct = 0;
-        this.updateTheater();
-    }
-    
-    initTV() {
-        this.currentTVChannel = 1;
-        this.updateTV();
     }
     
     prevSlide() {
-        this.currentSlide = (this.currentSlide - 1 + this.memes.length) % this.memes.length;
+        this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
         this.updateCarousel();
+        this.restartAutoAdvance();
     }
     
     nextSlide() {
-        this.currentSlide = (this.currentSlide + 1) % this.memes.length;
+        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
         this.updateCarousel();
+        this.restartAutoAdvance();
     }
     
     goToSlide(index) {
         this.currentSlide = index;
         this.updateCarousel();
+        this.restartAutoAdvance();
     }
     
     updateCarousel() {
@@ -924,7 +836,9 @@ class MemeGalleryManager {
         const dots = document.querySelectorAll('.carousel-dot');
         
         if (track) {
-            track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+            const slideWidth = 280 + 16; // slide width + gap
+            const translateX = -this.currentSlide * slideWidth;
+            track.style.transform = `translateX(${translateX}px)`;
         }
         
         dots.forEach((dot, index) => {
@@ -932,172 +846,28 @@ class MemeGalleryManager {
         });
     }
     
-    shuffleMeme() {
-        this.shuffleCount++;
-        this.currentRandomIndex = Math.floor(Math.random() * this.memes.length);
-        this.updateRandomMeme();
-        this.updateRandomStats();
+    startAutoAdvance() {
+        this.autoAdvanceInterval = setInterval(() => {
+            this.nextSlide();
+        }, 4000); // 4 seconds per slide
     }
     
-    toggleFavorite() {
-        this.favoritesCount++;
-        const favoriteBtn = document.querySelector('.favorite-btn');
-        if (favoriteBtn) {
-            favoriteBtn.classList.add('liked');
-            favoriteBtn.textContent = '❤️ Favorit!';
-            setTimeout(() => {
-                favoriteBtn.classList.remove('liked');
-                favoriteBtn.textContent = '❤️ Favorit';
-            }, 2000);
-        }
-        this.updateRandomStats();
-    }
-    
-    updateRandomMeme() {
-        const content = document.getElementById('random-meme-content');
-        if (!content) return;
-        
-        const meme = this.memes[this.currentRandomIndex];
-        const title = document.querySelector('.meme-title');
-        
-        if (meme.type === 'video') {
-            content.innerHTML = `
-                <video class="meme-video" controls>
-                    <source src="${meme.src}" type="video/mp4">
-                </video>
-            `;
-        } else {
-            content.innerHTML = `<img src="${meme.src}" alt="Random Meme" class="meme-image">`;
-        }
-        
-        if (title) {
-            title.textContent = meme.title;
+    stopAutoAdvance() {
+        if (this.autoAdvanceInterval) {
+            clearInterval(this.autoAdvanceInterval);
+            this.autoAdvanceInterval = null;
         }
     }
     
-    updateRandomStats() {
-        const shuffleCountEl = document.getElementById('shuffle-count');
-        const favoritesCountEl = document.getElementById('favorites-count');
-        
-        if (shuffleCountEl) shuffleCountEl.textContent = this.shuffleCount;
-        if (favoritesCountEl) favoritesCountEl.textContent = this.favoritesCount;
-    }
-    
-    nextTheaterAct() {
-        this.currentTheaterAct = (this.currentTheaterAct + 1) % this.memes.length;
-        this.updateTheater();
-    }
-    
-    updateTheater() {
-        const memeEl = document.getElementById('theater-meme');
-        const actEl = document.querySelector('.current-act');
-        
-        if (memeEl) {
-            const meme = this.memes[this.currentTheaterAct];
-            const img = memeEl.querySelector('img');
-            const name = memeEl.querySelector('.actor-name');
-            
-            if (img) {
-                if (meme.type === 'video') {
-                    img.style.display = 'none';
-                    let video = memeEl.querySelector('video');
-                    if (!video) {
-                        video = document.createElement('video');
-                        video.className = 'meme-video';
-                        video.controls = true;
-                        memeEl.insertBefore(video, img);
-                    }
-                    video.innerHTML = `<source src="${meme.src}" type="video/mp4">`;
-                    video.style.display = 'block';
-                } else {
-                    img.src = meme.src;
-                    img.style.display = 'block';
-                    const video = memeEl.querySelector('video');
-                    if (video) video.style.display = 'none';
-                }
-            }
-            
-            if (name) {
-                name.textContent = `Meme Star #${this.currentTheaterAct + 1}`;
-            }
-        }
-        
-        if (actEl) {
-            actEl.textContent = `Akt ${this.currentTheaterAct + 1} von ${this.memes.length}`;
-        }
-    }
-    
-    changeTVChannel(channel) {
-        this.currentTVChannel = channel;
-        this.updateTV();
-    }
-    
-    toggleTVPower() {
-        const screen = document.querySelector('.tv-screen');
-        if (screen) {
-            screen.style.opacity = screen.style.opacity === '0.3' ? '1' : '0.3';
-        }
-    }
-    
-    updateTV() {
-        const memeEl = document.getElementById('tv-meme');
-        const channelEl = document.querySelector('.channel-number');
-        
-        if (memeEl) {
-            const meme = this.memes[this.currentTVChannel - 1] || this.memes[0];
-            const img = memeEl.querySelector('img');
-            const title = memeEl.querySelector('.program-title');
-            
-            if (img) {
-                if (meme.type === 'video') {
-                    img.style.display = 'none';
-                    let video = memeEl.querySelector('video');
-                    if (!video) {
-                        video = document.createElement('video');
-                        video.className = 'meme-video';
-                        video.controls = true;
-                        memeEl.insertBefore(video, img);
-                    }
-                    video.innerHTML = `<source src="${meme.src}" type="video/mp4">`;
-                    video.style.display = 'block';
-                } else {
-                    img.src = meme.src;
-                    img.style.display = 'block';
-                    const video = memeEl.querySelector('video');
-                    if (video) video.style.display = 'none';
-                }
-            }
-            
-            if (title) {
-                title.textContent = `Baumholz Home Memes - Kanal ${this.currentTVChannel}`;
-            }
-        }
-        
-        if (channelEl) {
-            channelEl.textContent = `MEME TV ${this.currentTVChannel}`;
-        }
-    }
-    
-    updateTVTime() {
-        const timeEl = document.getElementById('tv-time');
-        if (timeEl) {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('de-DE', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: false 
-            });
-            timeEl.textContent = timeString;
-        }
-        
-        // Update every minute
-        setTimeout(() => this.updateTVTime(), 60000);
+    restartAutoAdvance() {
+        this.stopAutoAdvance();
+        this.startAutoAdvance();
     }
 }
 
-// Initialize meme gallery when DOM is loaded
+// Initialize meme carousel when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    new MemeGalleryManager();
+    new MemeCarouselManager();
 });
 
 
