@@ -745,7 +745,7 @@ document.addEventListener('DOMContentLoaded', function() {
 class MemeCarouselManager {
     constructor() {
         this.currentSlide = 0;
-        this.totalSlides = 18; // Total number of meme slides
+        this.totalSlides = 50; // Total number of meme slides (all memes from folder)
         this.autoAdvanceInterval = null;
         
         this.init();
