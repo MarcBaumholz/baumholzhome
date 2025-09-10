@@ -747,6 +747,7 @@ class MemeCarouselManager {
         this.currentSlide = 0;
         this.totalSlides = 50; // Total number of meme slides (all memes from folder)
         this.autoAdvanceInterval = null;
+        this.modalCurrentSlide = 0;
         
         this.init();
     }
@@ -754,6 +755,7 @@ class MemeCarouselManager {
     init() {
         this.setupCarousel();
         this.createDots();
+        this.setupModal();
         this.startAutoAdvance();
     }
     
@@ -800,6 +802,132 @@ class MemeCarouselManager {
         }
     }
     
+    setupModal() {
+        const modal = document.getElementById('memeModal');
+        const closeBtn = document.querySelector('.modal-close');
+        const overlay = document.querySelector('.modal-overlay');
+        const prevBtn = document.querySelector('.modal-prev');
+        const nextBtn = document.querySelector('.modal-next');
+        
+        // Add click handlers to all meme cards
+        const memeCards = document.querySelectorAll('.meme-card');
+        memeCards.forEach((card, index) => {
+            card.addEventListener('click', () => this.openModal(index));
+        });
+        
+        // Modal controls
+        if (closeBtn) closeBtn.addEventListener('click', () => this.closeModal());
+        if (overlay) overlay.addEventListener('click', () => this.closeModal());
+        if (prevBtn) prevBtn.addEventListener('click', () => this.modalPrevSlide());
+        if (nextBtn) nextBtn.addEventListener('click', () => this.modalNextSlide());
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    this.closeModal();
+                    break;
+                case 'ArrowLeft':
+                    this.modalPrevSlide();
+                    break;
+                case 'ArrowRight':
+                    this.modalNextSlide();
+                    break;
+            }
+        });
+    }
+    
+    openModal(slideIndex) {
+        this.modalCurrentSlide = slideIndex;
+        const modal = document.getElementById('memeModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalVideo = document.getElementById('modalVideo');
+        const modalCaption = document.getElementById('modalCaption');
+        
+        // Get the clicked meme data
+        const slides = document.querySelectorAll('.carousel-slide');
+        const currentSlide = slides[slideIndex];
+        if (!currentSlide) return;
+        
+        const memeCard = currentSlide.querySelector('.meme-card');
+        const img = memeCard.querySelector('.meme-image');
+        const video = memeCard.querySelector('.meme-video');
+        const caption = memeCard.querySelector('.meme-caption');
+        
+        if (img) {
+            modalImage.src = img.src;
+            modalImage.alt = img.alt;
+            modalImage.style.display = 'block';
+            modalVideo.style.display = 'none';
+        } else if (video) {
+            modalVideo.src = video.querySelector('source').src;
+            modalVideo.style.display = 'block';
+            modalImage.style.display = 'none';
+        }
+        
+        if (caption) {
+            modalCaption.textContent = caption.textContent;
+        }
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    closeModal() {
+        const modal = document.getElementById('memeModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Pause video if playing
+        const modalVideo = document.getElementById('modalVideo');
+        if (modalVideo) {
+            modalVideo.pause();
+        }
+    }
+    
+    modalPrevSlide() {
+        this.modalCurrentSlide = (this.modalCurrentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.updateModalContent();
+    }
+    
+    modalNextSlide() {
+        this.modalCurrentSlide = (this.modalCurrentSlide + 1) % this.totalSlides;
+        this.updateModalContent();
+    }
+    
+    updateModalContent() {
+        const modalImage = document.getElementById('modalImage');
+        const modalVideo = document.getElementById('modalVideo');
+        const modalCaption = document.getElementById('modalCaption');
+        
+        // Get the current slide data
+        const slides = document.querySelectorAll('.carousel-slide');
+        const currentSlide = slides[this.modalCurrentSlide];
+        if (!currentSlide) return;
+        
+        const memeCard = currentSlide.querySelector('.meme-card');
+        const img = memeCard.querySelector('.meme-image');
+        const video = memeCard.querySelector('.meme-video');
+        const caption = memeCard.querySelector('.meme-caption');
+        
+        if (img) {
+            modalImage.src = img.src;
+            modalImage.alt = img.alt;
+            modalImage.style.display = 'block';
+            modalVideo.style.display = 'none';
+        } else if (video) {
+            modalVideo.src = video.querySelector('source').src;
+            modalVideo.style.display = 'block';
+            modalImage.style.display = 'none';
+        }
+        
+        if (caption) {
+            modalCaption.textContent = caption.textContent;
+        }
+    }
+    
     createDots() {
         const dotsContainer = document.querySelector('.carousel-dots');
         if (!dotsContainer) return;
@@ -836,7 +964,7 @@ class MemeCarouselManager {
         const dots = document.querySelectorAll('.carousel-dot');
         
         if (track) {
-            const slideWidth = 280 + 16; // slide width + gap
+            const slideWidth = 300 + 16; // slide width + gap (updated for better display)
             const translateX = -this.currentSlide * slideWidth;
             track.style.transform = `translateX(${translateX}px)`;
         }

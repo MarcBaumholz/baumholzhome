@@ -1076,6 +1076,25 @@
       </section>
     </main>
 
+    <!-- Meme Modal -->
+    <div id="memeModal" class="meme-modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Modal schließen">&times;</button>
+        <div class="modal-media-container">
+          <img id="modalImage" class="modal-image" alt="Meme">
+          <video id="modalVideo" class="modal-video" controls style="display: none;">
+            <source src="" type="video/mp4">
+          </video>
+        </div>
+        <div class="modal-caption" id="modalCaption"></div>
+        <div class="modal-nav">
+          <button class="modal-prev" aria-label="Vorheriges Meme">‹</button>
+          <button class="modal-next" aria-label="Nächstes Meme">›</button>
+        </div>
+      </div>
+    </div>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
