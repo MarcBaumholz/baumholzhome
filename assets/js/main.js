@@ -1098,15 +1098,15 @@ var floatingButtons = [];
 var floatingButtonInterval;
 var isFloatingEnabled = true;
 
-// List of available sounds for floating buttons
+// List of available sounds for floating buttons (only working sounds)
 var floatingSoundList = [
     'vine-boom', 'bruh', 'sven', 'ralf-schumacher', 'was-geht-yallah',
     'neggaz', 'clash-royale', 'wecker-laut', 'ching-cheng', 'handy-ran',
     'fart', 'backfisch', 'helmut', 'klingelton', 'garmin', 'halts-maul',
     'rizz', 'among-us', 'nebenrisiken', 'max-kacken', 'aura-farming',
     'schnitzel', 'fortnite', 'brainrot', 'spongebob', 'apple-pay',
-    'katzenvieh', 'phone-ringing', 'verrueckter-vogel', 'eiermann',
-    'jet2', 'mortis', 'galaxy', 'clash-royale-deep', 'neeeee', 'ralf-willst-du'
+    'phone-ringing', 'eiermann', 'jet2', 'mortis', 'galaxy', 
+    'clash-royale-deep', 'ralf-willst-du'
 ];
 
 function createFloatingButton() {
