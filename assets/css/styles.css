@@ -4391,5 +4391,187 @@ a:focus, button:focus, .btn:focus {
   font-weight: 600;
 }
 
+/* Top 3 Sounds Section */
+.top-sounds-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.top-sounds-title {
+  color: var(--gold-2);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.top-sounds-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.top-sound-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  position: relative;
+  overflow: hidden;
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 600;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  border: none;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  
+  /* Glossy effect */
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(0, 0, 0, 0.1) 100%);
+}
+
+.top-sound-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.top-sound-btn:active {
+  transform: translateY(-1px) scale(0.95);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.top-sound-btn:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 3px;
+}
+
+/* Individual colors for top 3 sounds */
+.top-sound-btn[data-sound="galaxy"] {
+  background-color: #6c5ce7;
+}
+
+.top-sound-btn[data-sound="ching-cheng"] {
+  background-color: #ffffff;
+  color: #2d3436;
+}
+
+.top-sound-btn[data-sound="jet2"] {
+  background-color: #ffffff;
+  color: #2d3436;
+}
+
+.top-sound-btn .sound-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  z-index: 2;
+}
+
+.top-sound-btn .sound-name {
+  font-size: 0.7rem;
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  line-height: 1.1;
+  word-break: break-word;
+  hyphens: auto;
+  z-index: 2;
+  text-align: center;
+}
+
+/* Special styling for white background buttons */
+.top-sound-btn[data-sound="ching-cheng"] .sound-name,
+.top-sound-btn[data-sound="jet2"] .sound-name {
+  color: #2d3436;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+/* Loading and playing states for top sounds */
+.top-sound-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.top-sound-btn.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 3;
+}
+
+.top-sound-btn.playing {
+  animation: pulse 0.6s ease-in-out;
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive adjustments for top sounds */
+@media (max-width: 768px) {
+  .top-sounds-grid {
+    gap: 1rem;
+  }
+  
+  .top-sound-btn {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .top-sound-btn .sound-emoji {
+    font-size: 1.5rem;
+  }
+  
+  .top-sound-btn .sound-name {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-sounds-grid {
+    gap: 0.8rem;
+  }
+  
+  .top-sound-btn {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .top-sound-btn .sound-emoji {
+    font-size: 1.2rem;
+  }
+  
+  .top-sound-btn .sound-name {
+    font-size: 0.55rem;
+  }
+}
+
 
 
