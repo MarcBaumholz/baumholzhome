@@ -1003,11 +1003,6 @@ var soundCache = {};
 var isPlaying = false;
 
 function playSound(soundName) {
-    // Prevent multiple sounds playing simultaneously
-    if (isPlaying) {
-        stopAllSounds();
-    }
-
     // Get the button element for visual feedback
     const button = document.querySelector(`[data-sound="${soundName}"]`);
     if (button) {
@@ -1017,7 +1012,8 @@ function playSound(soundName) {
     // Create audio element if not cached
     if (!soundCache[soundName]) {
         soundCache[soundName] = new Audio(`./sounds/${soundName}.mp3`);
-        soundCache[soundName].volume = 0.8;
+        soundCache[soundName].volume = 0.7;
+        soundCache[soundName].preload = 'auto';
         
         // Handle audio end
         soundCache[soundName].onended = function() {
@@ -1034,12 +1030,17 @@ function playSound(soundName) {
             if (button) {
                 button.classList.remove('loading');
                 // Show a brief error indication
-                button.style.background = 'linear-gradient(135deg, #ff4444, #cc0000)';
+                button.style.backgroundColor = '#ff4444';
                 setTimeout(() => {
-                    button.style.background = '';
+                    button.style.backgroundColor = '';
                 }, 1000);
             }
         };
+    }
+
+    // Stop any currently playing sound
+    if (isPlaying) {
+        stopAllSounds();
     }
 
     // Play the sound
@@ -1047,7 +1048,7 @@ function playSound(soundName) {
         soundCache[soundName].currentTime = 0; // Reset to beginning
         soundCache[soundName].play().then(() => {
             isPlaying = true;
-            console.log(`Playing sound: ${soundName}`);
+            console.log(`🎵 Playing sound: ${soundName}`);
             if (button) {
                 button.classList.remove('loading');
                 button.classList.add('playing');
@@ -1058,9 +1059,9 @@ function playSound(soundName) {
             if (button) {
                 button.classList.remove('loading');
                 // Show a brief error indication
-                button.style.background = 'linear-gradient(135deg, #ff4444, #cc0000)';
+                button.style.backgroundColor = '#ff4444';
                 setTimeout(() => {
-                    button.style.background = '';
+                    button.style.backgroundColor = '';
                 }, 1000);
             }
         });
@@ -1085,10 +1086,11 @@ function stopAllSounds() {
     // Reset all button states
     document.querySelectorAll('.sound-btn').forEach(button => {
         button.classList.remove('playing', 'loading');
-        button.style.background = '';
+        button.style.backgroundColor = '';
     });
     
     isPlaying = false;
+    console.log('🛑 All sounds stopped');
 }
 
 // Make functions globally available

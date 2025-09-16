@@ -4001,36 +4001,33 @@ a:focus, button:focus, .btn:focus {
 
 .sound-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
   max-width: 100%;
   margin: 0 auto;
+  justify-items: center;
 }
 
 @media (max-width: 768px) {
   .sound-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
   }
 }
 
 .sound-btn {
-  background: linear-gradient(135deg, var(--gold), var(--gold-2));
-  border: 2px solid var(--gold-3);
-  border-radius: 12px;
-  padding: 1rem;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  min-height: 80px;
+  justify-content: center;
+  gap: 0.3rem;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 4px 8px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   font-family: Inter, system-ui, sans-serif;
   font-weight: 600;
   text-align: center;
@@ -4038,44 +4035,97 @@ a:focus, button:focus, .btn:focus {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  border: none;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  
+  /* Glossy effect */
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(0, 0, 0, 0.1) 100%);
+  
+  /* Default colors - will be overridden by individual button colors */
+  background-color: #ff6b6b;
 }
 
 .sound-btn:hover {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-3px) scale(1.05);
   box-shadow: 
-    0 8px 16px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  background: linear-gradient(135deg, var(--gold-2), var(--gold));
-  border-color: var(--gold-2);
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .sound-btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(-1px) scale(0.95);
   box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .sound-btn:focus {
-  outline: 3px solid var(--gold-2);
-  outline-offset: 2px;
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 3px;
 }
 
 .sound-emoji {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   line-height: 1;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  z-index: 2;
 }
 
 .sound-name {
-  font-size: 0.85rem;
-  color: var(--bg);
+  font-size: 0.7rem;
+  color: white;
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  line-height: 1.1;
   word-break: break-word;
   hyphens: auto;
+  z-index: 2;
+  text-align: center;
+  max-width: 80px;
 }
+
+/* Individual button colors matching Myinstants.com */
+.sound-btn[data-sound="vine-boom"] { background-color: #ff4757; }
+.sound-btn[data-sound="bruh"] { background-color: #ff6b6b; }
+.sound-btn[data-sound="sven"] { background-color: #74b9ff; }
+.sound-btn[data-sound="ralf-schumacher"] { background-color: #0984e3; }
+.sound-btn[data-sound="was-geht-yallah"] { background-color: #ff4757; }
+.sound-btn[data-sound="neggaz"] { background-color: #a29bfe; }
+.sound-btn[data-sound="clash-royale"] { background-color: #2d3436; }
+.sound-btn[data-sound="wecker-laut"] { background-color: #ff4757; }
+.sound-btn[data-sound="ching-cheng"] { background-color: #ffffff; color: #2d3436; }
+.sound-btn[data-sound="handy-ran"] { background-color: #74b9ff; }
+.sound-btn[data-sound="fart"] { background-color: #a29bfe; }
+.sound-btn[data-sound="backfisch"] { background-color: #0984e3; }
+.sound-btn[data-sound="helmut"] { background-color: #fdcb6e; }
+.sound-btn[data-sound="klingelton"] { background-color: #74b9ff; }
+.sound-btn[data-sound="garmin"] { background-color: #00b894; }
+.sound-btn[data-sound="halts-maul"] { background-color: #ff4757; }
+.sound-btn[data-sound="rizz"] { background-color: #ff4757; }
+.sound-btn[data-sound="among-us"] { background-color: #ff4757; }
+.sound-btn[data-sound="nebenrisiken"] { background-color: #636e72; }
+.sound-btn[data-sound="max-kacken"] { background-color: #ff4757; }
+.sound-btn[data-sound="aura-farming"] { background-color: #ff4757; }
+.sound-btn[data-sound="schnitzel"] { background-color: #fdcb6e; }
+.sound-btn[data-sound="fortnite"] { background-color: #ff4757; }
+.sound-btn[data-sound="brainrot"] { background-color: #ff4757; }
+.sound-btn[data-sound="spongebob"] { background-color: #a29bfe; }
+.sound-btn[data-sound="apple-pay"] { background-color: #ff4757; }
+.sound-btn[data-sound="katzenvieh"] { background-color: #00b894; }
+.sound-btn[data-sound="phone-ringing"] { background-color: #6c5ce7; }
+.sound-btn[data-sound="verrueckter-vogel"] { background-color: #74b9ff; }
+.sound-btn[data-sound="eiermann"] { background-color: #fdcb6e; }
+.sound-btn[data-sound="jet2"] { background-color: #ffffff; color: #2d3436; }
+.sound-btn[data-sound="mortis"] { background-color: #2d3436; }
+.sound-btn[data-sound="galaxy"] { background-color: #6c5ce7; }
+.sound-btn[data-sound="clash-royale-deep"] { background-color: #2d3436; }
+.sound-btn[data-sound="neeeee"] { background-color: #ff4757; }
+.sound-btn[data-sound="ralf-willst-du"] { background-color: #0984e3; }
 
 /* Sound button loading state */
 .sound-btn.loading {
@@ -4092,10 +4142,11 @@ a:focus, button:focus, .btn:focus {
   width: 20px;
   height: 20px;
   margin: -10px 0 0 -10px;
-  border: 2px solid var(--bg);
+  border: 2px solid white;
   border-top: 2px solid transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  z-index: 3;
 }
 
 @keyframes spin {
@@ -4105,30 +4156,37 @@ a:focus, button:focus, .btn:focus {
 
 /* Sound button playing state */
 .sound-btn.playing {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
-  border-color: #ff4500;
-  animation: pulse 0.5s ease-in-out;
+  animation: pulse 0.6s ease-in-out;
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes pulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
   .sound-btn {
-    padding: 0.8rem;
-    min-height: 70px;
+    width: 80px;
+    height: 80px;
   }
   
   .sound-emoji {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
   
   .sound-name {
-    font-size: 0.75rem;
+    font-size: 0.6rem;
+    max-width: 60px;
+  }
+  
+  .sound-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 0.8rem;
   }
 }
 
