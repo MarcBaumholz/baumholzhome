@@ -998,4 +998,101 @@ document.addEventListener('DOMContentLoaded', function() {
     new MemeCarouselManager();
 });
 
+// Sound Button System - Myinstants.com style
+var soundCache = {};
+var isPlaying = false;
+
+function playSound(soundName) {
+    // Prevent multiple sounds playing simultaneously
+    if (isPlaying) {
+        stopAllSounds();
+    }
+
+    // Get the button element for visual feedback
+    const button = document.querySelector(`[data-sound="${soundName}"]`);
+    if (button) {
+        button.classList.add('loading');
+    }
+
+    // Create audio element if not cached
+    if (!soundCache[soundName]) {
+        soundCache[soundName] = new Audio(`./sounds/${soundName}.mp3`);
+        soundCache[soundName].volume = 0.8;
+        
+        // Handle audio end
+        soundCache[soundName].onended = function() {
+            isPlaying = false;
+            if (button) {
+                button.classList.remove('playing', 'loading');
+            }
+        };
+        
+        // Handle audio error
+        soundCache[soundName].onerror = function() {
+            console.warn(`Sound file not found: ${soundName}.mp3`);
+            isPlaying = false;
+            if (button) {
+                button.classList.remove('loading');
+                // Show a brief error indication
+                button.style.background = 'linear-gradient(135deg, #ff4444, #cc0000)';
+                setTimeout(() => {
+                    button.style.background = '';
+                }, 1000);
+            }
+        };
+    }
+
+    // Play the sound
+    try {
+        soundCache[soundName].currentTime = 0; // Reset to beginning
+        soundCache[soundName].play().then(() => {
+            isPlaying = true;
+            console.log(`Playing sound: ${soundName}`);
+            if (button) {
+                button.classList.remove('loading');
+                button.classList.add('playing');
+            }
+        }).catch(error => {
+            console.warn(`Could not play sound: ${soundName}`, error);
+            isPlaying = false;
+            if (button) {
+                button.classList.remove('loading');
+                // Show a brief error indication
+                button.style.background = 'linear-gradient(135deg, #ff4444, #cc0000)';
+                setTimeout(() => {
+                    button.style.background = '';
+                }, 1000);
+            }
+        });
+    } catch (error) {
+        console.warn(`Error playing sound: ${soundName}`, error);
+        isPlaying = false;
+        if (button) {
+            button.classList.remove('loading');
+        }
+    }
+}
+
+function stopAllSounds() {
+    // Stop all currently playing sounds
+    Object.values(soundCache).forEach(audio => {
+        if (!audio.paused) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    });
+    
+    // Reset all button states
+    document.querySelectorAll('.sound-btn').forEach(button => {
+        button.classList.remove('playing', 'loading');
+        button.style.background = '';
+    });
+    
+    isPlaying = false;
+}
+
+// Make functions globally available
+window.playSound = playSound;
+window.stopAllSounds = stopAllSounds;
+
 
