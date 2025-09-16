@@ -1093,8 +1093,222 @@ function stopAllSounds() {
     console.log('🛑 All sounds stopped');
 }
 
+// Floating Sound Buttons System
+var floatingButtons = [];
+var floatingButtonInterval;
+var isFloatingEnabled = true;
+
+// List of available sounds for floating buttons
+var floatingSoundList = [
+    'vine-boom', 'bruh', 'sven', 'ralf-schumacher', 'was-geht-yallah',
+    'neggaz', 'clash-royale', 'wecker-laut', 'ching-cheng', 'handy-ran',
+    'fart', 'backfisch', 'helmut', 'klingelton', 'garmin', 'halts-maul',
+    'rizz', 'among-us', 'nebenrisiken', 'max-kacken', 'aura-farming',
+    'schnitzel', 'fortnite', 'brainrot', 'spongebob', 'apple-pay',
+    'katzenvieh', 'phone-ringing', 'verrueckter-vogel', 'eiermann',
+    'jet2', 'mortis', 'galaxy', 'clash-royale-deep', 'neeeee', 'ralf-willst-du'
+];
+
+function createFloatingButton() {
+    if (!isFloatingEnabled) return;
+    
+    // Don't create too many buttons at once
+    if (floatingButtons.length >= 3) return;
+    
+    // Random sound selection
+    var randomSound = floatingSoundList[Math.floor(Math.random() * floatingSoundList.length)];
+    
+    // Create button element
+    var button = document.createElement('button');
+    button.className = 'floating-sound-btn';
+    button.setAttribute('data-sound', randomSound);
+    button.onclick = function() {
+        playSound(randomSound);
+        removeFloatingButton(button);
+    };
+    
+    // Random position (avoid edges)
+    var x = Math.random() * (window.innerWidth - 120) + 60;
+    var y = Math.random() * (window.innerHeight - 120) + 60;
+    
+    // Random size variation
+    var size = 60 + Math.random() * 40; // 60-100px
+    
+    // Apply styles
+    button.style.position = 'fixed';
+    button.style.left = x + 'px';
+    button.style.top = y + 'px';
+    button.style.width = size + 'px';
+    button.style.height = size + 'px';
+    button.style.borderRadius = '50%';
+    button.style.border = 'none';
+    button.style.cursor = 'pointer';
+    button.style.zIndex = '9999';
+    button.style.opacity = '0';
+    button.style.transform = 'scale(0)';
+    button.style.transition = 'all 0.3s ease';
+    button.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+    button.style.fontSize = (size * 0.15) + 'px';
+    button.style.fontWeight = 'bold';
+    button.style.color = 'white';
+    button.style.textShadow = '0 1px 3px rgba(0, 0, 0, 0.8)';
+    button.style.display = 'flex';
+    button.style.flexDirection = 'column';
+    button.style.alignItems = 'center';
+    button.style.justifyContent = 'center';
+    button.style.textAlign = 'center';
+    button.style.userSelect = 'none';
+    button.style.background = getRandomButtonColor();
+    
+    // Add emoji and text
+    var emoji = getSoundEmoji(randomSound);
+    var shortName = getShortSoundName(randomSound);
+    
+    button.innerHTML = `
+        <span style="font-size: ${size * 0.3}px; line-height: 1;">${emoji}</span>
+        <span style="font-size: ${size * 0.12}px; line-height: 1; margin-top: 2px;">${shortName}</span>
+    `;
+    
+    // Add to DOM
+    document.body.appendChild(button);
+    floatingButtons.push(button);
+    
+    // Animate in
+    setTimeout(() => {
+        button.style.opacity = '0.9';
+        button.style.transform = 'scale(1)';
+    }, 100);
+    
+    // Auto remove after 10 seconds
+    setTimeout(() => {
+        removeFloatingButton(button);
+    }, 10000);
+}
+
+function removeFloatingButton(button) {
+    if (!button || !button.parentNode) return;
+    
+    // Animate out
+    button.style.opacity = '0';
+    button.style.transform = 'scale(0)';
+    
+    setTimeout(() => {
+        if (button.parentNode) {
+            button.parentNode.removeChild(button);
+        }
+        // Remove from array
+        var index = floatingButtons.indexOf(button);
+        if (index > -1) {
+            floatingButtons.splice(index, 1);
+        }
+    }, 300);
+}
+
+function getRandomButtonColor() {
+    var colors = [
+        '#ff4757', '#ff6b6b', '#74b9ff', '#0984e3', '#a29bfe',
+        '#2d3436', '#fdcb6e', '#00b894', '#6c5ce7', '#ffffff'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function getSoundEmoji(soundName) {
+    var emojiMap = {
+        'vine-boom': '💥', 'bruh': '😤', 'sven': '🤔', 'ralf-schumacher': '😡',
+        'was-geht-yallah': '👋', 'neggaz': '🥚', 'clash-royale': '🐷', 'wecker-laut': '⏰',
+        'ching-cheng': '🎵', 'handy-ran': '📱', 'fart': '💨', 'backfisch': '🐟',
+        'helmut': '🙂', 'klingelton': '🔔', 'garmin': '⌚', 'halts-maul': '🙄',
+        'rizz': '😏', 'among-us': '👾', 'nebenrisiken': '💊', 'max-kacken': '🚽',
+        'aura-farming': '✨', 'schnitzel': '🍖', 'fortnite': '💃', 'brainrot': '🧠',
+        'spongebob': '💰', 'apple-pay': '🍎', 'katzenvieh': '🐱', 'phone-ringing': '📞',
+        'verrueckter-vogel': '🐦', 'eiermann': '🥚', 'jet2': '✈️', 'mortis': '🌙',
+        'galaxy': '🌌', 'clash-royale-deep': '🏆', 'neeeee': '😩', 'ralf-willst-du': '🎲'
+    };
+    return emojiMap[soundName] || '🎵';
+}
+
+function getShortSoundName(soundName) {
+    var nameMap = {
+        'vine-boom': 'BOOM', 'bruh': 'BRUH', 'sven': 'SVEN', 'ralf-schumacher': 'RALF',
+        'was-geht-yallah': 'YALLAH', 'neggaz': 'NEGGAZ', 'clash-royale': 'CLASH', 'wecker-laut': 'WECKER',
+        'ching-cheng': 'CHING', 'handy-ran': 'HANDY', 'fart': 'FART', 'backfisch': 'FISCH',
+        'helmut': 'HELMUT', 'klingelton': 'RING', 'garmin': 'GARMIN', 'halts-maul': 'MAUL',
+        'rizz': 'RIZZ', 'among-us': 'AMONG', 'nebenrisiken': 'PILL', 'max-kacken': 'MAX',
+        'aura-farming': 'AURA', 'schnitzel': 'SCHNITZ', 'fortnite': 'FORTNITE', 'brainrot': 'BRAIN',
+        'spongebob': 'SPONGE', 'apple-pay': 'APPLE', 'katzenvieh': 'KATZE', 'phone-ringing': 'RING',
+        'verrueckter-vogel': 'VOGEL', 'eiermann': 'EIER', 'jet2': 'JET2', 'mortis': 'MORTIS',
+        'galaxy': 'GALAXY', 'clash-royale-deep': 'DEEP', 'neeeee': 'NEEEE', 'ralf-willst-du': 'WILLST'
+    };
+    return nameMap[soundName] || 'SOUND';
+}
+
+function startFloatingButtons() {
+    if (floatingButtonInterval) return;
+    
+    // Create first button after 2 seconds
+    setTimeout(() => {
+        createFloatingButton();
+    }, 2000);
+    
+    // Then create buttons every 8-15 seconds
+    floatingButtonInterval = setInterval(() => {
+        if (Math.random() < 0.7) { // 70% chance to create a button
+            createFloatingButton();
+        }
+    }, 8000 + Math.random() * 7000);
+}
+
+function stopFloatingButtons() {
+    if (floatingButtonInterval) {
+        clearInterval(floatingButtonInterval);
+        floatingButtonInterval = null;
+    }
+    
+    // Remove all existing floating buttons
+    floatingButtons.forEach(button => {
+        removeFloatingButton(button);
+    });
+    floatingButtons = [];
+}
+
+// Initialize floating buttons when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Start floating buttons after a short delay
+    setTimeout(() => {
+        startFloatingButtons();
+    }, 1000);
+});
+
+// Toggle floating buttons functionality
+function toggleFloatingButtons() {
+    const toggleBtn = document.getElementById('floatingToggle');
+    const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+    const toggleText = toggleBtn.querySelector('.toggle-text');
+    
+    if (isFloatingEnabled) {
+        // Disable floating buttons
+        isFloatingEnabled = false;
+        stopFloatingButtons();
+        toggleIcon.textContent = '🔇';
+        toggleText.textContent = 'Sounds aus';
+        toggleBtn.classList.add('disabled');
+        console.log('🔇 Floating buttons disabled');
+    } else {
+        // Enable floating buttons
+        isFloatingEnabled = true;
+        startFloatingButtons();
+        toggleIcon.textContent = '🎵';
+        toggleText.textContent = 'Schwebende Sounds';
+        toggleBtn.classList.remove('disabled');
+        console.log('🎵 Floating buttons enabled');
+    }
+}
+
 // Make functions globally available
 window.playSound = playSound;
 window.stopAllSounds = stopAllSounds;
+window.startFloatingButtons = startFloatingButtons;
+window.stopFloatingButtons = stopFloatingButtons;
+window.toggleFloatingButtons = toggleFloatingButtons;
 
 
