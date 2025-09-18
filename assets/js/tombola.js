@@ -289,16 +289,16 @@
     var pointerAngle = -Math.PI/2;
     var TWO_PI = Math.PI*2;
 
-    // Phase 1: fast constant speed ~1 full rotation per second for 4s
-    var fastDuration = 4000; // ms
-    var fastSpins = 4 + Math.floor(Math.random()*2); // 4–5 full rotations in 4s (~1 rps)
+    // Phase 1: fast constant speed ~1 full rotation per second for 3s
+    var fastDuration = 3000; // ms
+    var fastSpins = 3 + Math.floor(Math.random()*2); // 3–4 full rotations in 3s (~1 rps)
 
     var startRot = rotation;
     var afterFastRot = startRot - fastSpins * TWO_PI; // spin clockwise (negative)
 
     // Phase 2: ease-out deceleration for a few extra spins, landing on the chosen arc
-    var slowDuration = 3000; // ms
-    var slowSpins = 2 + Math.floor(Math.random()*2); // 2–3 more spins while easing
+    var slowDuration = 2000; // ms
+    var slowSpins = 1 + Math.floor(Math.random()*2); // 1–2 more spins while easing
     var finalRotation = pointerAngle - landingAngle - slowSpins * TWO_PI;
 
     // Ensure finalRotation is below afterFastRot so we continue same direction
