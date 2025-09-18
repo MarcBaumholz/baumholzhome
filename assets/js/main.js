@@ -283,8 +283,8 @@ function createFloatingReview() {
     });
 }
 
-// Show review popup after 25 seconds
-setTimeout(createReviewPopup, 25000);
+// Show review popup every minute
+setInterval(createReviewPopup, 60000);
 
 // Show floating reviews every 15 seconds
 setInterval(createFloatingReview, 15000);
