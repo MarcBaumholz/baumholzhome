@@ -1112,7 +1112,7 @@ var floatingSoundList = [
     'run-vine', 'clash-royale-hog-rider', 'he-he-he-ha-clash-royale-deep',
     'goku-drip', 'explosion-meme', 'windows-xp-shutdown', 'minecraft-eating',
     'minecraft-hurt', 'fart-with-reverb', 'fart-meme-better', 'buzzer',
-    'rizzbot-laugh', 'oh-my-god-meme', 'confused-kitten'
+    'rizzbot-laugh', 'oh-my-god-meme', 'confused-kitten', 'max-verstappen'
 ];
 
 function createFloatingButton() {
@@ -1234,7 +1234,7 @@ function getSoundEmoji(soundName) {
         'run-vine': '🏃', 'clash-royale-hog-rider': '🐗', 'he-he-he-ha-clash-royale-deep': '😈',
         'goku-drip': '🐉', 'explosion-meme': '💣', 'windows-xp-shutdown': '💻', 'minecraft-eating': '🍖',
         'minecraft-hurt': '💀', 'fart-with-reverb': '💨', 'fart-meme-better': '💨', 'buzzer': '🔔',
-        'rizzbot-laugh': '🤖', 'oh-my-god-meme': '😲', 'confused-kitten': '😿'
+        'rizzbot-laugh': '🤖', 'oh-my-god-meme': '😲', 'confused-kitten': '😿', 'max-verstappen': '🏎️'
     };
     return emojiMap[soundName] || '🎵';
 }
@@ -1255,7 +1255,7 @@ function getShortSoundName(soundName) {
         'run-vine': 'RUN', 'clash-royale-hog-rider': 'HOG', 'he-he-he-ha-clash-royale-deep': 'HEHE',
         'goku-drip': 'GOKU', 'explosion-meme': 'BOOM', 'windows-xp-shutdown': 'XP', 'minecraft-eating': 'EAT',
         'minecraft-hurt': 'HURT', 'fart-with-reverb': 'FART2', 'fart-meme-better': 'FART3', 'buzzer': 'BUZZ',
-        'rizzbot-laugh': 'RIZZBOT', 'oh-my-god-meme': 'OMG2', 'confused-kitten': 'KITTEN'
+        'rizzbot-laugh': 'RIZZBOT', 'oh-my-god-meme': 'OMG2', 'confused-kitten': 'KITTEN', 'max-verstappen': 'MAX'
     };
     return nameMap[soundName] || 'SOUND';
 }

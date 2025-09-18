@@ -4161,6 +4161,27 @@ a:focus, button:focus, .btn:focus {
 .sound-btn[data-sound="neeeee"] { background-color: #ff4757; }
 .sound-btn[data-sound="ralf-willst-du"] { background-color: #0984e3; }
 
+/* New meme sounds colors */
+.sound-btn[data-sound="emotional-damage"] { background-color: #e74c3c; }
+.sound-btn[data-sound="baby-laughing"] { background-color: #ff9ff3; }
+.sound-btn[data-sound="cat-laugh"] { background-color: #fd79a8; }
+.sound-btn[data-sound="oh-my-god-bro"] { background-color: #f39c12; }
+.sound-btn[data-sound="run-vine"] { background-color: #00b894; }
+.sound-btn[data-sound="clash-royale-hog-rider"] { background-color: #fdcb6e; }
+.sound-btn[data-sound="he-he-he-ha-clash-royale-deep"] { background-color: #6c5ce7; }
+.sound-btn[data-sound="goku-drip"] { background-color: #a29bfe; }
+.sound-btn[data-sound="explosion-meme"] { background-color: #fd79a8; }
+.sound-btn[data-sound="windows-xp-shutdown"] { background-color: #9b59b6; }
+.sound-btn[data-sound="minecraft-eating"] { background-color: #2ecc71; }
+.sound-btn[data-sound="minecraft-hurt"] { background-color: #e67e22; }
+.sound-btn[data-sound="fart-with-reverb"] { background-color: #00b894; }
+.sound-btn[data-sound="fart-meme-better"] { background-color: #00cec9; }
+.sound-btn[data-sound="buzzer"] { background-color: #d63031; }
+.sound-btn[data-sound="rizzbot-laugh"] { background-color: #00cec9; }
+.sound-btn[data-sound="oh-my-god-meme"] { background-color: #f39c12; }
+.sound-btn[data-sound="confused-kitten"] { background-color: #fd79a8; }
+.sound-btn[data-sound="max-verstappen"] { background-color: #e67e22; }
+
 /* Sound button loading state */
 .sound-btn.loading {
   opacity: 0.7;
