@@ -284,7 +284,7 @@ function createFloatingReview() {
 }
 
 // Show review popup every minute
-setInterval(createReviewPopup, 60000);
+    setInterval(createReviewPopup, 90000);
 
 // Show floating reviews every 15 seconds
 setInterval(createFloatingReview, 15000);
