@@ -1106,7 +1106,13 @@ var floatingSoundList = [
     'rizz', 'among-us', 'nebenrisiken', 'max-kacken', 'aura-farming',
     'schnitzel', 'fortnite', 'brainrot', 'spongebob', 'apple-pay',
     'phone-ringing', 'eiermann', 'jet2', 'mortis', 'galaxy', 
-    'clash-royale-deep', 'ralf-willst-du'
+    'clash-royale-deep', 'ralf-willst-du',
+    // New meme sounds
+    'emotional-damage', 'baby-laughing', 'cat-laugh', 'oh-my-god-bro',
+    'run-vine', 'clash-royale-hog-rider', 'he-he-he-ha-clash-royale-deep',
+    'goku-drip', 'explosion-meme', 'windows-xp-shutdown', 'minecraft-eating',
+    'minecraft-hurt', 'fart-with-reverb', 'fart-meme-better', 'buzzer',
+    'rizzbot-laugh', 'oh-my-god-meme', 'confused-kitten'
 ];
 
 function createFloatingButton() {
@@ -1222,7 +1228,13 @@ function getSoundEmoji(soundName) {
         'aura-farming': '✨', 'schnitzel': '🍖', 'fortnite': '💃', 'brainrot': '🧠',
         'spongebob': '💰', 'apple-pay': '🍎', 'katzenvieh': '🐱', 'phone-ringing': '📞',
         'verrueckter-vogel': '🐦', 'eiermann': '🥚', 'jet2': '✈️', 'mortis': '🌙',
-        'galaxy': '🌌', 'clash-royale-deep': '🏆', 'neeeee': '😩', 'ralf-willst-du': '🎲'
+        'galaxy': '🌌', 'clash-royale-deep': '🏆', 'neeeee': '😩', 'ralf-willst-du': '🎲',
+        // New meme emojis
+        'emotional-damage': '💔', 'baby-laughing': '👶', 'cat-laugh': '😸', 'oh-my-god-bro': '😱',
+        'run-vine': '🏃', 'clash-royale-hog-rider': '🐗', 'he-he-he-ha-clash-royale-deep': '😈',
+        'goku-drip': '🐉', 'explosion-meme': '💣', 'windows-xp-shutdown': '💻', 'minecraft-eating': '🍖',
+        'minecraft-hurt': '💀', 'fart-with-reverb': '💨', 'fart-meme-better': '💨', 'buzzer': '🔔',
+        'rizzbot-laugh': '🤖', 'oh-my-god-meme': '😲', 'confused-kitten': '😿'
     };
     return emojiMap[soundName] || '🎵';
 }
@@ -1237,7 +1249,13 @@ function getShortSoundName(soundName) {
         'aura-farming': 'AURA', 'schnitzel': 'SCHNITZ', 'fortnite': 'FORTNITE', 'brainrot': 'BRAIN',
         'spongebob': 'SPONGE', 'apple-pay': 'APPLE', 'katzenvieh': 'KATZE', 'phone-ringing': 'RING',
         'verrueckter-vogel': 'VOGEL', 'eiermann': 'EIER', 'jet2': 'JET2', 'mortis': 'MORTIS',
-        'galaxy': 'GALAXY', 'clash-royale-deep': 'DEEP', 'neeeee': 'NEEEE', 'ralf-willst-du': 'WILLST'
+        'galaxy': 'GALAXY', 'clash-royale-deep': 'DEEP', 'neeeee': 'NEEEE', 'ralf-willst-du': 'WILLST',
+        // New meme short names
+        'emotional-damage': 'DAMAGE', 'baby-laughing': 'BABY', 'cat-laugh': 'CAT', 'oh-my-god-bro': 'OMG',
+        'run-vine': 'RUN', 'clash-royale-hog-rider': 'HOG', 'he-he-he-ha-clash-royale-deep': 'HEHE',
+        'goku-drip': 'GOKU', 'explosion-meme': 'BOOM', 'windows-xp-shutdown': 'XP', 'minecraft-eating': 'EAT',
+        'minecraft-hurt': 'HURT', 'fart-with-reverb': 'FART2', 'fart-meme-better': 'FART3', 'buzzer': 'BUZZ',
+        'rizzbot-laugh': 'RIZZBOT', 'oh-my-god-meme': 'OMG2', 'confused-kitten': 'KITTEN'
     };
     return nameMap[soundName] || 'SOUND';
 }
