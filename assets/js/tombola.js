@@ -185,11 +185,11 @@
       ctx.translate(r*0.6, 0);
       ctx.rotate(Math.PI/2);
       ctx.fillStyle = '#0a0805';
-      ctx.font = 'bold 14px Inter, system-ui, sans-serif';
+      ctx.font = 'bold 12px Inter, system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       var label = a.name.toUpperCase();
-      clipText(ctx, label, r*0.8, 14);
+      clipText(ctx, label, r*0.75, 12);
       ctx.restore();
     }
 
@@ -279,28 +279,27 @@
     if (spinning) return;
     winner = null; stopConfetti();
 
-    // Select weighted winner upfront and compute exact target angle so pointer stops on the winner.
+    // weighted winner selection
     var selected = weightedDraw(participants);
     var targetArc = arcs.find(function(a){ return a.name === selected.name; }) || arcs[arcs.length-1];
-    // Choose a landing angle within the arc (avoid edges for visual clarity)
     var mid = (targetArc.startAngle + targetArc.endAngle)/2;
     var margin = Math.min( (targetArc.endAngle - targetArc.startAngle) * 0.3, 0.25 );
     var landingAngle = clamp(mid + randRange(-margin, margin), targetArc.startAngle+0.02, targetArc.endAngle-0.02);
 
-    // Pointer is fixed at -PI/2 (top). We need final rotation such that pointerAngle - rotation == landingAngle (mod 2PI)
     var pointerAngle = -Math.PI/2;
     var finalRotation = pointerAngle - landingAngle;
-    // Add several full spins for drama
-    var spins = 6 + Math.floor(Math.random()*3); // 6-8 spins
+    var spins = 10 + Math.floor(Math.random()*6); // much faster: 10-15 spins
     finalRotation -= spins * Math.PI * 2;
 
-    // Animate rotation from current rotation to finalRotation with ease-out
     var startRot = rotation;
     var delta = shortestAngularDelta(startRot, finalRotation);
-    var duration = 10000; // 10s
+    var duration = 5000; // faster total duration ~5s
     var start = performance.now();
     spinning = true;
     setStatus('Drehe…');
+
+    // start live stream
+    startLiveStream();
 
     function animate(){
       var now = performance.now();
@@ -308,7 +307,7 @@
       var eased = 1 - Math.pow(1 - t, 3);
       rotation = startRot + delta * eased;
       redraw();
-      if (t < 1) requestAnimationFrame(animate); else { spinning = false; winner = targetArc; finalizeWinner(); }
+      if (t < 1) requestAnimationFrame(animate); else { spinning = false; winner = targetArc; stopLiveStream(); finalizeWinner(); }
     }
     requestAnimationFrame(animate);
   }
@@ -334,7 +333,6 @@
 
   function finalizeWinner(){
     if (!winner){
-      // fallback compute from current rotation if needed
       var pointerAngle = -Math.PI/2;
       var angle = (pointerAngle - rotation) % (Math.PI*2);
       if (angle < 0) angle += Math.PI*2;
@@ -346,6 +344,32 @@
     setStatus('Gewinner: ' + formatName(winner.name) + ' (' + winner.tickets + ' Lose)');
     showWinnerOverlay(formatName(winner.name));
     startConfetti();
+  }
+
+  // Live stream of pointer names
+  var liveInterval = null;
+  function startLiveStream(){
+    stopLiveStream();
+    liveInterval = setInterval(pushLivePointerName, 80); // fast update while spinning
+  }
+  function stopLiveStream(){ if (liveInterval) { clearInterval(liveInterval); liveInterval=null; } }
+  function pushLivePointerName(){
+    var listEl = document.getElementById('tombolaLiveList');
+    if (!listEl || !arcs.length) return;
+    var pointerAngle = -Math.PI/2;
+    var angle = (pointerAngle - rotation) % (Math.PI*2);
+    if (angle < 0) angle += Math.PI*2;
+    var current = null;
+    for (var i=0;i<arcs.length;i++){
+      var a = arcs[i]; if (angle >= a.startAngle && angle < a.endAngle){ current = a; break; }
+    }
+    if (!current) current = arcs[arcs.length-1];
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="n">' + escapeHtml(formatName(current.name)) + '</span>' +
+                   '<span class="t">' + current.tickets + ' Lose</span>';
+    listEl.insertBefore(li, listEl.firstChild);
+    // cap list length
+    while (listEl.children.length > 15) listEl.removeChild(listEl.lastChild);
   }
 
   function formatName(n){ return n.replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
