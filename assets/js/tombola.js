@@ -288,18 +288,15 @@
 
     var pointerAngle = -Math.PI/2;
     var finalRotation = pointerAngle - landingAngle;
-    var spins = 20 + Math.floor(Math.random()*10); // double speed: 20-30 spins
+    var spins = 80 + Math.floor(Math.random()*40); // ~10x speed: 80-120 spins
     finalRotation -= spins * Math.PI * 2;
 
     var startRot = rotation;
     var delta = shortestAngularDelta(startRot, finalRotation);
-    var duration = 2500; // double speed: ~2.5s total duration
+    var duration = 1000; // ~1s total duration
     var start = performance.now();
     spinning = true;
     setStatus('Drehe…');
-
-    // start live stream
-    startLiveStream();
 
     function animate(){
       var now = performance.now();
@@ -307,7 +304,8 @@
       var eased = 1 - Math.pow(1 - t, 3);
       rotation = startRot + delta * eased;
       redraw();
-      if (t < 1) requestAnimationFrame(animate); else { spinning = false; winner = targetArc; stopLiveStream(); finalizeWinner(); }
+      updateLiveName();
+      if (t < 1) requestAnimationFrame(animate); else { spinning = false; winner = targetArc; updateLiveName(); finalizeWinner(); }
     }
     requestAnimationFrame(animate);
   }
@@ -346,13 +344,7 @@
     startConfetti();
   }
 
-  // Live display of current pointer name
-  var liveInterval = null;
-  function startLiveStream(){
-    stopLiveStream();
-    liveInterval = setInterval(updateLiveName, 50); // very fast update while spinning
-  }
-  function stopLiveStream(){ if (liveInterval) { clearInterval(liveInterval); liveInterval=null; } }
+  // Live display of current pointer name (per frame)
   function updateLiveName(){
     var nameEl = document.getElementById('tombolaLiveName');
     if (!nameEl || !arcs.length) return;
