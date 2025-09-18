@@ -235,9 +235,12 @@
   }
 
   function loadDefaultCsv(){
-    var p = './tickets/Käufe 25bd42a1faf580449071dfb28aa621fe_all.csv';
-    fetch(encodeURI(p), { cache: 'no-store' })
-      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    var candidates = [
+      './tickets/tombola.csv',
+      './tickets/Käufe 25bd42a1faf580449071dfb28aa621fe_all.csv'
+    ];
+
+    fetchTextWithFallback(candidates)
       .then(function(text){
         participants = mergeDuplicates(parseCsv(text));
         if (!participants.length) { setStatus('Keine gültigen Einträge gefunden.'); drawWheelPlaceholder(); return; }
@@ -246,6 +249,21 @@
         if (spinBtn) spinBtn.disabled = false;
       })
       .catch(function(err){ setStatus('CSV konnte nicht geladen werden: ' + err.message); });
+  }
+
+  function fetchTextWithFallback(urls){
+    return new Promise(function(resolve, reject){
+      var i = 0;
+      function tryNext(){
+        if (i >= urls.length) { reject(new Error('Keine CSV gefunden (' + urls.join(', ') + ')')); return; }
+        var url = urls[i++];
+        fetch(encodeURI(url), { cache: 'no-store' })
+          .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+          .then(resolve)
+          .catch(function(){ tryNext(); });
+      }
+      tryNext();
+    });
   }
 
   function mergeDuplicates(list){
