@@ -3429,11 +3429,8 @@ p, h1, h2, h3, h4, h5, h6, span, div {
 /* Live panel */
 .tombola-live { margin-top: .5rem; }
 .tombola-live-header { color: var(--gold-2); font-weight:700; margin-bottom:.25rem; letter-spacing:.5px; }
-.tombola-live-frame { max-height: 220px; border:1px solid rgba(212,161,90,0.3); border-radius:12px; background: rgba(255,255,255,0.03); overflow:auto; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
-.tombola-live-list { list-style:none; margin:0; padding:.5rem; display:flex; flex-direction:column; gap:.35rem; }
-.tombola-live-list li { display:flex; justify-content:space-between; align-items:center; padding:.4rem .6rem; border:1px solid rgba(212,161,90,0.15); border-radius:8px; background: rgba(212,161,90,0.05); }
-.tombola-live-list li .n { color: var(--text); font-weight:600; }
-.tombola-live-list li .t { color: var(--muted); font-size:.85rem; }
+.tombola-live-frame { min-height: 60px; border:2px solid var(--gold-2); border-radius:12px; background: rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 16px rgba(212,161,90,0.2); }
+.tombola-live-name { color: var(--gold-2); font-weight:700; font-size:1.2rem; text-align:center; text-shadow: 0 0 10px rgba(212,161,90,0.5); transition: all 0.1s ease; }
 
 
 /* Winner overlay */

@@ -288,12 +288,12 @@
 
     var pointerAngle = -Math.PI/2;
     var finalRotation = pointerAngle - landingAngle;
-    var spins = 10 + Math.floor(Math.random()*6); // much faster: 10-15 spins
+    var spins = 20 + Math.floor(Math.random()*10); // double speed: 20-30 spins
     finalRotation -= spins * Math.PI * 2;
 
     var startRot = rotation;
     var delta = shortestAngularDelta(startRot, finalRotation);
-    var duration = 5000; // faster total duration ~5s
+    var duration = 2500; // double speed: ~2.5s total duration
     var start = performance.now();
     spinning = true;
     setStatus('Drehe…');
@@ -346,16 +346,16 @@
     startConfetti();
   }
 
-  // Live stream of pointer names
+  // Live display of current pointer name
   var liveInterval = null;
   function startLiveStream(){
     stopLiveStream();
-    liveInterval = setInterval(pushLivePointerName, 80); // fast update while spinning
+    liveInterval = setInterval(updateLiveName, 50); // very fast update while spinning
   }
   function stopLiveStream(){ if (liveInterval) { clearInterval(liveInterval); liveInterval=null; } }
-  function pushLivePointerName(){
-    var listEl = document.getElementById('tombolaLiveList');
-    if (!listEl || !arcs.length) return;
+  function updateLiveName(){
+    var nameEl = document.getElementById('tombolaLiveName');
+    if (!nameEl || !arcs.length) return;
     var pointerAngle = -Math.PI/2;
     var angle = (pointerAngle - rotation) % (Math.PI*2);
     if (angle < 0) angle += Math.PI*2;
@@ -364,12 +364,7 @@
       var a = arcs[i]; if (angle >= a.startAngle && angle < a.endAngle){ current = a; break; }
     }
     if (!current) current = arcs[arcs.length-1];
-    var li = document.createElement('li');
-    li.innerHTML = '<span class="n">' + escapeHtml(formatName(current.name)) + '</span>' +
-                   '<span class="t">' + current.tickets + ' Lose</span>';
-    listEl.insertBefore(li, listEl.firstChild);
-    // cap list length
-    while (listEl.children.length > 15) listEl.removeChild(listEl.lastChild);
+    nameEl.textContent = formatName(current.name);
   }
 
   function formatName(n){ return n.replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
