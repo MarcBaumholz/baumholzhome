@@ -289,9 +289,9 @@
     var pointerAngle = -Math.PI/2;
     var TWO_PI = Math.PI*2;
 
-    // Phase 1: fast constant speed ~1 full rotation per second for 10s
-    var fastDuration = 10000; // ms
-    var fastSpins = 10 + Math.floor(Math.random()*3); // 10–12 full rotations in 10s (~1 rps)
+    // Phase 1: fast constant speed ~1 full rotation per second for 4s
+    var fastDuration = 4000; // ms
+    var fastSpins = 4 + Math.floor(Math.random()*2); // 4–5 full rotations in 4s (~1 rps)
 
     var startRot = rotation;
     var afterFastRot = startRot - fastSpins * TWO_PI; // spin clockwise (negative)
