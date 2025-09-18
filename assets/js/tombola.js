@@ -22,6 +22,9 @@
   var spinStartTime = 0;
   var winner = null;
   var confettiTimer = null;
+  var lastArcIndex = -1;
+  var audioCtx = null; // WebAudio context for click sound
+  var clickGain = null;
 
   var COLORS = [
     "#D4A15A","#F0D7A1","#B8945A","#9A8663","#6c5ce7","#00b894","#fdcb6e","#0984e3","#ff6b6b","#a29bfe"
@@ -274,7 +277,52 @@
     return out;
   }
 
+  function ensureAudio(){
+    if (audioCtx) return;
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      clickGain = audioCtx.createGain();
+      clickGain.gain.value = 0.0;
+      clickGain.connect(audioCtx.destination);
+    } catch(e) { console.warn('AudioContext not available'); }
+  }
+
+  function playClick(){
+    if (!audioCtx) return;
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.value = 900 + Math.random()*300; // 900-1200 Hz
+    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  }
+
+  function getArcIndexByAngle(angle){
+    for (var i=0;i<arcs.length;i++){
+      var a = arcs[i];
+      if (angle >= a.startAngle && angle < a.endAngle) return i;
+    }
+    return arcs.length ? arcs.length-1 : -1;
+  }
+
+  function handlePointerCrossing(){
+    var pointerAngle = -Math.PI/2;
+    var angle = (pointerAngle - rotation) % (Math.PI*2);
+    if (angle < 0) angle += Math.PI*2;
+    var idx = getArcIndexByAngle(angle);
+    if (idx !== lastArcIndex){
+      lastArcIndex = idx;
+      playClick();
+    }
+  }
+
   function onSpin(){
+    ensureAudio();
     if (!arcs.length){ setStatus('Keine Daten geladen.'); return; }
     if (spinning) return;
     winner = null; stopConfetti();
@@ -289,50 +337,74 @@
     var pointerAngle = -Math.PI/2;
     var TWO_PI = Math.PI*2;
 
-    // Phase 1: fast constant speed ~1 full rotation per second for 3s
-    var fastDuration = 3000; // ms
-    var fastSpins = 3 + Math.floor(Math.random()*2); // 3–4 full rotations in 3s (~1 rps)
-
+    // Phase 1: 2000ms fast (slightly slowing), Phase 2: 2000ms decel, Phase 3: 1000ms very slow
     var startRot = rotation;
-    var afterFastRot = startRot - fastSpins * TWO_PI; // spin clockwise (negative)
 
-    // Phase 2: ease-out deceleration for a few extra spins, landing on the chosen arc
-    var slowDuration = 2000; // ms
-    var slowSpins = 1 + Math.floor(Math.random()*2); // 1–2 more spins while easing
-    var finalRotation = pointerAngle - landingAngle - slowSpins * TWO_PI;
+    // Phase A: quick rotations with gentle slowdown
+    var aDuration = 2000;
+    var aSpins = 2 + Math.random()*1; // 2-3 spins
+    var afterARot = startRot - aSpins * TWO_PI;
 
-    // Ensure finalRotation is below afterFastRot so we continue same direction
-    while (finalRotation > afterFastRot - Math.PI) finalRotation -= TWO_PI;
+    // Phase B: medium decel, a bit more rotation
+    var bDuration = 2000;
+    var bSpins = 1 + Math.random()*0.8; // 1-1.8 spins
+    var afterBRot = afterARot - bSpins * TWO_PI;
+
+    // Phase C: very slow to final landing
+    var cDuration = 1000;
+    var cSpins = 0.2 + Math.random()*0.3; // 0.2-0.5 spin
+    var finalRotation = pointerAngle - landingAngle - cSpins * TWO_PI;
+
+    // make sure continuity (keep rotating same direction)
+    while (finalRotation > afterBRot - Math.PI) finalRotation -= TWO_PI;
 
     spinning = true;
+    lastArcIndex = -1;
     setStatus('Drehe…');
 
-    var start1 = performance.now();
-    function animateFast(){
+    var startA = performance.now();
+    function phaseA(){
       var now = performance.now();
-      var t = Math.min(1, (now - start1)/fastDuration);
-      // linear constant speed during phase 1
-      rotation = startRot + (afterFastRot - startRot) * t;
+      var t = Math.min(1, (now - startA)/aDuration);
+      var eased = 1 - Math.pow(1 - t, 1.5); // gentle slowdown
+      rotation = startRot + (afterARot - startRot) * eased;
       redraw();
       updateLiveName();
-      if (t < 1) {
-        requestAnimationFrame(animateFast);
-      } else {
-        // start deceleration
-        var start2 = performance.now();
-        function animateSlow(){
-          var now2 = performance.now();
-          var u = Math.min(1, (now2 - start2)/slowDuration);
-          var eased = 1 - Math.pow(1 - u, 3);
-          rotation = afterFastRot + (finalRotation - afterFastRot) * eased;
-          redraw();
-          updateLiveName();
-          if (u < 1) requestAnimationFrame(animateSlow); else { spinning = false; winner = targetArc; updateLiveName(); finalizeWinner(); }
-        }
-        requestAnimationFrame(animateSlow);
-      }
+      handlePointerCrossing();
+      if (t < 1) requestAnimationFrame(phaseA); else startPhaseB();
     }
-    requestAnimationFrame(animateFast);
+
+    function startPhaseB(){
+      var startB = performance.now();
+      function phaseB(){
+        var now = performance.now();
+        var t = Math.min(1, (now - startB)/bDuration);
+        var eased = 1 - Math.pow(1 - t, 2.2); // stronger slowdown
+        rotation = afterARot + (afterBRot - afterARot) * eased;
+        redraw();
+        updateLiveName();
+        handlePointerCrossing();
+        if (t < 1) requestAnimationFrame(phaseB); else startPhaseC();
+      }
+      requestAnimationFrame(phaseB);
+    }
+
+    function startPhaseC(){
+      var startC = performance.now();
+      function phaseC(){
+        var now = performance.now();
+        var t = Math.min(1, (now - startC)/cDuration);
+        var eased = 1 - Math.pow(1 - t, 3.2); // very slow finish
+        rotation = afterBRot + (finalRotation - afterBRot) * eased;
+        redraw();
+        updateLiveName();
+        handlePointerCrossing();
+        if (t < 1) requestAnimationFrame(phaseC); else { spinning = false; winner = targetArc; updateLiveName(); finalizeWinner(); }
+      }
+      requestAnimationFrame(phaseC);
+    }
+
+    requestAnimationFrame(phaseA);
   }
 
   function stepSpin(duration, now){
