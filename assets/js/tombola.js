@@ -289,17 +289,25 @@
 
   function playClick(){
     if (!audioCtx) return;
+    var now = audioCtx.currentTime;
     var osc = audioCtx.createOscillator();
     var gain = audioCtx.createGain();
-    osc.type = 'square';
-    osc.frequency.value = 900 + Math.random()*300; // 900-1200 Hz
-    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.005);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
-    osc.connect(gain);
+    var filter = audioCtx.createBiquadFilter();
+    osc.type = 'triangle';
+    var base = 180 + Math.random()*140; // 180–320 Hz (deeper click)
+    osc.frequency.setValueAtTime(base, now);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(60, base*0.6), now + 0.05);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1200, now);
+    filter.Q.value = 0.7;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.12, now + 0.006);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+    osc.connect(filter);
+    filter.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.05);
+    osc.stop(now + 0.08);
   }
 
   function getArcIndexByAngle(angle){
@@ -310,13 +318,18 @@
     return arcs.length ? arcs.length-1 : -1;
   }
 
-  function handlePointerCrossing(){
+  function currentArc(){
     var pointerAngle = -Math.PI/2;
     var angle = (pointerAngle - rotation) % (Math.PI*2);
     if (angle < 0) angle += Math.PI*2;
     var idx = getArcIndexByAngle(angle);
-    if (idx !== lastArcIndex){
-      lastArcIndex = idx;
+    return { idx: idx, arc: (idx >=0 && arcs[idx]) ? arcs[idx] : null };
+  }
+
+  function handlePointerCrossing(){
+    var cur = currentArc();
+    if (cur.idx !== lastArcIndex){
+      lastArcIndex = cur.idx;
       playClick();
     }
   }
@@ -376,11 +389,13 @@
 
     function startPhaseB(){
       var startB = performance.now();
+      var startRotB = rotation; // continuity
+      var targetRotB = startRotB + (afterBRot - afterARot);
       function phaseB(){
         var now = performance.now();
         var t = Math.min(1, (now - startB)/bDuration);
         var eased = 1 - Math.pow(1 - t, 2.2); // stronger slowdown
-        rotation = afterARot + (afterBRot - afterARot) * eased;
+        rotation = startRotB + (targetRotB - startRotB) * eased;
         redraw();
         updateLiveName();
         handlePointerCrossing();
@@ -391,15 +406,24 @@
 
     function startPhaseC(){
       var startC = performance.now();
+      var startRotC = rotation; // continuity
       function phaseC(){
         var now = performance.now();
         var t = Math.min(1, (now - startC)/cDuration);
         var eased = 1 - Math.pow(1 - t, 3.2); // very slow finish
-        rotation = afterBRot + (finalRotation - afterBRot) * eased;
+        rotation = startRotC + (finalRotation - startRotC) * eased;
         redraw();
         updateLiveName();
         handlePointerCrossing();
-        if (t < 1) requestAnimationFrame(phaseC); else { spinning = false; winner = targetArc; updateLiveName(); finalizeWinner(); }
+        if (t < 1) requestAnimationFrame(phaseC); else {
+          // Ensure final rotation and winner derived from actual angle
+          rotation = finalRotation;
+          updateLiveName();
+          var cur = currentArc();
+          winner = cur.arc || targetArc;
+          spinning = false;
+          finalizeWinner();
+        }
       }
       requestAnimationFrame(phaseC);
     }
@@ -427,15 +451,9 @@
   }
 
   function finalizeWinner(){
-    if (!winner){
-      var pointerAngle = -Math.PI/2;
-      var angle = (pointerAngle - rotation) % (Math.PI*2);
-      if (angle < 0) angle += Math.PI*2;
-      for (var i=0;i<arcs.length;i++){
-        var a = arcs[i]; if (angle >= a.startAngle && angle < a.endAngle){ winner = a; break; }
-      }
-      if (!winner && arcs.length) winner = arcs[arcs.length-1];
-    }
+    // Always derive winner from current rotation to match live display
+    var cur = currentArc();
+    winner = cur.arc || winner;
     setStatus('Gewinner: ' + formatName(winner.name) + ' (' + winner.tickets + ' Lose)');
     showWinnerOverlay(formatName(winner.name));
     startConfetti();
@@ -445,15 +463,9 @@
   function updateLiveName(){
     var nameEl = document.getElementById('tombolaLiveName');
     if (!nameEl || !arcs.length) return;
-    var pointerAngle = -Math.PI/2;
-    var angle = (pointerAngle - rotation) % (Math.PI*2);
-    if (angle < 0) angle += Math.PI*2;
-    var current = null;
-    for (var i=0;i<arcs.length;i++){
-      var a = arcs[i]; if (angle >= a.startAngle && angle < a.endAngle){ current = a; break; }
-    }
-    if (!current) current = arcs[arcs.length-1];
-    nameEl.textContent = formatName(current.name);
+    var cur = currentArc();
+    if (!cur.arc) return;
+    nameEl.textContent = formatName(cur.arc.name);
   }
 
   function formatName(n){ return n.replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
