@@ -287,28 +287,52 @@
     var landingAngle = clamp(mid + randRange(-margin, margin), targetArc.startAngle+0.02, targetArc.endAngle-0.02);
 
     var pointerAngle = -Math.PI/2;
-    var finalRotation = pointerAngle - landingAngle;
-    // Keep very high initial speed but extend total spin time to ~10-15s
-    var spins = 150 + Math.floor(Math.random()*120); // many rotations for long spin feel
-    finalRotation -= spins * Math.PI * 2;
+    var TWO_PI = Math.PI*2;
+
+    // Phase 1: fast constant speed for ~10s with many rotations
+    var fastDuration = 10000; // ms
+    var fastSpins = 60 + Math.floor(Math.random()*40); // 60-100 full rotations in 10s
 
     var startRot = rotation;
-    var delta = shortestAngularDelta(startRot, finalRotation);
-    var duration = 10000 + Math.floor(Math.random()*5000); // 10-15s total duration
-    var start = performance.now();
+    var afterFastRot = startRot - fastSpins * TWO_PI; // spin clockwise (negative)
+
+    // Phase 2: ease-out deceleration for a few extra spins, landing on the chosen arc
+    var slowDuration = 3000; // ms
+    var slowSpins = 3 + Math.floor(Math.random()*4); // 3-6 more spins while easing
+    var finalRotation = pointerAngle - landingAngle - slowSpins * TWO_PI;
+
+    // Ensure finalRotation is below afterFastRot so we continue same direction
+    while (finalRotation > afterFastRot - Math.PI) finalRotation -= TWO_PI;
+
     spinning = true;
     setStatus('Drehe…');
 
-    function animate(){
+    var start1 = performance.now();
+    function animateFast(){
       var now = performance.now();
-      var t = Math.min(1, (now - start)/duration);
-      var eased = 1 - Math.pow(1 - t, 3);
-      rotation = startRot + delta * eased;
+      var t = Math.min(1, (now - start1)/fastDuration);
+      // linear constant speed during phase 1
+      rotation = startRot + (afterFastRot - startRot) * t;
       redraw();
       updateLiveName();
-      if (t < 1) requestAnimationFrame(animate); else { spinning = false; winner = targetArc; updateLiveName(); finalizeWinner(); }
+      if (t < 1) {
+        requestAnimationFrame(animateFast);
+      } else {
+        // start deceleration
+        var start2 = performance.now();
+        function animateSlow(){
+          var now2 = performance.now();
+          var u = Math.min(1, (now2 - start2)/slowDuration);
+          var eased = 1 - Math.pow(1 - u, 3);
+          rotation = afterFastRot + (finalRotation - afterFastRot) * eased;
+          redraw();
+          updateLiveName();
+          if (u < 1) requestAnimationFrame(animateSlow); else { spinning = false; winner = targetArc; updateLiveName(); finalizeWinner(); }
+        }
+        requestAnimationFrame(animateSlow);
+      }
     }
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animateFast);
   }
 
   function stepSpin(duration, now){

@@ -4607,5 +4607,40 @@ a:focus, button:focus, .btn:focus {
   }
 }
 
+/* Sound ranking badges */
+.top-sound-btn .sound-rank {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--gold);
+  color: var(--bg);
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--bg);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+  .top-sound-btn .sound-rank {
+    width: 16px;
+    height: 16px;
+    font-size: 0.55rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-sound-btn .sound-rank {
+    width: 14px;
+    height: 14px;
+    font-size: 0.5rem;
+  }
+}
+
 
 

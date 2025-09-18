@@ -1118,8 +1118,8 @@ var floatingSoundList = [
 function createFloatingButton() {
     if (!isFloatingEnabled) return;
     
-    // Don't create too many buttons at once
-    if (floatingButtons.length >= 3) return;
+    // Allow up to 2 buttons at once (increased from 3)
+    if (floatingButtons.length >= 2) return;
     
     // Random sound selection
     var randomSound = floatingSoundList[Math.floor(Math.random() * floatingSoundList.length)];
@@ -1268,12 +1268,12 @@ function startFloatingButtons() {
         createFloatingButton();
     }, 2000);
     
-    // Then create buttons every 8-15 seconds
+    // Then create buttons every 5-10 seconds (more frequent)
     floatingButtonInterval = setInterval(() => {
-        if (Math.random() < 0.7) { // 70% chance to create a button
+        if (Math.random() < 0.8) { // 80% chance to create a button (increased)
             createFloatingButton();
         }
-    }, 8000 + Math.random() * 7000);
+    }, 5000 + Math.random() * 5000); // Faster interval
 }
 
 function stopFloatingButtons() {
