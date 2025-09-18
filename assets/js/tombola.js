@@ -288,12 +288,13 @@
 
     var pointerAngle = -Math.PI/2;
     var finalRotation = pointerAngle - landingAngle;
-    var spins = 80 + Math.floor(Math.random()*40); // ~10x speed: 80-120 spins
+    // Keep very high initial speed but extend total spin time to ~10-15s
+    var spins = 150 + Math.floor(Math.random()*120); // many rotations for long spin feel
     finalRotation -= spins * Math.PI * 2;
 
     var startRot = rotation;
     var delta = shortestAngularDelta(startRot, finalRotation);
-    var duration = 1000; // ~1s total duration
+    var duration = 10000 + Math.floor(Math.random()*5000); // 10-15s total duration
     var start = performance.now();
     spinning = true;
     setStatus('Drehe…');
