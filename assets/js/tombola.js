@@ -355,17 +355,17 @@
 
     // Phase A: quick rotations with gentle slowdown
     var aDuration = 2000;
-    var aSpins = 2 + Math.random()*1; // 2-3 spins
+    var aSpins = 1.5 + Math.random()*0.7; // 1.5–2.2 spins (slower)
     var afterARot = startRot - aSpins * TWO_PI;
 
     // Phase B: medium decel, a bit more rotation
     var bDuration = 2000;
-    var bSpins = 1 + Math.random()*0.8; // 1-1.8 spins
+    var bSpins = 0.6 + Math.random()*0.6; // 0.6–1.2 spins (slower)
     var afterBRot = afterARot - bSpins * TWO_PI;
 
     // Phase C: very slow to final landing
     var cDuration = 1000;
-    var cSpins = 0.2 + Math.random()*0.3; // 0.2-0.5 spin
+    var cSpins = 0.15 + Math.random()*0.15; // 0.15–0.3 spin (slower)
     var finalRotation = pointerAngle - landingAngle - cSpins * TWO_PI;
 
     // make sure continuity (keep rotating same direction)
