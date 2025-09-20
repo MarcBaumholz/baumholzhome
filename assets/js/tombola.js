@@ -49,6 +49,11 @@
     if (!canvas) return;
     ctx = canvas.getContext('2d');
 
+    // Initialize global tombola activity flag
+    if (typeof window !== 'undefined' && typeof window.isTombolaActive === 'undefined') {
+      window.isTombolaActive = false;
+    }
+
     attachEvents();
     setStatus('Lade Tombola-Daten …');
     drawWheelPlaceholder();
@@ -62,6 +67,23 @@
     if (spinBtn) spinBtn.addEventListener('click', onSpin);
     if (resetBtn) resetBtn.addEventListener('click', onReset);
     window.addEventListener('resize', redraw);
+  }
+
+  function setTombolaActive(active){
+    try {
+      if (typeof window !== 'undefined') {
+        window.isTombolaActive = !!active;
+        if (active) {
+          if (typeof window.stopAllSounds === 'function') window.stopAllSounds();
+          if (typeof window.stopFloatingButtons === 'function') window.stopFloatingButtons();
+          // Pause any page <audio>/<video>
+          var media = document.querySelectorAll('audio, video');
+          media.forEach(function(m){ try { m.pause(); } catch(e){} });
+        } else {
+          if (typeof window.startFloatingButtons === 'function') window.startFloatingButtons();
+        }
+      }
+    } catch(e){ console.warn('setTombolaActive error', e); }
   }
 
   function setStatus(msg){ if (statusEl) { statusEl.textContent = msg; } }
@@ -417,6 +439,7 @@
     if (!arcs.length){ setStatus('Keine Daten geladen.'); return; }
     if (spinning) return;
     winner = null; stopConfetti();
+    setTombolaActive(true);
     
     // Start drum roll sound
     playDrumRoll();
@@ -491,6 +514,16 @@
     // Stop drum roll and play celebration sound
     stopDrumRoll();
     playCelebration();
+    // Re-enable other sounds after celebration ends
+    if (celebrationAudio){
+      celebrationAudio.onended = function(){ setTombolaActive(false); };
+      // Fallback timeout in case onended doesn't fire
+      if (celebrationDuration && isFinite(celebrationDuration)) {
+        setTimeout(function(){ setTombolaActive(false); }, celebrationDuration + 200);
+      }
+    } else {
+      setTombolaActive(false);
+    }
     
     setStatus('Gewinner: ' + formatName(winner.name));
     showWinnerOverlay(formatName(winner.name));
@@ -511,6 +544,7 @@
   function onReset(){
     spinning = false; rotation = 0; winner = null; stopConfetti();
     stopDrumRoll(); // Stop any playing drum roll
+    setTombolaActive(false);
     redraw();
     setStatus('Zurückgesetzt');
   }

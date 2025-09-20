@@ -149,8 +149,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Review Popup System
+// Review Popup System - Only shows once per session
 function createReviewPopup() {
+  // Check if popup has already been shown in this session
+  const popupShown = localStorage.getItem('reviewPopupShown');
+  if (popupShown === 'true') {
+    console.log('Review popup already shown in this session, skipping...');
+    return;
+  }
+
   // Load all reviews from JSON file
   fetch('./assets/js/reviews.json')
     .then(response => response.json())
@@ -188,6 +195,9 @@ function createReviewPopup() {
       `;
 
       document.body.appendChild(popup);
+
+      // Mark popup as shown in localStorage
+      localStorage.setItem('reviewPopupShown', 'true');
 
       // Close functionality
       const closePopup = () => {
@@ -283,8 +293,8 @@ function createFloatingReview() {
     });
 }
 
-// Show review popup every minute
-    setInterval(createReviewPopup, 90000);
+// Show review popup once on page load (only if not shown before)
+setTimeout(createReviewPopup, 2000); // Show after 2 seconds delay
 
 // Show floating reviews every 15 seconds
 setInterval(createFloatingReview, 15000);
@@ -1003,6 +1013,11 @@ var soundCache = {};
 var isPlaying = false;
 
 function playSound(soundName) {
+    // Block sounds while tombola is active
+    if (typeof window !== 'undefined' && window.isTombolaActive) {
+        console.log('🔇 Sound blocked during tombola:', soundName);
+        return;
+    }
     // Get the button element for visual feedback
     const button = document.querySelector(`[data-sound="${soundName}"]`);
     if (button) {
@@ -1262,6 +1277,7 @@ function getShortSoundName(soundName) {
 
 function startFloatingButtons() {
     if (floatingButtonInterval) return;
+    if (typeof window !== 'undefined' && window.isTombolaActive) return; // don't start while tombola active
     
     // Create first button after 2 seconds
     setTimeout(() => {
