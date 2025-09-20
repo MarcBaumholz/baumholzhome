@@ -25,6 +25,8 @@
   var lastArcIndex = -1;
   var audioCtx = null; // WebAudio context for click sound
   var clickGain = null;
+  var drumRollAudio = null; // Drum roll sound during spinning
+  var celebrationAudio = null; // YAAAAAAAY sound for winner
 
   var COLORS = [
     "#D4A15A","#F0D7A1","#B8945A","#9A8663","#6c5ce7","#00b894","#fdcb6e","#0984e3","#ff6b6b","#a29bfe"
@@ -50,6 +52,8 @@
     attachEvents();
     setStatus('Lade Tombola-Daten …');
     drawWheelPlaceholder();
+    // Load audio files
+    loadAudioFiles();
     // Auto-load default CSV on init
     loadDefaultCsv();
   }
@@ -150,7 +154,7 @@
       angle += slice;
     }
     redraw();
-    setStatus(participants.length + ' Teilnehmer · ' + totalTickets + ' Lose');
+    setStatus('');
     if (spinBtn) spinBtn.disabled = false;
   }
 
@@ -313,6 +317,42 @@
     } catch(e) { console.warn('AudioContext not available'); }
   }
 
+  function loadAudioFiles(){
+    // Load drum roll sound
+    drumRollAudio = new Audio('./sounds/drum-roll.mp3');
+    drumRollAudio.preload = 'auto';
+    drumRollAudio.volume = 0.7;
+    
+    // Load celebration sound
+    celebrationAudio = new Audio('./sounds/yaaaaaaay.mp3');
+    celebrationAudio.preload = 'auto';
+    celebrationAudio.volume = 0.8;
+  }
+
+  function playDrumRoll(){
+    if (!drumRollAudio) return;
+    try {
+      drumRollAudio.currentTime = 0;
+      drumRollAudio.play().catch(function(e) { console.warn('Drum roll audio failed:', e); });
+    } catch(e) { console.warn('Drum roll audio error:', e); }
+  }
+
+  function stopDrumRoll(){
+    if (!drumRollAudio) return;
+    try {
+      drumRollAudio.pause();
+      drumRollAudio.currentTime = 0;
+    } catch(e) { console.warn('Stop drum roll error:', e); }
+  }
+
+  function playCelebration(){
+    if (!celebrationAudio) return;
+    try {
+      celebrationAudio.currentTime = 0;
+      celebrationAudio.play().catch(function(e) { console.warn('Celebration audio failed:', e); });
+    } catch(e) { console.warn('Celebration audio error:', e); }
+  }
+
   function playClick(){
     if (!audioCtx) return;
     var now = audioCtx.currentTime;
@@ -365,6 +405,9 @@
     if (!arcs.length){ setStatus('Keine Daten geladen.'); return; }
     if (spinning) return;
     winner = null; stopConfetti();
+    
+    // Start drum roll sound
+    playDrumRoll();
 
     // weighted winner selection
     var selected = weightedDraw(participants);
@@ -480,7 +523,12 @@
     // Always derive winner from current rotation to match live display
     var cur = currentArc();
     winner = cur.arc || winner;
-    setStatus('Gewinner: ' + formatName(winner.name) + ' (' + winner.tickets + ' Lose)');
+    
+    // Stop drum roll and play celebration sound
+    stopDrumRoll();
+    playCelebration();
+    
+    setStatus('Gewinner: ' + formatName(winner.name));
     showWinnerOverlay(formatName(winner.name));
     startConfetti();
   }
@@ -498,8 +546,9 @@
 
   function onReset(){
     spinning = false; angularVelocity = 0; rotation = 0; winner = null; stopConfetti();
+    stopDrumRoll(); // Stop any playing drum roll
     redraw();
-    setStatus(participants.length ? (participants.length + ' Teilnehmer · ' + totalTickets + ' Lose') : 'Zurückgesetzt');
+    setStatus('Zurückgesetzt');
   }
 
   // Probabilities UI removed per requirements
