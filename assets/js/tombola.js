@@ -322,11 +322,13 @@
     drumRollAudio = new Audio('./sounds/drum-roll.mp3');
     drumRollAudio.preload = 'auto';
     drumRollAudio.volume = 0.7;
+    drumRollAudio.loop = false;
     
     // Load celebration sound
     celebrationAudio = new Audio('./sounds/yaaaaaaay.mp3');
     celebrationAudio.preload = 'auto';
     celebrationAudio.volume = 0.8;
+    celebrationAudio.loop = false;
     
     // Get actual audio durations
     drumRollAudio.addEventListener('loadedmetadata', function(){
@@ -351,6 +353,7 @@
     try {
       drumRollAudio.pause();
       drumRollAudio.currentTime = 0;
+      drumRollAudio.onended = null;
     } catch(e) { console.warn('Stop drum roll error:', e); }
   }
 
@@ -433,6 +436,7 @@
     // Add random offset to make it truly random where it lands
     finalRotation += (Math.random() - 0.5) * Math.PI * 2;
 
+    var rafId = 0;
     function animate(){
       var now = performance.now();
       var elapsed = now - startTime;
@@ -449,7 +453,7 @@
       handlePointerCrossing();
       
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       } else {
         // Spinning finished - determine winner from actual final position
         rotation = finalRotation;
@@ -460,7 +464,22 @@
       }
     }
     
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+
+    // Safety: if audio ends earlier/later than metadata, finish exactly on audio end
+    if (drumRollAudio){
+      drumRollAudio.onended = function(){
+        if (!spinning) return;
+        // Force final frame and finalize
+        cancelAnimationFrame(rafId);
+        rotation = finalRotation;
+        redraw();
+        var cur = currentArc();
+        winner = cur.arc;
+        spinning = false;
+        finalizeWinner();
+      };
+    }
   }
 
 
