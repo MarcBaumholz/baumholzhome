@@ -181,19 +181,8 @@
       ctx.fill();
       ctx.globalAlpha = 1;
 
-      // label
-      var mid = (a.startAngle + a.endAngle)/2;
-      ctx.save();
-      ctx.rotate(mid);
-      ctx.translate(r*0.6, 0);
-      ctx.rotate(Math.PI/2);
-      ctx.fillStyle = '#0a0805';
-      ctx.font = 'bold 12px Inter, system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      var label = a.name.toUpperCase();
-      clipText(ctx, label, r*0.75, 12);
-      ctx.restore();
+      // radial label inside wedge (from center outward)
+      drawRadialLabelInWedge(ctx, a.name, a.startAngle, a.endAngle, r*0.18, r*0.92);
     }
 
     // center cap
@@ -215,6 +204,43 @@
       if (ctx.measureText(s).width <= maxWidth) lo = mid; else hi = mid-1;
     }
     ctx.fillText(text.slice(0, lo) + ell, 0, 0);
+  }
+
+  // Draw name letters along the radius within the colored wedge
+  function drawRadialLabelInWedge(ctx, text, startAngle, endAngle, innerR, outerR){
+    if (!text) return;
+    ctx.save();
+    // Clip to wedge ring area so letters stay inside their slice
+    ctx.beginPath();
+    ctx.arc(0, 0, outerR, startAngle, endAngle);
+    ctx.arc(0, 0, innerR, endAngle, startAngle, true);
+    ctx.closePath();
+    ctx.clip();
+
+    var mid = (startAngle + endAngle) / 2;
+    ctx.rotate(mid);
+    ctx.fillStyle = '#0a0805';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    var label = String(text).toUpperCase();
+    var padding = 6; // inner/outer padding
+    var available = Math.max(0, (outerR - innerR) - padding*2);
+    if (available <= 0) { ctx.restore(); return; }
+    var count = Math.max(1, label.length);
+    var step = available / (count + 1);
+    // Adapt font size to spacing; clamp for readability
+    var fontSize = Math.min(14, Math.max(8, step * 0.9));
+    ctx.font = 'bold ' + fontSize + 'px Inter, system-ui, sans-serif';
+
+    var x = innerR + padding + step;
+    for (var i=0; i<label.length; i++){
+      ctx.fillText(label[i], x, 0);
+      x += step;
+      if (x > outerR - padding) break; // safety
+    }
+
+    ctx.restore();
   }
 
   function onCsvSelected(e){
