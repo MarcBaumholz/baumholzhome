@@ -18,8 +18,6 @@
   var arcs = []; // [{name, tickets, startAngle, endAngle, color}]
   var spinning = false;
   var rotation = 0; // current rotation in radians
-  var angularVelocity = 0; // rad/s
-  var spinStartTime = 0;
   var winner = null;
   var confettiTimer = null;
   var lastArcIndex = -1;
@@ -27,6 +25,8 @@
   var clickGain = null;
   var drumRollAudio = null; // Drum roll sound during spinning
   var celebrationAudio = null; // YAAAAAAAY sound for winner
+  var drumRollDuration = 5000; // Default drum roll duration in ms
+  var celebrationDuration = 3000; // Default celebration duration in ms
 
   var COLORS = [
     "#D4A15A","#F0D7A1","#B8945A","#9A8663","#6c5ce7","#00b894","#fdcb6e","#0984e3","#ff6b6b","#a29bfe"
@@ -327,6 +327,15 @@
     celebrationAudio = new Audio('./sounds/yaaaaaaay.mp3');
     celebrationAudio.preload = 'auto';
     celebrationAudio.volume = 0.8;
+    
+    // Get actual audio durations
+    drumRollAudio.addEventListener('loadedmetadata', function(){
+      drumRollDuration = drumRollAudio.duration * 1000; // Convert to ms
+    });
+    
+    celebrationAudio.addEventListener('loadedmetadata', function(){
+      celebrationDuration = celebrationAudio.duration * 1000; // Convert to ms
+    });
   }
 
   function playDrumRoll(){
@@ -409,115 +418,51 @@
     // Start drum roll sound
     playDrumRoll();
 
-    // weighted winner selection
-    var selected = weightedDraw(participants);
-    var targetArc = arcs.find(function(a){ return a.name === selected.name; }) || arcs[arcs.length-1];
-    var mid = (targetArc.startAngle + targetArc.endAngle)/2;
-    var margin = Math.min( (targetArc.endAngle - targetArc.startAngle) * 0.3, 0.25 );
-    var landingAngle = clamp(mid + randRange(-margin, margin), targetArc.startAngle+0.02, targetArc.endAngle-0.02);
-
-    var pointerAngle = -Math.PI/2;
-    var TWO_PI = Math.PI*2;
-
-    // Phase 1: 2000ms fast (slightly slowing), Phase 2: 2000ms decel, Phase 3: 1000ms very slow
-    var startRot = rotation;
-
-    // Phase A: quick rotations with gentle slowdown
-    var aDuration = 2000;
-    var aSpins = 1.5 + Math.random()*0.7; // 1.5–2.2 spins (slower)
-    var afterARot = startRot - aSpins * TWO_PI;
-
-    // Phase B: medium decel, a bit more rotation
-    var bDuration = 2000;
-    var bSpins = 0.6 + Math.random()*0.6; // 0.6–1.2 spins (slower)
-    var afterBRot = afterARot - bSpins * TWO_PI;
-
-    // Phase C: very slow to final landing
-    var cDuration = 1000;
-    var cSpins = 0.15 + Math.random()*0.15; // 0.15–0.3 spin (slower)
-    var finalRotation = pointerAngle - landingAngle - cSpins * TWO_PI;
-
-    // make sure continuity (keep rotating same direction)
-    while (finalRotation > afterBRot - Math.PI) finalRotation -= TWO_PI;
-
     spinning = true;
     lastArcIndex = -1;
     setStatus('Drehe…');
 
-    var startA = performance.now();
-    function phaseA(){
+    var startTime = performance.now();
+    var startRotation = rotation;
+    var totalDuration = drumRollDuration; // Use actual audio duration
+    
+    // Random number of spins (3-8 full rotations)
+    var totalSpins = 3 + Math.random() * 5;
+    var finalRotation = startRotation - (totalSpins * Math.PI * 2);
+    
+    // Add random offset to make it truly random where it lands
+    finalRotation += (Math.random() - 0.5) * Math.PI * 2;
+
+    function animate(){
       var now = performance.now();
-      var t = Math.min(1, (now - startA)/aDuration);
-      var eased = 1 - Math.pow(1 - t, 1.5); // gentle slowdown
-      rotation = startRot + (afterARot - startRot) * eased;
+      var elapsed = now - startTime;
+      var progress = Math.min(1, elapsed / totalDuration);
+      
+      // Ease-out cubic for smooth deceleration
+      var eased = 1 - Math.pow(1 - progress, 3);
+      
+      // Calculate current rotation
+      rotation = startRotation + (finalRotation - startRotation) * eased;
+      
       redraw();
       updateLiveName();
       handlePointerCrossing();
-      if (t < 1) requestAnimationFrame(phaseA); else startPhaseB();
-    }
-
-    function startPhaseB(){
-      var startB = performance.now();
-      var startRotB = rotation; // continuity
-      var targetRotB = startRotB + (afterBRot - afterARot);
-      function phaseB(){
-        var now = performance.now();
-        var t = Math.min(1, (now - startB)/bDuration);
-        var eased = 1 - Math.pow(1 - t, 2.2); // stronger slowdown
-        rotation = startRotB + (targetRotB - startRotB) * eased;
-        redraw();
-        updateLiveName();
-        handlePointerCrossing();
-        if (t < 1) requestAnimationFrame(phaseB); else startPhaseC();
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // Spinning finished - determine winner from actual final position
+        rotation = finalRotation;
+        var cur = currentArc();
+        winner = cur.arc;
+        spinning = false;
+        finalizeWinner();
       }
-      requestAnimationFrame(phaseB);
     }
-
-    function startPhaseC(){
-      var startC = performance.now();
-      var startRotC = rotation; // continuity
-      function phaseC(){
-        var now = performance.now();
-        var t = Math.min(1, (now - startC)/cDuration);
-        var eased = 1 - Math.pow(1 - t, 3.2); // very slow finish
-        rotation = startRotC + (finalRotation - startRotC) * eased;
-        redraw();
-        updateLiveName();
-        handlePointerCrossing();
-        if (t < 1) requestAnimationFrame(phaseC); else {
-          // Ensure final rotation and winner derived from actual angle
-          rotation = finalRotation;
-          updateLiveName();
-          var cur = currentArc();
-          winner = cur.arc || targetArc;
-          spinning = false;
-          finalizeWinner();
-        }
-      }
-      requestAnimationFrame(phaseC);
-    }
-
-    requestAnimationFrame(phaseA);
+    
+    requestAnimationFrame(animate);
   }
 
-  function stepSpin(duration, now){
-    if (!spinning) return;
-    var t = now || performance.now();
-    var elapsed = t - spinStartTime;
-    var progress = Math.min(1, elapsed / duration);
-    // ease-out cubic for angular velocity decay
-    var ease = 1 - Math.pow(1 - progress, 3);
-    var currentVel = angularVelocity * (1 - ease);
-    rotation += Math.max(0.002, currentVel/60); // integrate roughly per frame
-    redraw();
-
-    if (progress < 1) {
-      requestAnimationFrame(stepSpin.bind(null, duration));
-    } else {
-      spinning = false;
-      finalizeWinner();
-    }
-  }
 
   function finalizeWinner(){
     // Always derive winner from current rotation to match live display
@@ -545,7 +490,7 @@
   function formatName(n){ return n.replace(/\b\w/g, function(c){ return c.toUpperCase(); }); }
 
   function onReset(){
-    spinning = false; angularVelocity = 0; rotation = 0; winner = null; stopConfetti();
+    spinning = false; rotation = 0; winner = null; stopConfetti();
     stopDrumRoll(); // Stop any playing drum roll
     redraw();
     setStatus('Zurückgesetzt');
